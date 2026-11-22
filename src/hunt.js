@@ -20,6 +20,11 @@ export const POLICY = resolve(fileURLToPath(import.meta.url), '../../policies/se
 export function classify({ exitCode, end, policyPassed }) {
   const rc = end?.result_code ?? null;
   if (rc === 740 || policyPassed === false) return 'silent_failure';
+  // Kane's own bug-detection verdict says whether a failed assertion was the app's
+  // fault. QuietBench (tududi, fixed build): 710 with family automation_bug, because
+  // Kane clicked the label instead of the switch. That is not a reason to block.
+  const family = end?.verdict?.family;
+  if ((rc === 710 || rc === 720 || rc === 730) && (family === 'automation_bug' || family === 'environment_issue')) return 'inconclusive';
   if (rc === 710 || rc === 720 || rc === 730) return 'failed';
   if (rc === 100 && end?.status === 'passed') return 'clean';
   if (exitCode === 2 || (rc >= 500 && rc < 700)) return 'not_run';
@@ -46,7 +51,9 @@ export async function huntFlow(opts) {
     ...observe,
     status: confirm.status === 'silent_failure' || confirm.status === 'failed' ? confirm.status : observe.status,
     kane: confirm.kane.result_code === 740 ? confirm.kane : observe.kane,
+    observe: { status: observe.status, kane: observe.kane, findings: observe.findings.length },
     confirm: { status: confirm.status, kane: confirm.kane, findings: confirm.findings.length },
+    credits: (observe.kane.credits ?? 0) + (observe.retriedAfter?.credits ?? 0) + (confirm.kane.credits ?? 0),
     findings: dedupe([...observe.findings, ...confirm.findings]),
   };
 }

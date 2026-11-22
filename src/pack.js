@@ -26,6 +26,9 @@ export function classifyRequest(entry, surfaceHost) {
   }
   if (entry._failed || status === 0) return { kind: 'request_failed', severity: 'blocking', ...base, detail: entry._failure_reason ?? 'no response' };
   if (status >= 500) return { kind: 'http_5xx', severity: 'blocking', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
+  // A GET that answers 401/403 is how most apps ask "am I logged in?" before the login form.
+  // Measured on tududi (QuietBench): the fixed build answers GET /api/profile 401 before login.
+  if ((status === 401 || status === 403) && (base.method ?? 'GET') === 'GET') return { kind: 'auth_probe', severity: 'warning', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
   if (status >= 400 && entry._resource_type !== 'document') return { kind: 'http_4xx', severity: 'blocking', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
   if (url.startsWith('http://') && surfaceHost && base.url && pageIsHttps(entry)) return { kind: 'mixed_content', severity: 'warning', ...base, detail: 'http request from an https page' };
   if (base.ms > SLOW_MS) return { kind: 'slow_response', severity: 'warning', ...base, detail: `${base.ms} ms` };
@@ -34,11 +37,23 @@ export function classifyRequest(entry, surfaceHost) {
 
 const pageIsHttps = (entry) => (entry.request?.headers ?? []).some((h) => /^referer$/i.test(h.name) && h.value.startsWith('https://'));
 
-/** Classify one console line; returns a finding or null. */
-export function classifyConsole(line) {
+// Chrome's own echo of a failed request; the HAR entry already carries it (and its severity).
+const ECHO = /^Failed to load resource: (the server responded with a status of \d+|net::)/;
+
+/**
+ * Classify one console line; returns a finding or null. `loadStep` is the run's first
+ * (navigate) step: errors logged while the page first loads, before the flow does
+ * anything, are reported as `ambient` warnings. They are real, but this flow didn't
+ * cause them (QuietBench: tududi logs an i18n error on every load, fixed or not).
+ */
+export function classifyConsole(line, loadStep = null) {
   if (line.marker || !line.level) return null;
   if (line.level !== 'error' && !line.is_exception) return null;
-  return { kind: line.is_exception ? 'js_exception' : 'console_error', severity: 'blocking', step: line.step ?? null, url: line.url, detail: String(line.text ?? '').slice(0, 300) };
+  const text = String(line.text ?? '');
+  if (!line.is_exception && ECHO.test(text)) return null;
+  const base = { step: line.step ?? null, url: line.url, detail: text.slice(0, 300) };
+  if (loadStep && line.step === loadStep) return { kind: 'ambient_console', severity: 'warning', ...base };
+  return { kind: line.is_exception ? 'js_exception' : 'console_error', severity: 'blocking', ...base };
 }
 
 /** Read every test in a pack and return its Kane status plus the silent findings. */
@@ -49,6 +64,8 @@ export async function readPack(packPath) {
   const tests = [];
   for (const id of await pack.listTestIds()) {
     const result = parseYaml((await pack.readResult(id)) ?? '{}') ?? {};
+    const first = (result.steps ?? [])[0];
+    const loadStep = first?.kind === 'navigate' ? first.id : null;
     const findings = [];
     for (const entry of await pack.listDir(`tests/${id}/logs`)) {
       const text = entry.isDir ? null : await pack.readText(`tests/${id}/logs/${entry.name}`);
@@ -56,7 +73,7 @@ export async function readPack(packPath) {
       if (entry.name.endsWith('-network.har')) {
         for (const e of JSON.parse(text).log?.entries ?? []) { const f = classifyRequest(e, surfaceHost); if (f) findings.push(f); }
       } else if (entry.name.endsWith('-console.ndjson')) {
-        for (const raw of text.split('\n')) { if (!raw.trim()) continue; const f = classifyConsole(JSON.parse(raw)); if (f) findings.push(f); }
+        for (const raw of text.split('\n')) { if (!raw.trim()) continue; const f = classifyConsole(JSON.parse(raw), loadStep); if (f) findings.push(f); }
       }
     }
     const blocking = findings.filter((f) => f.severity === 'blocking');

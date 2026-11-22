@@ -55,3 +55,16 @@ test('Kane outcomes map to the right status', async () => {
   assert.equal(classify({ exitCode: 1, end: { result_code: 750 }, policyPassed: true }), 'inconclusive', 'kane checkpoint capture timeout is not the app');
   assert.equal(classify({ exitCode: 3, end: null, policyPassed: null }), 'inconclusive');
 });
+
+test('noise every app makes is reported, not blocking (QuietBench: tududi)', async () => {
+  const { classify } = await import('../src/hunt.js');
+  const probe = classifyRequest({ request: { method: 'GET', url: 'http://127.0.0.1:3002/api/profile', headers: [] }, response: { status: 401 }, time: 5 }, '127.0.0.1');
+  assert.equal(probe.kind, 'auth_probe'); assert.equal(probe.severity, 'warning');
+  const put401 = classifyRequest({ request: { method: 'PUT', url: 'http://127.0.0.1:3002/api/profile', headers: [] }, response: { status: 401 }, time: 5 }, '127.0.0.1');
+  assert.equal(put401.kind, 'http_4xx', 'a write that is refused still blocks');
+  assert.equal(classifyConsole({ level: 'error', step: '0-5', text: 'Failed to load resource: the server responded with a status of 401 (Unauthorized)' }, '0-1'), null, 'echo of a HAR entry');
+  assert.equal(classifyConsole({ level: 'error', step: '0-1', text: 'Error loading translations' }, '0-1').kind, 'ambient_console');
+  assert.equal(classifyConsole({ level: 'error', step: '0-10', text: 'Failed to save settings' }, '0-1').kind, 'console_error');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 710, verdict: { family: 'automation_bug' } }, policyPassed: true }), 'inconclusive');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 710, verdict: { family: 'application_issue' } }, policyPassed: true }), 'failed');
+});

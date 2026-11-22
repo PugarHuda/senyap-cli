@@ -1,7 +1,8 @@
 // Thin wrapper over the kane-cli binary: run it in agent mode, collect NDJSON,
 // and enforce our own kill timer (kane's --timeout is not always honoured, #138).
 import { spawn, execFileSync } from 'node:child_process';
-import { readdirSync, existsSync, readFileSync } from 'node:fs';
+import { readdirSync, existsSync, readFileSync, writeFileSync, statSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 let entry;
@@ -21,8 +22,29 @@ function kaneCommand() {
   return [process.execPath, [entry]];
 }
 
+// Two kane-cli browser runs started in the same second on one machine wrote the same
+// mixed traffic into both evidence packs (QuietBench: Uptime Kuma + Memos). So Senyap
+// never starts a browser run while another Senyap-started one is going.
+const LOCK = join(tmpdir(), 'senyap-kane-run.lock');
+const STALE_MS = 30 * 60 * 1000;
+async function withRunLock(fn) {
+  for (;;) {
+    try { writeFileSync(LOCK, String(process.pid), { flag: 'wx' }); break; } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      try { if (Date.now() - statSync(LOCK).mtimeMs > STALE_MS) unlinkSync(LOCK); } catch { /* raced */ }
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+  }
+  try { return await fn(); } finally { try { unlinkSync(LOCK); } catch { /* already gone */ } }
+}
+const BROWSER_RUNS = new Set(['run', 'testmd', 'testrun', 'explore']);
+
 /** Run kane-cli with args; resolves { exitCode, events, end, stderr }. Never rejects on a failed test. */
-export function kane(args, { timeoutSec = 300, cwd = process.cwd(), onEvent } = {}) {
+export function kane(args, opts = {}) {
+  return BROWSER_RUNS.has(args[0]) ? withRunLock(() => spawnKane(args, opts)) : spawnKane(args, opts);
+}
+
+function spawnKane(args, { timeoutSec = 300, cwd = process.cwd(), onEvent } = {}) {
   return new Promise((resolve, reject) => {
     const [cmd, pre] = kaneCommand();
     const child = spawn(cmd, [...pre, ...args], { cwd, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, NO_COLOR: '1' } });
