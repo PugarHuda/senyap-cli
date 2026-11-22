@@ -6,7 +6,7 @@ import { existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'nod
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { kane, packOf } from './kane.js';
-import { LOCK_ASSERTS } from './objectives.js';
+import { lockAsserts } from './objectives.js';
 import { loadConfig } from './config.js';
 
 export const LOCK_POLICY = resolve(fileURLToPath(import.meta.url), '../../policies/senyap-lock.policy.yaml');
@@ -21,7 +21,7 @@ export function testMd({ url, flow }) {
     `# ${flow}`, '',
     '## Run the flow and check underneath the screen',
     `${flow.trim().replace(/\.$/, '')}.`,
-    ...LOCK_ASSERTS, '',
+    ...lockAsserts(url), '',
   ].join('\n');
 }
 

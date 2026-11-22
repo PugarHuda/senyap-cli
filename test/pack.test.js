@@ -43,3 +43,15 @@ test('objectives and locked tests carry the under-the-screen checks', () => {
   assert.equal(md.match(/^## /gm).length, 1, 'trigger and asserts share one step (#133)');
   assert.match(md, /Assert: no API calls returned 4xx or 5xx/);
 });
+
+test('Kane outcomes map to the right status', async () => {
+  const { classify } = await import('../src/hunt.js');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 740 }, policyPassed: true }), 'silent_failure');
+  assert.equal(classify({ exitCode: 0, end: { result_code: 100, status: 'passed' }, policyPassed: false }), 'silent_failure', 'false green');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 720 }, policyPassed: true }), 'failed');
+  assert.equal(classify({ exitCode: 0, end: { result_code: 100, status: 'passed' }, policyPassed: true }), 'clean');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 560 }, policyPassed: null }), 'not_run');
+  assert.equal(classify({ exitCode: 2, end: null, policyPassed: null }), 'not_run');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 750 }, policyPassed: true }), 'inconclusive', 'kane checkpoint capture timeout is not the app');
+  assert.equal(classify({ exitCode: 3, end: null, policyPassed: null }), 'inconclusive');
+});

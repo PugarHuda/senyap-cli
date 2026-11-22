@@ -18,7 +18,8 @@ const HELP = `senyap ${VERSION}: catch the bugs that fail silently (powered by K
   senyap lock [--flow "<flow>"]                   Save clean flows as regression *_test.md files
   senyap init [--agent claude|codex|cursor|all]   Write senyap.config.json and install the agent hook
 
-Flows and URL default to senyap.config.json. Exit 0 clean, 1 silent failure, 2 Kane did not run.`;
+Flows and URL default to senyap.config.json.
+Exit 0 clean, 1 silent or functional failure, 2 Kane did not run or could not finish verifying.`;
 
 const [cmd, ...rest] = process.argv.slice(2);
 const { values, positionals } = parseArgs({
@@ -41,7 +42,8 @@ const commands = {
     }
     saveReport(results);
     if (values.json) console.log(JSON.stringify(results, null, 2)); else console.log('\n' + brief(results));
-    return results.some((r) => r.status === 'not_run') && !results.some((r) => r.status === 'silent_failure') ? 2 : results.some((r) => r.status !== 'clean') ? 1 : 0;
+    if (results.some((r) => r.status === 'silent_failure' || r.status === 'failed')) return 1;
+    return results.every((r) => r.status === 'clean') ? 0 : 2;
   },
   async check() {
     if (!positionals.length) throw new Error('give one or more Kane .evidence packs');
@@ -63,7 +65,7 @@ const commands = {
   async init() { return (await import('../src/init.js')).init(values); },
 };
 
-function icon(s) { return { clean: '✔', silent_failure: '✖', failed: '✖', not_run: '…' }[s] ?? '?'; }
+function icon(s) { return { clean: '✔', silent_failure: '✖', failed: '✖', not_run: '…', inconclusive: '?' }[s] ?? '?'; }
 function log(m) { process.stderr.write(m + '\n'); }
 
 if (!cmd || cmd === '-h' || cmd === '--help' || !commands[cmd]) { console.log(HELP); process.exit(cmd && !['-h', '--help'].includes(cmd) ? 2 : 0); }

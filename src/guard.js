@@ -42,8 +42,12 @@ export async function guard({ agent } = {}) {
   saveReport(results);
   const failing = results.filter((r) => r.status === 'silent_failure' || r.status === 'failed');
   if (!failing.length) {
-    writeFileSync(STATE, JSON.stringify({ attempts: 0, cleanHash: hash, cleanAt: new Date().toISOString() }));
-    return allow(flavour, results.some((r) => r.status === 'not_run') ? 'Senyap: Kane could not run some flows (see .senyap/report.json).' : 'Senyap: Kane checked every flow; nothing failed underneath the screen.');
+    const unsure = results.filter((r) => r.status === 'not_run' || r.status === 'inconclusive');
+    // Only a fully verified tree is remembered as clean; an unsure one is re-hunted next stop.
+    writeFileSync(STATE, JSON.stringify({ attempts: 0, cleanHash: unsure.length ? null : hash, at: new Date().toISOString() }));
+    return allow(flavour, unsure.length
+      ? `Senyap: Kane could not finish verifying ${unsure.length} flow(s) (${unsure.map((r) => r.kane.reason_code ?? r.status).join(', ')}); nothing failed in the evidence it did capture. See .senyap/report.json.`
+      : 'Senyap: Kane checked every flow; nothing failed underneath the screen.');
   }
   state.attempts += 1;
   writeFileSync(STATE, JSON.stringify(state));
