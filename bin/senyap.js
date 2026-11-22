@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // senyap: catch the bugs that fail silently. See README.md.
-import { mkdirSync } from 'node:fs';
+import { appendFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { huntFlow, brief, saveReport, POLICY } from '../src/hunt.js';
@@ -42,6 +42,7 @@ const commands = {
     }
     saveReport(results);
     if (values.json) console.log(JSON.stringify(results, null, 2)); else console.log('\n' + brief(results));
+    if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, brief(results) + '\n');
     if (results.some((r) => r.status === 'silent_failure' || r.status === 'failed')) return 1;
     return results.every((r) => r.status === 'clean') ? 0 : 2;
   },

@@ -1,0 +1,73 @@
+name: Senyap
+description: Catch the bugs that fail silently. Kane CLI drives your flows; Senyap fails the job on hidden 5xx, console errors, env leaks and false greens.
+author: PugarHuda
+branding:
+  icon: eye
+  color: gray-dark
+inputs:
+  url:
+    description: App URL to hunt (a preview deployment, or a server started earlier in the job)
+    required: false
+  flows:
+    description: One user flow per line, in plain English
+    required: false
+  packs:
+    description: Instead of hunting, judge these Kane .evidence packs (space-separated globs), e.g. from kane-cli testmd run
+    required: false
+  kane-username:
+    description: TestMu AI username (store as a secret)
+    required: true
+  kane-access-key:
+    description: TestMu AI access key (store as a secret)
+    required: true
+  kane-project-id:
+    description: Test Manager project id, so kane-cli never asks
+    required: false
+  kane-folder-id:
+    description: Test Manager folder id
+    required: false
+outputs:
+  report:
+    description: Path to .senyap/report.json
+    value: ${{ steps.senyap.outputs.report }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Install Kane CLI and Senyap
+      shell: bash
+      run: |
+        npm install -g @testmuai/kane-cli
+        cd "$GITHUB_ACTION_PATH" && npm ci --omit=dev --no-audit --no-fund
+    - name: Log in to Kane CLI
+      shell: bash
+      env:
+        KANE_USER: ${{ inputs.kane-username }}
+        KANE_KEY: ${{ inputs.kane-access-key }}
+        KANE_PROJECT: ${{ inputs.kane-project-id }}
+        KANE_FOLDER: ${{ inputs.kane-folder-id }}
+      run: |
+        args=(login --username "$KANE_USER" --access-key "$KANE_KEY")
+        [ -n "$KANE_PROJECT" ] && args+=(--project-id "$KANE_PROJECT")
+        [ -n "$KANE_FOLDER" ] && args+=(--folder-id "$KANE_FOLDER")
+        kane-cli "${args[@]}" < /dev/null
+        kane-cli balance
+    - name: Senyap
+      id: senyap
+      shell: bash
+      env:
+        INPUT_URL: ${{ inputs.url }}
+        INPUT_FLOWS: ${{ inputs.flows }}
+        INPUT_PACKS: ${{ inputs.packs }}
+      run: |
+        echo "report=$PWD/.senyap/report.json" >> "$GITHUB_OUTPUT"
+        if [ -n "$INPUT_PACKS" ]; then
+          node "$GITHUB_ACTION_PATH/bin/senyap.js" check $INPUT_PACKS
+        else
+          args=(hunt)
+          [ -n "$INPUT_URL" ] && args+=(--url "$INPUT_URL")
+          while IFS= read -r flow; do [ -n "$flow" ] && args+=(--flow "$flow"); done <<< "$INPUT_FLOWS"
+          node "$GITHUB_ACTION_PATH/bin/senyap.js" "${args[@]}"
+        fi

@@ -1,0 +1,49 @@
+# Proves the action on the hosted demo: the buggy app must fail, the fixed app must pass.
+name: Senyap on the demo app
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'bin/**', 'policies/**', 'action.yml', '.github/workflows/demo.yml']
+  workflow_dispatch:
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci && npm test
+  hunt:
+    needs: unit
+    if: vars.KANE_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: buggy, url: 'https://senyap-demo.vercel.app/', expect: failure }
+          - { name: fixed, url: 'https://senyap-demo.vercel.app/fixed/', expect: success }
+    name: hunt (${{ matrix.name }} app, expect ${{ matrix.expect }})
+    steps:
+      - uses: actions/checkout@v4
+      - id: senyap
+        uses: ./
+        continue-on-error: true
+        with:
+          url: ${{ matrix.url }}
+          flows: |
+            Add a note that says "Don't forget the milk" and save it
+          kane-username: ${{ secrets.KANE_USERNAME }}
+          kane-access-key: ${{ secrets.KANE_ACCESS_KEY }}
+          kane-project-id: ${{ vars.KANE_PROJECT_ID }}
+          kane-folder-id: ${{ vars.KANE_FOLDER_ID }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: senyap-${{ matrix.name }}
+          path: .senyap/report.json
+          if-no-files-found: ignore
+      - name: Senyap reached the expected verdict
+        run: |
+          echo "outcome=${{ steps.senyap.outcome }} expected=${{ matrix.expect }}"
+          test "${{ steps.senyap.outcome }}" = "${{ matrix.expect }}"
