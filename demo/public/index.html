@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 3rem auto; padding: 0 1rem; }
+  input { width: 70%; padding: .5rem; } button { padding: .5rem 1rem; }
+  #toast { color: #0a7d32; min-height: 1.5rem; } li { padding: .25rem 0; }
+  footer { margin-top: 3rem; font-size: .85rem; color: #666; }
+</style>
+</head>
+<body>
+<h1>Notes</h1>
+<form id="f"><input id="text" placeholder="Write a note" autocomplete="off"> <button>Save</button></form>
+<p id="toast" role="status"></p>
+<ul id="list"></ul>
+<footer>Senyap demo app. This version has silent bugs; <a href="/fixed/">/fixed/</a> does not. <a href="https://github.com/PugarHuda/senyap-cli">github.com/PugarHuda/senyap-cli</a></footer>
+<script>
+const list = document.getElementById('list');
+const toast = document.getElementById('toast');
+const show = (notes) => { list.innerHTML = ''; for (const n of notes) { const li = document.createElement('li'); li.textContent = n.text; list.append(li); } };
+fetch('/api/notes').then((r) => r.json()).then(show);
+
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = document.getElementById('text').value.trim();
+  if (!text) return;
+  const res = await fetch('/api/notes', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text }) });
+  // Optimistic UI: the note goes on the list and the user is told it saved.
+  const li = document.createElement('li'); li.textContent = text; list.append(li);
+  toast.textContent = 'Saved!';
+  if (!res.ok) console.error('save failed', res.status);
+  document.getElementById('text').value = '';
+  // Usage analytics, left pointing at the staging collector.
+  fetch('https://staging.notes-analytics.test/collect', { method: 'POST', mode: 'no-cors', body: 'note_saved' }).catch(() => {});
+});
+</script>
+</body>
+</html>

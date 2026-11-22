@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes (fixed)</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 3rem auto; padding: 0 1rem; }
+  input { width: 70%; padding: .5rem; } button { padding: .5rem 1rem; }
+  #toast { min-height: 1.5rem; } li { padding: .25rem 0; }
+  footer { margin-top: 3rem; font-size: .85rem; color: #666; }
+</style>
+</head>
+<body>
+<h1>Notes</h1>
+<form id="f"><input id="text" placeholder="Write a note" autocomplete="off"> <button>Save</button></form>
+<p id="toast" role="status"></p>
+<ul id="list"></ul>
+<footer>Senyap demo app, fixed version. The <a href="/">buggy version</a> fails silently. <a href="https://github.com/PugarHuda/senyap-cli">github.com/PugarHuda/senyap-cli</a></footer>
+<script>
+const list = document.getElementById('list');
+const toast = document.getElementById('toast');
+const show = (notes) => { list.innerHTML = ''; for (const n of notes) { const li = document.createElement('li'); li.textContent = n.text; list.append(li); } };
+fetch('/api/notes?v=fixed').then((r) => r.json()).then(show);
+
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = document.getElementById('text').value.trim();
+  if (!text) return;
+  const res = await fetch('/api/notes?v=fixed', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text }) });
+  if (!res.ok) { toast.style.color = '#b00020'; toast.textContent = 'Could not save the note. Please try again.'; return; }
+  const note = await res.json();
+  const li = document.createElement('li'); li.textContent = note.text; list.append(li);
+  toast.style.color = '#0a7d32'; toast.textContent = 'Saved!';
+  document.getElementById('text').value = '';
+});
+</script>
+</body>
+</html>
