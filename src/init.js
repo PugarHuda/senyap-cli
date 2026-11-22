@@ -5,10 +5,12 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { kane } from './kane.js';
+import { VERSION } from './version.js';
 
 const BIN = resolve(fileURLToPath(import.meta.url), '../../bin/senyap.js');
-// Installed from npm -> `npx senyap`; run from a checkout -> node <abs path>.
-const guardCmd = (agent) => (BIN.includes('node_modules') ? `npx --yes senyap guard --agent ${agent}` : `node "${BIN.replace(/\\/g, '/')}" guard --agent ${agent}`);
+// Installed from npm -> npx pinned to this exact version (never "whatever is latest" on
+// every stop); run from a checkout -> node <abs path>.
+const guardCmd = (agent) => (BIN.includes('node_modules') ? `npx --yes senyap@${VERSION} guard --agent ${agent}` : `node "${BIN.replace(/\\/g, '/')}" guard --agent ${agent}`);
 
 const readJson = (p, fallback) => (existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : fallback);
 function writeJson(p, v) { mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, JSON.stringify(v, null, 2) + '\n'); }
