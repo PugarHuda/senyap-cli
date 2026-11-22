@@ -6,20 +6,38 @@ Your coding agent says "done". The screen says "Saved!". Underneath, the API ret
 
 Senyap makes [Kane CLI](https://www.testmuai.com/kane-cli/) look under the screen, turns what it finds into a verdict Kane itself enforces, and won't let your agent stop until the flow is clean.
 
+**Landing page:** https://senyap-cli.vercel.app · **Demo app:** https://senyap-demo.vercel.app (silent bugs) and https://senyap-demo.vercel.app/fixed/ (clean)
+
 ```
 agent says done ─► senyap guard (Stop hook)
                     │
-                    ├─ kane-cli run "<flow>. Then verify no 4xx/5xx, no console errors,
-                    │                 no calls to staging, still there after reload"
-                    │                 --agent --bug-detection continue
+                    ├─ observe: kane-cli run "<flow>. Then reload and verify it's still there"
+                    │           --agent --bug-detection continue
                     ├─ read Kane's evidence pack: logs/*-network.har, logs/*-console.ndjson
                     ├─ seal a senyap evidence pack with its own metric catalog
                     ├─ kane-cli evidence verdict --policy senyap.policy.yaml
+                    ├─ confirm (only if the evidence shows a failure):
+                    │           kane-cli run "<flow>. Then verify no 4xx/5xx, no console errors,
+                    │           no calls to another environment" → Kane 740 + root cause
                     │
                     ├─ clean ─────► agent may stop; senyap lock freezes the flow as *_test.md
                     └─ silent failure ► block, hand the agent a brief with Kane's run link,
                                         re-check after the fix (3 tries, then a human)
 ```
+
+## Try it in one command
+
+```bash
+npm install -g @testmuai/kane-cli && kane-cli login
+npx senyap hunt --url https://senyap-demo.vercel.app/ --flow "Add a note that says \"Don't forget the milk\" and save it"
+# ✖ silent_failure  kane=failed/740  findings=5
+npx senyap hunt --url https://senyap-demo.vercel.app/fixed/ --flow "Add a note that says \"Don't forget the milk\" and save it"
+# ✔ clean  kane=passed/100  findings=0
+```
+
+## A real agent session
+
+Claude Code was asked to add a note counter to `examples/notes-app`, with Senyap as its Stop hook. Senyap blocked the stop twice. Claude Code fixed the apostrophe 500 and the staging call, then, on the second block, found a bug nobody had planted: the server read `index.html` once at startup, so the browser kept getting the old page. The third check came back clean (Kane result code 100, no findings in the pack).
 
 ## Why this needs to exist: one measurement
 
@@ -102,6 +120,9 @@ Senyap drives no browser of its own. Every verdict comes from Kane.
 | Adaptive heal can re-author a step and hide a regression | Locked runs use `--no-adaptive-heal`; the lock policy fails on `metrics.heal.healed_tests` |
 | Third-party kane-cli plugins aren't loadable (the registry is an allowlist) | Ship as a CLI + agent hooks + Kane's own skill |
 | On Windows the npm shim needs a shell, which splits objectives on spaces | Senyap runs kane-cli's JS entry with node directly |
+| Kane's DevTools analyzers time out proving that *nothing* failed on a clean page (result_code 750, seen repeatedly), but answer fast when something did | Two phases: observe without analyzers and judge the pack; run the analyzers only to confirm a failure the evidence already shows |
+| An environment rule like "no request to localhost" is impossible for an app served from localhost (Kane got stuck, 330) | The rule is derived from the app's own host: local apps must not call staging, production must call neither |
+| Kane-side failures (3xx/4xx/750, timeouts) look like test failures | Classified `inconclusive`, retried once, and never counted against the agent |
 
 ## Development
 
@@ -115,3 +136,18 @@ node bin/senyap.js check ~/.testmuai/kaneai/sessions/*/evidence/*.evidence
 ## License
 
 Apache-2.0
+
+## GitHub Action
+
+```yaml
+- uses: PugarHuda/senyap-cli@main
+  with:
+    url: ${{ steps.deploy.outputs.preview-url }}
+    flows: |
+      Add a note that says "Don't forget the milk" and save it
+      Sign up with a new email and open the dashboard
+    kane-username: ${{ secrets.KANE_USERNAME }}
+    kane-access-key: ${{ secrets.KANE_ACCESS_KEY }}
+```
+
+Or judge the packs your own `kane-cli testmd run` steps wrote: `packs: .testmuai/evidence/*.evidence`. The job fails on any silent failure and the agent brief goes to the job summary. `.github/workflows/demo.yml` runs it against the hosted demo and expects the buggy app to fail and the fixed one to pass.

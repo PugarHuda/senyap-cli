@@ -8,7 +8,7 @@ import { kane } from './kane.js';
 
 const BIN = resolve(fileURLToPath(import.meta.url), '../../bin/senyap.js');
 // Installed from npm -> `npx senyap`; run from a checkout -> node <abs path>.
-const guardCmd = (agent) => (BIN.includes('node_modules') ? `npx --no-install senyap guard --agent ${agent}` : `node "${BIN.replace(/\\/g, '/')}" guard --agent ${agent}`);
+const guardCmd = (agent) => (BIN.includes('node_modules') ? `npx --yes senyap guard --agent ${agent}` : `node "${BIN.replace(/\\/g, '/')}" guard --agent ${agent}`);
 
 const readJson = (p, fallback) => (existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : fallback);
 function writeJson(p, v) { mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, JSON.stringify(v, null, 2) + '\n'); }

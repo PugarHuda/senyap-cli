@@ -16,5 +16,32 @@
   },
   "engines": {
     "node": ">=20.19"
-  }
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "policies/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PugarHuda/senyap-cli.git"
+  },
+  "homepage": "https://github.com/PugarHuda/senyap-cli#readme",
+  "bugs": {
+    "url": "https://github.com/PugarHuda/senyap-cli/issues"
+  },
+  "keywords": [
+    "kane-cli",
+    "testmu",
+    "e2e",
+    "claude-code",
+    "codex",
+    "cursor",
+    "agent",
+    "hooks",
+    "evidence",
+    "silent-failures"
+  ]
 }

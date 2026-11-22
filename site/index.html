@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Senyap: catch the bugs that fail silently</title>
+<meta name="description" content="Your agent said done. The screen said Saved!. The server said 500. Senyap makes Kane CLI look under the screen and keeps your coding agent working until the flow is clean.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Schibsted+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #eef1f4;      /* the screen: cool, quiet */
+  --card: #ffffff;
+  --ink: #1d2733;        /* slate text */
+  --muted: #5f6b7a;
+  --rule: #cfd6de;
+  --under: #24324a;      /* what sits beneath the screen */
+  --under-ink: #dbe3ee;
+  --under-dim: #8d9bb0;
+  --ok: #2e7d4f;         /* "Saved!" */
+  --fail: #c8362f;       /* DevTools error row */
+  --fail-bg: #3a2730;
+  --focus: #2f6fdb;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; overflow-x: clip; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.6 var(--sans); }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+code, pre, .mono { font-family: var(--mono); font-size: .875em; }
+.hero > *, .two > * { min-width: 0; }
+.wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
+
+header.top { display: flex; justify-content: space-between; align-items: baseline; padding: 1.5rem 0; }
+.brand { font-weight: 900; font-size: 1.25rem; letter-spacing: -.01em; text-decoration: none; }
+.brand small { font-weight: 400; color: var(--muted); font-size: .95rem; margin-left: .5rem; }
+nav a { margin-left: 1.25rem; color: var(--muted); text-decoration: none; }
+nav a:hover { color: var(--ink); text-decoration: underline; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 0 4.5rem; align-items: center; }
+@media (min-width: 900px) { .hero { grid-template-columns: 1.05fr 1fr; gap: 4rem; padding-top: 4.5rem; } }
+.claims { margin: 0; font-weight: 700; font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.08; letter-spacing: -.02em; }
+.claims span { display: block; }
+.claims .said { color: var(--muted); font-weight: 500; }
+.claims .truth { color: var(--fail); }
+.lede { max-width: 34rem; margin: 1.75rem 0 2rem; font-size: 1.15rem; color: #364353; }
+.cta { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: center; }
+.cmd { max-width: 100%; overflow-x: auto; display: inline-flex; align-items: center; gap: .75rem; background: var(--ink); color: #f3f6fa; padding: .7rem 1rem; border-radius: 6px; font-family: var(--mono); font-size: .95rem; }
+.cmd button { font: inherit; font-size: .8rem; background: none; border: 1px solid #5d6b7d; color: #cdd6e2; border-radius: 4px; padding: .15rem .5rem; cursor: pointer; }
+
+/* The two layers */
+.stack { position: relative; overflow: hidden; border-radius: 10px; }
+.under { background: var(--under); color: var(--under-ink); border-radius: 10px; padding: 1rem 0 1.25rem; min-height: 21rem; font-family: var(--mono); font-size: .8rem; box-shadow: inset 0 0 0 1px #33445f; }
+.under h3 { margin: 0 1rem .75rem; font: 600 .8rem var(--mono); color: var(--under-dim); }
+.row { display: grid; grid-template-columns: 3.2rem 1fr 3rem; gap: .5rem; padding: .35rem 1rem; border-top: 1px solid #2e3e58; }
+.row .st { text-align: right; }
+.row.bad { background: var(--fail-bg); color: #ffb8b3; }
+.row.bad .st { font-weight: 600; color: #ff8a82; }
+.row .u { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.console { margin: .9rem 1rem 0; color: #ff8a82; }
+.console div::before { content: "✖ "; }
+.screen { position: absolute; inset: 2.25rem 1.25rem auto 2rem; background: var(--card); border-radius: 10px; padding: 1.5rem 1.5rem 1.25rem; box-shadow: 0 1px 0 var(--rule), 0 18px 40px -18px rgba(29, 39, 51, .45); transition: transform .7s cubic-bezier(.2, .8, .2, 1), opacity .7s; }
+.screen h4 { margin: 0 0 1rem; font-size: 1.4rem; }
+.screen .field { display: flex; gap: .5rem; }
+.screen .field div { flex: 1; border: 1px solid var(--rule); border-radius: 5px; padding: .5rem .65rem; color: var(--ink); }
+.screen .field b { background: var(--ink); color: #fff; border-radius: 5px; padding: .5rem .9rem; font-weight: 500; }
+.screen .saved { color: var(--ok); font-weight: 700; margin: .9rem 0 .4rem; }
+.screen ul { margin: 0; padding-left: 1.1rem; color: #364353; }
+.stack.lifted .screen { transform: translate(48%, 78%) rotate(5deg); opacity: .15; }
+.peek { margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--muted); font-size: .9rem; }
+.peek button { font: 500 .95rem var(--sans); background: var(--card); color: var(--ink); border: 1px solid var(--ink); border-radius: 6px; padding: .5rem .9rem; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .screen { transition: none; } }
+
+section { padding: 4rem 0; border-top: 1px solid var(--rule); }
+h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.15; letter-spacing: -.015em; margin: 0 0 1rem; max-width: 40rem; }
+.sub { max-width: 42rem; color: #364353; margin: 0 0 2rem; }
+
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td { text-align: left; vertical-align: top; padding: .85rem .75rem .85rem 0; border-bottom: 1px solid var(--rule); }
+th { font-weight: 500; color: var(--muted); }
+td.v-pass { color: var(--ok); font-weight: 700; }
+td.v-fail { color: var(--fail); font-weight: 700; }
+.scroll { overflow-x: auto; }
+
+ol.loop { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 0; max-width: 46rem; }
+ol.loop li { counter-increment: s; display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+ol.loop li::before { content: counter(s); font-weight: 900; font-size: 1.4rem; color: var(--muted); line-height: 1.2; }
+ol.loop strong { display: block; }
+
+.transcript { background: var(--card); border-radius: 10px; padding: 1.5rem; max-width: 50rem; box-shadow: 0 1px 0 var(--rule); }
+.turn { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #e4e8ed; }
+.turn:last-child { border-bottom: 0; }
+.who { color: var(--muted); font-size: .9rem; }
+.turn.hook .what { color: var(--fail); }
+.turn.done .what { color: var(--ok); font-weight: 700; }
+
+.two { display: grid; gap: 2.5rem; }
+@media (min-width: 900px) { .two { grid-template-columns: 1fr 1fr; } }
+pre { background: var(--ink); color: #e7edf5; padding: 1.1rem 1.2rem; border-radius: 8px; overflow-x: auto; line-height: 1.55; margin: 0; }
+pre .c { color: #8d9bb0; }
+pre .bad { color: #ff8a82; }
+pre .ok { color: #7fd1a0; }
+
+dl.prims { display: grid; grid-template-columns: 1fr; gap: 0; margin: 0; }
+@media (min-width: 760px) { dl.prims { grid-template-columns: 17rem 1fr; } }
+dl.prims dt, dl.prims dd { margin: 0; padding: .7rem 0; border-bottom: 1px solid var(--rule); }
+dl.prims dt { font-family: var(--mono); font-size: .85rem; }
+dl.prims dd { color: #364353; }
+@media (min-width: 760px) { dl.prims dd { padding-left: 1rem; } }
+
+footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#">senyap<small>Indonesian for "silent"</small></a>
+    <nav><a href="#proof">Proof</a><a href="#install">Install</a><a href="https://github.com/PugarHuda/senyap-cli">GitHub</a></nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1 class="claims">
+          <span class="said">Your agent said done.</span>
+          <span class="said">The screen said Saved!</span>
+          <span class="truth">The server said 500.</span>
+        </h1>
+        <p class="lede">Senyap makes Kane CLI look under the screen of your app: failed requests, console errors, calls to staging. It turns what Kane finds into a verdict Kane itself enforces, and your coding agent can't stop until the flow is clean.</p>
+        <div class="cta">
+          <span class="cmd"><span id="cmdtext">npx senyap init --agent claude</span><button type="button" id="copy" aria-label="Copy the install command">Copy</button></span>
+          <a href="https://github.com/PugarHuda/senyap-cli">Read the source</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="stack" id="stack">
+          <div class="under" aria-label="What Kane's evidence pack recorded during this flow">
+            <h3>Network and console, from Kane's evidence pack</h3>
+            <div class="row"><span>GET</span><span class="u">senyap-demo.vercel.app/</span><span class="st">200</span></div>
+            <div class="row"><span>GET</span><span class="u">/api/notes</span><span class="st">200</span></div>
+            <div class="row bad"><span>POST</span><span class="u">/api/notes  {"error":"syntax error near \"Don't forget the milk\""}</span><span class="st">500</span></div>
+            <div class="row bad"><span>POST</span><span class="u">staging.notes-analytics.test/collect</span><span class="st">failed</span></div>
+            <div class="console">
+              <div>save failed 500</div>
+              <div>net::ERR_NAME_NOT_RESOLVED</div>
+            </div>
+          </div>
+          <div class="screen" aria-label="What the user sees">
+            <h4>Notes</h4>
+            <div class="field"><div>Don't forget the milk</div><b>Save</b></div>
+            <p class="saved">Saved!</p>
+            <ul><li>Welcome to Notes</li><li>Don't forget the milk</li></ul>
+          </div>
+        </div>
+        <div class="peek">
+          <span id="peekcap">This is the hosted demo, mid-flow.</span>
+          <button type="button" id="peek" aria-pressed="false" aria-controls="stack">Look underneath</button>
+        </div>
+      </div>
+    </div>
+
+    <section id="proof">
+      <h2>A plain Kane run passed this page. Here are the three runs.</h2>
+      <p class="sub">A notes page that shows "Saved!" whatever the server answers, while <code>POST /api/save</code> returns <code>500 {"error":"db down"}</code>.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Run</th><th>What Kane said</th><th>What was true</th></tr></thead>
+          <tbody>
+            <tr><td><code>kane-cli run "Type 'hello', click Save, and verify the note was really saved"</code></td><td class="v-pass">Passed, result code 100</td><td>The save failed.</td></tr>
+            <tr><td>The same flow with Senyap's checks for network, console, environment and reload</td><td class="v-fail">Failed, 740 confirmed product bug</td><td>The save failed.</td></tr>
+            <tr><td><code>senyap check</code> on the first run's evidence pack</td><td class="v-fail">Kane's own <code>evidence verdict</code> fails: no-false-green, no-hidden-5xx, no-console-errors</td><td>The 500 was in the pack all along. Nothing read it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sub" style="margin-top:2rem">On the hosted demo: the <a href="https://senyap-demo.vercel.app/">buggy app</a> comes back <strong>silent_failure</strong> (<a href="https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M820WAC7X9K2F2G23VNWRS9A/dashboard/share/US_MUV4PFPQ6NDVT1WSMSX8FLF2HZ4XOIXTJGCHNOVNBO4Q3F09QO2WKB9I2PMQE7NM?type=summary&amp;agentView=true&amp;fqdn=summary-page">Kane run</a>) and the <a href="https://senyap-demo.vercel.app/fixed/">fixed app</a> comes back <strong>clean</strong> (<a href="https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8210HFNYN4FED31X1N2GS4E/dashboard/share/US_V0UM034HEJ1BIZL1D11K11WIY7HDPFQG0ZWREY4VIB51WE2H9H5T6MRVWICSSEZB?type=summary&amp;agentView=true&amp;fqdn=summary-page">Kane run</a>).</p>
+    </section>
+
+    <section>
+      <h2>What happens when your agent says it's done</h2>
+      <ol class="loop">
+        <li><div><strong>Kane drives the flow</strong>The flows in <code>senyap.config.json</code>, in a real Chrome, including a reload to check the result stuck.</div></li>
+        <li><div><strong>Senyap reads the evidence</strong>The HAR and console log Kane wrote into the run's evidence pack, then seals a pack of its own with a <code>senyap</code> metric catalog.</div></li>
+        <li><div><strong>Kane judges it</strong><code>kane-cli evidence verdict</code> runs <code>senyap.policy.yaml</code>: no hidden 5xx, no dropped requests, no console errors, no calls to another environment, no false green.</div></li>
+        <li><div><strong>Kane explains it</strong>Only when the evidence shows a failure, Kane runs again with its DevTools checks and returns a confirmed product bug (740) with a root cause.</div></li>
+        <li><div><strong>The agent fixes it</strong>The stop is blocked with a brief: what failed, the request, the response, and a link to the Kane run. After three tries a human is asked to look.</div></li>
+        <li><div><strong>The flow is locked</strong><code>senyap lock</code> saves the clean flow as a <code>*_test.md</code> that replays from cache with adaptive heal off, so a later regression can't be healed away.</div></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>A real Claude Code session, asked to add a note counter</h2>
+      <p class="sub">The task had nothing to do with the bugs. Senyap was the Stop hook. Excerpts from the session transcript:</p>
+      <div class="transcript">
+        <div class="turn"><span class="who">Claude Code</span><span class="what">"I added a note counter above the list in index.html."</span></div>
+        <div class="turn hook"><span class="who">Senyap</span><span class="what">Blocked: POST /api/notes returned 500 on an apostrophe; analytics called staging.notes-analytics.test.</span></div>
+        <div class="turn"><span class="who">Claude Code</span><span class="what">Replaced the string-built query, checked the response before saying "Saved!", removed the staging call.</span></div>
+        <div class="turn hook"><span class="who">Senyap</span><span class="what">Blocked again: the staging call is still in the page the browser receives.</span></div>
+        <div class="turn"><span class="who">Claude Code</span><span class="what">"The browser was still being sent an old copy of the page." The server read index.html once at startup. A third bug nobody planted.</span></div>
+        <div class="turn done"><span class="who">Senyap</span><span class="what">Clean. Kane result code 100, no findings in the evidence pack.</span></div>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="two">
+        <div>
+          <h2>Install it in the repo your agent works in</h2>
+          <p class="sub">Senyap drives no browser of its own. You need Kane CLI and a TestMu AI account.</p>
+<pre><span class="c"># once</span>
+npm install -g @testmuai/kane-cli
+kane-cli login
+
+<span class="c"># in your app's repo</span>
+npx senyap init --agent claude   <span class="c"># or codex, cursor, all</span>
+</pre>
+          <p class="sub" style="margin-top:1.25rem"><code>init</code> writes <code>senyap.config.json</code>, registers the Stop hook (Claude Code and Codex block with a reason; Cursor gets a follow-up message), and installs Kane's own agent skill so the agent can call Kane while it fixes.</p>
+        </div>
+        <div>
+          <h2>Or point it at the demo</h2>
+<pre>npx senyap hunt \
+  --url https://senyap-demo.vercel.app/ \
+  --flow "Add a note that says \"Don't forget the milk\" and save it"
+
+<span class="bad">✖ silent_failure  kane=failed/740  findings=5</span>
+  http_5xx       POST /api/notes → 500
+  console_error  save failed 500
+  env_leak       page on senyap-demo.vercel.app
+                 called staging.notes-analytics.test
+
+npx senyap hunt --url https://senyap-demo.vercel.app/fixed/ …
+<span class="ok">✔ clean  kane=passed/100  findings=0</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Built on Kane CLI's own pieces</h2>
+      <p class="sub">Every verdict comes from Kane. Where Kane fell short, Senyap works with it instead of around it.</p>
+      <dl class="prims">
+        <dt>kane-cli run --agent</dt><dd>Drives each flow; Senyap reads the NDJSON <code>run_end</code>: result code, summary, Test Manager link, credits.</dd>
+        <dt>--bug-detection continue</dt><dd>Kane separates a product bug (740) from a broken test.</dd>
+        <dt>Evidence packs</dt><dd>The <code>network.har</code> and <code>console.ndjson</code> Kane records in every run are the facts Senyap judges.</dd>
+        <dt>evidence-cli producer catalog</dt><dd>Kane's policies can't read logs, so Senyap seals its own pack with <code>metrics.silent.*</code> and <code>metrics.false_green_tests</code>.</dd>
+        <dt>kane-cli evidence verdict</dt><dd>Kane enforces <code>senyap.policy.yaml</code> on those metrics.</dd>
+        <dt>*_test.md, testmd run</dt><dd>Locked flows replay from cache with <code>--no-adaptive-heal</code>, gated on <code>metrics.heal.healed_tests</code> so a heal can't hide a regression.</dd>
+        <dt>kane-cli install skill</dt><dd>The agent gets Kane while it fixes.</dd>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    Senyap is open source under Apache-2.0. Built for the KaneCLI Online Hackathon by <a href="https://github.com/PugarHuda">Pugar Huda Mantoro</a>. <a href="https://github.com/PugarHuda/senyap-cli">Source</a>, <a href="https://senyap-demo.vercel.app/">demo app</a>, <a href="https://www.testmuai.com/kane-cli/">Kane CLI</a>.
+  </footer>
+</div>
+<script>
+const stack = document.getElementById('stack');
+const peek = document.getElementById('peek');
+const cap = document.getElementById('peekcap');
+peek.addEventListener('click', () => {
+  const lifted = stack.classList.toggle('lifted');
+  peek.setAttribute('aria-pressed', String(lifted));
+  peek.textContent = lifted ? 'Put the screen back' : 'Look underneath';
+  cap.textContent = lifted ? 'Kane recorded all of this. A screenshot shows none of it.' : 'This is the hosted demo, mid-flow.';
+});
+document.getElementById('copy').addEventListener('click', async (e) => {
+  try { await navigator.clipboard.writeText(document.getElementById('cmdtext').textContent); e.target.textContent = 'Copied'; }
+  catch { e.target.textContent = 'Select and copy'; }
+  setTimeout(() => { e.target.textContent = 'Copy'; }, 1800);
+});
+</script>
+</body>
+</html>
