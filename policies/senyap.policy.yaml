@@ -1,0 +1,11 @@
+policy: senyap-silent-failures
+gates:
+  - { id: no-false-green, metric: metrics.false_green_tests, equals: 0, severity: blocking }
+  - { id: no-hidden-5xx, metric: metrics.silent.http_5xx, equals: 0, severity: blocking }
+  - { id: no-hidden-4xx, metric: metrics.silent.http_4xx, equals: 0, severity: blocking }
+  - { id: no-dropped-requests, metric: metrics.silent.request_failed, equals: 0, severity: blocking }
+  - { id: no-console-errors, metric: metrics.silent.console_errors, equals: 0, severity: blocking }
+  - { id: no-js-exceptions, metric: metrics.silent.js_exceptions, equals: 0, severity: blocking }
+  - { id: no-env-leaks, metric: metrics.silent.env_leaks, equals: 0, severity: blocking }
+  - { id: no-mixed-content, metric: metrics.silent.mixed_content, equals: 0, severity: warning }
+  - { id: no-slow-responses, metric: metrics.silent.slow_responses, equals: 0, severity: warning }
