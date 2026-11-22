@@ -1,0 +1,2 @@
+✖ type-hello-in-the-note-field-click-save--6e019c91  kane=passed  findings=3  FALSE GREEN
+  verdict: fail (no-false-green, no-hidden-5xx, no-console-errors)  .senyap\packs\730a9dd4-fbcd-4236-b497-518e3e4d76e5-senyap.evidence

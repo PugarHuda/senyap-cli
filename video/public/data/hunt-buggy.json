@@ -1,0 +1,354 @@
+{
+  "at": "2026-11-22T17:32:00.854Z",
+  "results": [
+    {
+      "flow": "Add a note that says \"Don't forget the milk\" and save it",
+      "url": "https://senyap-demo.vercel.app/",
+      "phase": "observe",
+      "objective": "Add a note that says \"Don't forget the milk\" and save it. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The save service mishandles note text containing an apostrophe, so the requested note cannot be saved reliably. The page also attempted to contact a staging analytics address, and that request did not complete.\nFix note saving so apostrophes are handled safely, and remove or replace the staging analytics request with a reachable production endpoint.\nevidence: http_error_response: POST https://senyap-demo.vercel.app/api/notes -> 500 body: {\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"}\nevidence: console_error: save failed 500\nevidence: network_failure: POST https://staging.notes-analytics.test/collect -> None FAILED (net::ERR_NAME_NOT_RESOLVED)",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "api_error",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The save service mishandles note text containing an apostrophe, so the requested note cannot be saved reliably. The page also attempted to contact a staging analytics address, and that request did not complete.",
+          "agent_fault_assessment": "The agent followed the requested flow: it opened the production app, entered the exact requested note, and clicked Save. The failure occurred when the application submitted that valid note; it was not caused by a wrong element, premature action, or bad test data.",
+          "bug_title": "Saving apostrophe-containing notes returns a 500 error",
+          "signals": [
+            {
+              "excerpt": "POST https://senyap-demo.vercel.app/api/notes -> 500 body: {\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"}",
+              "kind": "http_error_response",
+              "step": "0-3"
+            },
+            {
+              "excerpt": "save failed 500",
+              "kind": "console_error",
+              "step": "0-3"
+            },
+            {
+              "excerpt": "POST https://staging.notes-analytics.test/collect -> None FAILED (net::ERR_NAME_NOT_RESOLVED)",
+              "kind": "network_failure",
+              "step": "0-3"
+            }
+          ],
+          "confidence": 0.99,
+          "suggestion": "Fix note saving so apostrophes are handled safely, and remove or replace the staging analytics request with a reachable production endpoint.",
+          "one_liner": "The app could not save the requested note because its apostrophe triggered a server error.",
+          "relevant_steps": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "culprit_step": "0-3",
+          "credits_consumed": 4.847049999999999,
+          "known_bug_id": "BUG-8",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 30.103044999999998,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M824WRZQP4MF3WB1HAFM8TXV/dashboard/share/US_X5XPQSOTW5BBK03CWBUQT2RP2ZL5YHN6D9IX4X7ENFPV6HJ9EGEKLPLS6REORF2H?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-3",
+          "url": "https://senyap-demo.vercel.app/api/notes",
+          "detail": "Failed to load resource: the server responded with a status of 500 ()"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-3",
+          "url": "https://senyap-demo.vercel.app/",
+          "detail": "save failed 500"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-3",
+          "url": "https://staging.notes-analytics.test/collect",
+          "detail": "Failed to load resource: net::ERR_NAME_NOT_RESOLVED"
+        },
+        {
+          "kind": "http_5xx",
+          "severity": "blocking",
+          "step": "0-3",
+          "method": "POST",
+          "url": "https://senyap-demo.vercel.app/api/notes",
+          "status": 500,
+          "ms": 341,
+          "detail": "{\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"}"
+        },
+        {
+          "kind": "env_leak",
+          "severity": "blocking",
+          "step": "0-3",
+          "method": "POST",
+          "url": "https://staging.notes-analytics.test/collect",
+          "status": 0,
+          "ms": 25,
+          "detail": "page on senyap-demo.vercel.app called staging.notes-analytics.test (net::ERR_NAME_NOT_RESOLVED)"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\5de32c62-08fc-4a27-9c43-c0ae8fd45795\\evidence\\741cf42a-52d7-4a8c-b50b-c331d5235598.evidence",
+      "senyapPack": ".senyap\\packs\\741cf42a-52d7-4a8c-b50b-c331d5235598-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "741cf42a-52d7-4a8c-b50b-c331d5235598-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 3,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-hidden-5xx",
+                "no-console-errors",
+                "no-env-leaks"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Users\\pc\\AppData\\Local\\Temp\\claude\\5c24d8aa20b47952\\2d46bb81-3265-489d-8d09-fbf458568842\\scratchpad\\vidhunt\\.senyap\\packs\\741cf42a-52d7-4a8c-b50b-c331d5235598-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-22T17:29:30.456Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "741cf42a-52d7-4a8c-b50b-c331d5235598-senyap",
+                "sha256": "8acabf9bd110eb25c1b0ad0f47287c021ce3bbffcbea599347e5b63e0d6274ef",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 3,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-hidden-5xx",
+                "no-console-errors",
+                "no-env-leaks"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The save service mishandles note text containing an apostrophe, so the requested note cannot be saved reliably. The page also attempted to contact a staging analytics address, and that request did not complete.\nFix note saving so apostrophes are handled safely, and remove or replace the staging analytics request with a reachable production endpoint.\nevidence: http_error_response: POST https://senyap-demo.vercel.app/api/notes -> 500 body: {\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"}\nevidence: console_error: save failed 500\nevidence: network_failure: POST https://staging.notes-analytics.test/collect -> None FAILED (net::ERR_NAME_NOT_RESOLVED)",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "api_error",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The save service mishandles note text containing an apostrophe, so the requested note cannot be saved reliably. The page also attempted to contact a staging analytics address, and that request did not complete.",
+            "agent_fault_assessment": "The agent followed the requested flow: it opened the production app, entered the exact requested note, and clicked Save. The failure occurred when the application submitted that valid note; it was not caused by a wrong element, premature action, or bad test data.",
+            "bug_title": "Saving apostrophe-containing notes returns a 500 error",
+            "signals": [
+              {
+                "excerpt": "POST https://senyap-demo.vercel.app/api/notes -> 500 body: {\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"}",
+                "kind": "http_error_response",
+                "step": "0-3"
+              },
+              {
+                "excerpt": "save failed 500",
+                "kind": "console_error",
+                "step": "0-3"
+              },
+              {
+                "excerpt": "POST https://staging.notes-analytics.test/collect -> None FAILED (net::ERR_NAME_NOT_RESOLVED)",
+                "kind": "network_failure",
+                "step": "0-3"
+              }
+            ],
+            "confidence": 0.99,
+            "suggestion": "Fix note saving so apostrophes are handled safely, and remove or replace the staging analytics request with a reachable production endpoint.",
+            "one_liner": "The app could not save the requested note because its apostrophe triggered a server error.",
+            "relevant_steps": [
+              1,
+              2,
+              3,
+              4,
+              6
+            ],
+            "culprit_step": "0-3",
+            "credits_consumed": 4.847049999999999,
+            "known_bug_id": "BUG-8",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 30.103044999999998,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M824WRZQP4MF3WB1HAFM8TXV/dashboard/share/US_X5XPQSOTW5BBK03CWBUQT2RP2ZL5YHN6D9IX4X7ENFPV6HJ9EGEKLPLS6REORF2H?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 5
+      }
+    }
+  ]
+}

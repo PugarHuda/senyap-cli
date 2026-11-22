@@ -1,0 +1,8 @@
+{
+ "type": "run_end",
+ "status": "passed",
+ "result_code": 100,
+ "reason_code": "success.complete",
+ "one_liner": "saved a note on the local note page",
+ "summary": "Clicked Save and received a “Saved!” confirmation, showing that the note was saved successfully."
+}

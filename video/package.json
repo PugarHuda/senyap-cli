@@ -1,0 +1,20 @@
+{
+  "name": "senyap-video",
+  "private": true,
+  "type": "module",
+  "description": "Senyap demo video: captures of the live demo, real Kane/Senyap output, composed in Remotion",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "vo": "python vo.py",
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts Senyap out/senyap.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.545",
+    "@remotion/google-fonts": "^4.0.545",
+    "playwright": "^1.56.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "remotion": "4.0.545"
+  }
+}

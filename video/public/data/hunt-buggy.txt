@@ -1,0 +1,17 @@
+▶ Add a note that says "Don't forget the milk" and save it
+  ✖ silent_failure  kane=failed/740  findings=5  https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M824WRZQP4MF3WB1HAFM8TXV/dashboard/share/US_X5XPQSOTW5BBK03CWBUQT2RP2ZL5YHN6D9IX4X7ENFPV6HJ9EGEKLPLS6REORF2H?type=summary&agentView=true&fqdn=summary-page
+
+# Senyap found silent failures
+
+Kane CLI drove these flows in a real browser. The screen may look fine; what is listed below failed underneath. Fix the application code (not the test), then stop again so Senyap can re-check.
+
+## Add a note that says "Don't forget the milk" and save it
+- Kane: `failed` (result_code 740, assertion_error.confirmed_product_bug)
+- Run: https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M824WRZQP4MF3WB1HAFM8TXV/dashboard/share/US_X5XPQSOTW5BBK03CWBUQT2RP2ZL5YHN6D9IX4X7ENFPV6HJ9EGEKLPLS6REORF2H?type=summary&agentView=true&fqdn=summary-page
+- Kane summary: The save service mishandles note text containing an apostrophe, so the requested note cannot be saved reliably. The page also attempted to contact a staging analytics address, and that request did not complete. / Fix note saving so apostrophes are handled safely, and remove or replace the staging analytics request with a reachable production endpoint. / evidence: http_error_response: POST https://senyap-demo.vercel.app/api/notes -> 500 body: {"error":"syntax error near \"Don't forget the milk\""} / evidence: console_error: save failed 500 / evidence: network_failure: POST https://staging.notes-analytics.test/collect -> None FAILED (net::ERR_NAME_NOT_RESOLVED)
+- `console_error` https://senyap-demo.vercel.app/api/notes : Failed to load resource: the server responded with a status of 500 ()
+- `console_error` https://senyap-demo.vercel.app/ : save failed 500
+- `console_error` https://staging.notes-analytics.test/collect : Failed to load resource: net::ERR_NAME_NOT_RESOLVED
+- `http_5xx` POST https://senyap-demo.vercel.app/api/notes → 500 : {"error":"syntax error near \"Don't forget the milk\""}
+- `env_leak` POST https://staging.notes-analytics.test/collect : page on senyap-demo.vercel.app called staging.notes-analytics.test (net::ERR_NAME_NOT_RESOLVED)
+
