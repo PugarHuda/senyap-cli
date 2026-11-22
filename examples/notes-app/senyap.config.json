@@ -1,0 +1,8 @@
+{
+  "url": "http://127.0.0.1:4800/",
+  "flows": [
+    "Add a note that says \"Don't forget the milk\" and save it"
+  ],
+  "persistence": true,
+  "maxAttempts": 3
+}

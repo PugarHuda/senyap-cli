@@ -1,0 +1,6 @@
+policy: senyap-lock
+gates:
+  - { id: no-failed-steps, metric: steps.failed, equals: 0, severity: blocking }
+  - { id: every-test-checks-something, metric: metrics.tests_without_checks, equals: 0, severity: blocking }
+  - { id: no-silent-heal, metric: metrics.heal.healed_tests, equals: 0, severity: blocking }
+  - { id: no-heal-exhausted, metric: metrics.heal.exhausted_tests, equals: 0, severity: blocking }

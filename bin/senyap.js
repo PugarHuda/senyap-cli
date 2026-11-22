@@ -58,7 +58,7 @@ const commands = {
     }
     return worst;
   },
-  async guard() { return (await import('../src/guard.js')).guard(); },
+  async guard() { return (await import('../src/guard.js')).guard({ agent: values.agent }); },
   async lock() { return (await import('../src/lock.js')).lockCommand(values); },
   async init() { return (await import('../src/init.js')).init(values); },
 };

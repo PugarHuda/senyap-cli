@@ -6,7 +6,10 @@ import { openContainer } from '@testmuai/evidence-cli';
 import { parse as parseYaml } from 'yaml';
 
 const NOISE = [/\/favicon\.ico(\?|$)/i];
-const ENV_HOST = /(^|[.-])(localhost|127\.0\.0\.1|0\.0\.0\.0|staging|stage|dev|test|sandbox|preview|qa)([.-]|$)/i;
+const LOCAL_HOST = /^(localhost|127\.\d+\.\d+\.\d+|0\.0\.0\.0|\[?::1\]?)$/i;
+const PRE_PROD = /(^|[.-])(staging|stage|dev|test|sandbox|preview|qa|uat)([.-]|$)/i;
+/** Which environment a host belongs to: local, preprod or prod. */
+export const envOf = (host) => (LOCAL_HOST.test(host) ? 'local' : PRE_PROD.test(host) ? 'preprod' : 'prod');
 export const SLOW_MS = 3000; // ponytail: same default as `kane-cli explore --slow-budget response=3s`
 
 /** Classify one HAR entry; returns a finding or null. */
@@ -15,14 +18,15 @@ export function classifyRequest(entry, surfaceHost) {
   if (NOISE.some((re) => re.test(url))) return null;
   const status = entry.response?.status ?? 0;
   const base = { step: entry._step ?? null, method: entry.request?.method, url, status, ms: Math.round(entry.time ?? 0) };
+  let host = '';
+  try { host = new URL(url).hostname; } catch { /* data: or blob: url */ }
+  // A call to another environment is the root cause even when it also failed.
+  if (host && surfaceHost && host !== surfaceHost && envOf(host) !== 'prod' && envOf(host) !== envOf(surfaceHost)) {
+    return { kind: 'env_leak', severity: 'blocking', ...base, detail: `page on ${surfaceHost} called ${host}${entry._failed ? ` (${entry._failure_reason ?? 'failed'})` : ''}` };
+  }
   if (entry._failed || status === 0) return { kind: 'request_failed', severity: 'blocking', ...base, detail: entry._failure_reason ?? 'no response' };
   if (status >= 500) return { kind: 'http_5xx', severity: 'blocking', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
   if (status >= 400 && entry._resource_type !== 'document') return { kind: 'http_4xx', severity: 'blocking', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
-  let host = '';
-  try { host = new URL(url).hostname; } catch { /* data: or blob: url */ }
-  if (host && surfaceHost && host !== surfaceHost && ENV_HOST.test(host) && !ENV_HOST.test(surfaceHost)) {
-    return { kind: 'env_leak', severity: 'blocking', ...base, detail: `page on ${surfaceHost} called ${host}` };
-  }
   if (url.startsWith('http://') && surfaceHost && base.url && pageIsHttps(entry)) return { kind: 'mixed_content', severity: 'warning', ...base, detail: 'http request from an https page' };
   if (base.ms > SLOW_MS) return { kind: 'slow_response', severity: 'warning', ...base, detail: `${base.ms} ms` };
   return null;

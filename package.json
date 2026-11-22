@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Catch the bugs that fail silently: Kane CLI hunts hidden 5xx, console errors and false greens, then makes your coding agent fix and prove them.",
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   },
   "license": "Apache-2.0",
   "type": "module",
