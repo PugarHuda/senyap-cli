@@ -135,6 +135,11 @@ test('classify maps Kane outcomes and the pack verdict to one status', () => {
   assert.equal(classify({ exitCode: 0, end: { result_code: 100, status: 'passed' }, policyPassed: true }), 'clean');
   assert.equal(classify({ exitCode: 2, end: {} }), 'not_run');
   assert.equal(classify({ exitCode: 3, end: { result_code: 750 } }), 'inconclusive');
+  // a failed probe: a false green when Kane passed, but no verdict when Kane never ran the flow
+  assert.equal(classify({ exitCode: 0, end: { result_code: 100, status: 'passed' }, policyPassed: false, probeOnly: true }), 'silent_failure');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 720, verdict: { family: 'automation_bug' } }, policyPassed: false, probeOnly: true }), 'inconclusive');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 740 }, policyPassed: false, probeOnly: true }), 'silent_failure');
+  assert.equal(classify({ exitCode: 1, end: { result_code: 720, verdict: { family: 'automation_bug' } }, policyPassed: false, probeOnly: false }), 'silent_failure');
 });
 
 test('probes: a failing data check becomes a blocking finding', () => {

@@ -18,8 +18,16 @@ export const POLICY = resolve(fileURLToPath(import.meta.url), '../../policies/se
  * assertion failed: 710/720/730), clean, not_run (never started, infra, blockers),
  * inconclusive (Kane could not finish verifying: 3xx/4xx/750/timeouts; not the app's fault).
  */
-export function classify({ exitCode, end, policyPassed }) {
+export function classify({ exitCode, end, policyPassed, probeOnly = false }) {
   const rc = end?.result_code ?? null;
+  // A probe only speaks for a flow Kane actually ran. When the probe is the only thing that
+  // failed and Kane says the run itself went wrong, the data is wrong because the flow never
+  // happened (QuietBench tududi #904: Kane never renamed the task, 720 automation_bug), so the
+  // run is inconclusive. Kane passing while the probe fails is exactly the false green it's for.
+  if (probeOnly && policyPassed === false) {
+    const without = classify({ exitCode, end, policyPassed: true });
+    return without === 'inconclusive' || without === 'not_run' ? without : 'silent_failure';
+  }
   if (rc === 740 || policyPassed === false) return 'silent_failure';
   // Kane's own bug-detection verdict says whether a failed assertion was the app's
   // fault. QuietBench (tududi, fixed build): 710 with family automation_bug, because
@@ -97,7 +105,8 @@ async function huntOnce({ url, flow, probe, reset, phase, workDir = '.senyap', t
   const findings = pack?.tests.flatMap((t) => t.findings) ?? (probeFail ? [probeFail] : []);
   return {
     flow, url, phase, objective,
-    status: classify({ exitCode: run.exitCode, end, policyPassed: judged ? judged.passed : probeFail ? false : null }),
+    status: classify({ exitCode: run.exitCode, end, policyPassed: judged ? judged.passed : probeFail ? false : null,
+      probeOnly: !!probeFail && !findings.some((f) => f.severity === 'blocking' && f.kind !== 'probe_failed') }),
     kane: { status: end.status, result_code: end.result_code, reason_code: end.reason_code, summary: end.summary, verdict: end.verdict ?? null, credits: end.credits_consumed, test_url: end.test_url, exitCode: run.exitCode },
     falseGreen: pack?.tests.some((t) => t.falseGreen) ?? false,
     findings, kanePack, senyapPack, policyVerdict: judged && { passed: judged.passed, doc: judged.doc },
