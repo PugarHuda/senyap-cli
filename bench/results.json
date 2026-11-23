@@ -1,0 +1,555 @@
+[
+  {
+    "bug": "tududi1045",
+    "app": "tududi",
+    "issue_url": "https://github.com/chrisvel/tududi/issues/1045",
+    "fix_url": "https://github.com/chrisvel/tududi/pull/1044",
+    "pre_sha": "a21e643842",
+    "fix_sha": "b9eaedc468",
+    "flow": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value",
+    "A": {
+      "status": "failed",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M825WE4PKHSYZ3D2B2PGE5RQ/dashboard/share/US_5Q0D2W69NYMUXRS3W8CC282BI6XTP6M4GCM9HD04YMVBMHPKM5DK66H8U16X5ATX?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 38.31,
+      "summary": "The app rejected the request that saves Today page settings with an internal server error. The reload therefore used the previously saved setting instead of the newly selected one.\nInvestigate and fix the server error on the Today-settings save endpoint, then retry changing Show Metrics and confirm that its state remains changed after a reload.\nevidence: network_failure: PUT http://localhost:3002/api/profile/today-settings -> 500 body: {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERRO\nevidence: console_error: Failed to save settings"
+    },
+    "B": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "verdict_family": null,
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 100,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82X8ZC9CD1JVZR7M3W9W0ST/dashboard/share/US_4AB6S6KJ94G0E03N8CMGV7QQ9J1AUSH9O43ZYHIYB6HM49WQI4B74Y94O6MQ5SOY?type=summary&agentView=true&fqdn=summary-page"
+      },
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82X8ZC9CD1JVZR7M3W9W0ST/dashboard/share/US_4AB6S6KJ94G0E03N8CMGV7QQ9J1AUSH9O43ZYHIYB6HM49WQI4B74Y94O6MQ5SOY?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82XDRZZ8X18PCZXGQPDR5EA/dashboard/share/US_WD27WBL9IY6OPITNRV5LNIRN8IB5WB3FXOER98NXVUR9LB1CON8CGN3LYTII2HS0?type=summary&agentView=true&fqdn=summary-page",
+      "blocking": 2,
+      "findings": [
+        "warning ambient_console http://localhost:3002/main.db6f287330be3acd7c83.js Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning ambient_console http://localhost:3002/main.db6f287330be3acd7c83.js Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "blocking console_error http://localhost:3002/main.db6f287330be3acd7c83.js Failed to save settings",
+        "warning auth_probe GET http://localhost:3002/api/profile 401 {\"error\":\"Authentication required\"}",
+        "blocking http_5xx PUT http://localhost:3002/api/profile/today-settings 500 {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERROR\"}"
+      ],
+      "falseGreen": true,
+      "confirm_status": "inconclusive",
+      "retried": false,
+      "credits": 74.29
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "inconclusive",
+      "result_code": 750,
+      "reason_code": "assertion_error.step_not_achievable",
+      "verdict_family": "automation_bug",
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82XS5NZJ2R97G07CWZXAD9R/dashboard/share/US_0EW1G3ZNJ3IJ2ROX8AF632QYJ4QVR3U3EKSY12BR9J3MQGLV01XNDSTX5A6KB1PC?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [
+        "warning ambient_console http://localhost:3002/main.30bb0ad27895b9ff4b00.js Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning ambient_console http://localhost:3002/main.30bb0ad27895b9ff4b00.js Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning auth_probe GET http://localhost:3002/api/profile 401 {\"error\":\"Authentication required\"}"
+      ],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": true,
+      "credits": 58.92
+    },
+    "superseded_v011": {
+      "B": {
+        "senyap": "0.1.1",
+        "status": "silent_failure",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "verdict_family": "application_issue",
+        "observe": null,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8263FV2GKW8XY3MYXF71TND/dashboard/share/US_TB0T3G569HN9MLDNRADXRATKIEDMW62LEXWXNU712SWE8HONTOVBV9MVPHO8DZ7C?type=summary&agentView=true&fqdn=summary-page",
+        "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8263FV2GKW8XY3MYXF71TND/dashboard/share/US_TB0T3G569HN9MLDNRADXRATKIEDMW62LEXWXNU712SWE8HONTOVBV9MVPHO8DZ7C?type=summary&agentView=true&fqdn=summary-page",
+        "blocking": 7,
+        "findings": [
+          "blocking console_error http://localhost:3002/api/profile Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "blocking console_error http://localhost:3002/main.db6f287330be3acd7c83.js Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+          "blocking console_error http://localhost:3002/main.db6f287330be3acd7c83.js Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+          "blocking console_error http://localhost:3002/api/profile/today-settings Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "blocking console_error http://localhost:3002/main.db6f287330be3acd7c83.js Failed to save settings",
+          "blocking http_4xx GET http://localhost:3002/api/profile 401 {\"error\":\"Authentication required\"}",
+          "warning slow_response GET http://localhost:3002/api/profile 200 3375 ms",
+          "blocking http_5xx PUT http://localhost:3002/api/profile/today-settings 500 {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERROR\"}"
+        ],
+        "falseGreen": true,
+        "confirm_status": "silent_failure",
+        "retried": false,
+        "credits": 75.57
+      },
+      "C": {
+        "senyap": "0.1.1",
+        "status": "silent_failure",
+        "result_code": 710,
+        "reason_code": "assertion_error.final_verification",
+        "verdict_family": "automation_bug",
+        "observe": null,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826DPPHXGTRPMB3T3Z4XZA0/dashboard/share/US_QL9Y096J7IHN5JVMV51KSKB8KCJ3BUT4438WM30CA1O43AR4FLYJL5SK7VJAAHDL?type=summary&agentView=true&fqdn=summary-page",
+        "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826JYC7ZPR8AY4V8EHDJ1NV/dashboard/share/US_6Q37HF2AIX629KBMNMI0OL8IQO24G55XPS4SJ31VGJ1WOD56YBPCZ6ODGK87N31K?type=summary&agentView=true&fqdn=summary-page",
+        "blocking": 4,
+        "findings": [
+          "blocking console_error http://localhost:3002/api/profile Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "blocking console_error http://localhost:3002/main.30bb0ad27895b9ff4b00.js Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+          "blocking console_error http://localhost:3002/main.30bb0ad27895b9ff4b00.js Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+          "blocking http_4xx GET http://localhost:3002/api/profile 401 {\"error\":\"Authentication required\"}"
+        ],
+        "falseGreen": false,
+        "confirm_status": "silent_failure",
+        "retried": false,
+        "credits": 92.31
+      }
+    },
+    "notes": "Native Node 26, production build served by the backend on :3002, fresh SQLite. A (unchanged from 22 Nov) caught it via the 500 on PUT /api/profile/today-settings. B and C re-run live on 23 Nov with senyap 0.1.2, one Kane run at a time. B: silent_failure. Kane's observe run PASSED (100, a false green); Senyap failed it on the hidden 500 on PUT /api/profile/today-settings plus the app's own console.error \"Failed to save settings\"; the pre-login 401 is now an auth_probe warning and the i18n errors are ambient warnings. The confirm run ended 750 (Kane DevTools capture), so the 740 diagnosis is missing, but the status rests on the pack. C (fixed build): inconclusive, 0 blocking findings (only the 3 warnings). Observe ended 710 final_verification with verdict family automation_bug, the automatic retry ended 750 step_not_achievable, family automation_bug (Kane clicked the Show Metrics label, not the switch). Not a false alarm, but not a clean pass either. Not re-run a third time: both attempts failed on the same Kane click problem."
+  },
+  {
+    "bug": "kuma3713",
+    "app": "Uptime Kuma",
+    "issue_url": "https://github.com/louislam/uptime-kuma/issues/3713",
+    "fix_url": "https://github.com/louislam/uptime-kuma/pull/3717",
+    "pre_sha": "1f29fabe64",
+    "fix_sha": "0af4ee6c34",
+    "flow": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused)",
+    "A": {
+      "status": "passed",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826C3D1BRTPG6HE17SQ44DT/dashboard/share/US_96LGQUHH3WMQ0JMKEUX6K1AY3HXJL4CERB07L5X8CF0MQLAQR432V3ER24XB23WD?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 35.18,
+      "summary": "Logged in with the provided QB account credentials.\nOpened the “QB Self” monitor, selected Edit, and saved it without making changes.\nReturned to the “QB Self” monitor page and reloaded it.\nConfirmed that the monitor remained paused because the Resume button was still visible."
+    },
+    "B": {
+      "senyap": "0.1.1",
+      "status": "clean",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "verdict_family": null,
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82Y8SHY4J244Q6ZRHJKSSZ3/dashboard/share/US_YGECB6X4HJJ74U8BM4S4LQVJL24S5XYB533IEL9QGVTYSW0UOP6AM3CU9G6V8ZD4?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": false,
+      "credits": 36.06
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "clean",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "verdict_family": null,
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YF3QKVTQBVH3RDSRKFZN2/dashboard/share/US_B6BGNQTFDUMFPLSQAJ1UH35DKXU0GDJ4GOOW3ARF7SGK0B02DJM9PT0GLF4OTV8E?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": false,
+      "credits": 36.6
+    },
+    "notes": "Run natively on Node 26 with a SlowBuffer preload shim (tools/node26-shim.js), port 3011, server restarted and reseeded (admin qb, monitor QB Self paused) before every Kane run. A (22 Nov) PASSED: a false green; the server log shows the Save resumed the monitor (the bug) and then the agent itself pressed Pause before checking for the Resume button. B (23 Nov, senyap 0.1.2), run 1: inconclusive. The observe run triggered the bug (server log \"Resume Monitor: 1\" 07:48:47 right after Save) and Kane failed it 720 checkpoint_failed, but Kane's verdict blamed itself (family automation_bug: \"the test checked for the Resume button without first putting QB Self into the paused state\"), so 0.1.2 counts it as inconclusive, not a failure. Senyap's automatic retry then ran against the already-resumed monitor (Senyap does not reset app state between attempts) and got the same 720/automation_bug. Under 0.1.1 the same 720 would have counted as failed. B run 2 (one re-run, server reseeded): clean, 100, 0 findings: the same false green as A (log: Resume at 07:54:04 after Save, then the agent pressed Pause at 07:54:52). The table shows run 2; run 1 is kept at results/kuma3713-pre-run1.json. C (fixed build): clean, 100, 0 findings, and the server log shows no Resume after Save. This bug has no network or console signal, so Senyap adds nothing over plain Kane here: a miss for both."
+  },
+  {
+    "bug": "memos5011",
+    "app": "Memos",
+    "issue_url": "https://github.com/usememos/memos/issues/5011",
+    "fix_url": "https://github.com/usememos/memos/pull/5012",
+    "pre_sha": "01d3f2f86c",
+    "fix_sha": "fbcdf0fba7",
+    "flow": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, change the theme to Dark, reload the page, and check that the theme setting still shows Dark",
+    "A": {
+      "status": "failed",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826EW7XWPVDF9E0TKZ56A58/dashboard/share/US_9THP5PUAG78FMIIIB9GXH7MN5RRET9FF79GDI7I1WXUQUTT705YC0LUSGAHOCPWC?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 43.42,
+      "summary": "The app tried to save the selected theme, but the requested user setting could not be found, so the preference was not retained.\nInvestigate why saving the theme returns “GENERAL not found,” then verify that choosing Default Dark remains selected after a reload.\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found\nevidence: objective_contradiction: Checkpoint assertion failed: \"the theme setting still shows Dark\""
+    },
+    "B": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "verdict_family": "application_issue",
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 740,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YMM4DM8C2PN13QATC63C6/dashboard/share/US_LI7YQD3YNP1O0R5W9MH8ITBQ4SQ8J6DO3U3NNXY5VZKAWL8LS3TU722CELQPD1SP?type=summary&agentView=true&fqdn=summary-page"
+      },
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YMM4DM8C2PN13QATC63C6/dashboard/share/US_LI7YQD3YNP1O0R5W9MH8ITBQ4SQ8J6DO3U3NNXY5VZKAWL8LS3TU722CELQPD1SP?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YTJ2G6HFTR5E0HCYP504X/dashboard/share/US_VGA6F5X5FNP7V19IUFV3ZD2JBLBC8HT3C6MYOXXXK8O76UMQCQ7KKMS63OU6O4XZ?type=summary&agentView=true&fqdn=summary-page",
+      "blocking": 1,
+      "findings": [
+        "blocking console_error /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found"
+      ],
+      "falseGreen": false,
+      "confirm_status": "silent_failure",
+      "retried": false,
+      "credits": 71.39
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "clean",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "verdict_family": null,
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YZXWJV0H2R107ACC6G190/dashboard/share/US_IZ5AJR7D7G1JBGR4LUGF7V24PQMC1LZT9OAP7AMGE2UE6KEZJKMQH6DYWTELL0RZ?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": false,
+      "credits": 34.85
+    },
+    "notes": "Native Go binary with embedded frontend (prod mode, fresh data dir), :8081. User qb created via POST /api/v1/users so it has no saved settings row, as in the issue. A (22 Nov) caught it (740, console NOT_FOUND: GENERAL not found). B (23 Nov, senyap 0.1.2, run alone): silent_failure; Kane's observe run already failed 740 on the console error, and the confirm run agreed (740). The server log shows UpdateUserSetting NotFound \"GENERAL not found\" during the run. Senyap adds nothing over plain Kane here: both caught it. C (fixed build): clean, 100, 0 findings; server log shows UpdateUserSetting OK. The 22 Nov B run was invalid (evidence crossover) and is kept in results/invalid/."
+  },
+  {
+    "bug": "memos4978",
+    "app": "Memos",
+    "issue_url": "https://github.com/usememos/memos/issues/4978",
+    "fix_url": "https://github.com/usememos/memos/pull/4980",
+    "pre_sha": "1f1add1a48",
+    "fix_sha": "9f8921d3b9",
+    "flow": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, set Appearance to 'Always dark', then set Default memo visibility to 'Public', reload the page, and check that Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'",
+    "A": {
+      "status": "failed",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82ZF3XF9EQPH8VZNB77Y4JB/dashboard/share/US_YHO9H8DEQBSUGHOH2SFPK5RHT1332BOVDOJW0H749XAA91D5Y8JYXNYQWHAGRNH9?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 48.57,
+      "summary": "The app accepted the Appearance choice during the session but did not retain it when Preferences was loaded again.\nFix saving or restoring the Appearance preference, then retest by choosing Always dark, reloading Preferences, and confirming both values remain selected.\nevidence: objective_contradiction: Checkpoint assertion failed: \"Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'.\""
+    },
+    "B": {
+      "senyap": "0.1.1",
+      "status": "inconclusive",
+      "result_code": 720,
+      "reason_code": "assertion_error.checkpoint_failed",
+      "verdict_family": "automation_bug",
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82ZY1WHF8ZX1QKDK941T6PW/dashboard/share/US_LJ6XOPBPIZ6KFG7B7YO7FTE4V9XXEMH5GK95EB6FV49NG9O7NGZXAWQGCRZ28YJ7?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": true,
+      "credits": 95.35
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "inconclusive",
+      "result_code": 720,
+      "reason_code": "assertion_error.checkpoint_failed",
+      "verdict_family": "automation_bug",
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M830B1MSJZW44K67KZ396YN6/dashboard/share/US_4MYW81OBQ7E475NEC4AZBJRJKHV5SL266AIU5EZGFEKEESI3E21VT4MR75E88RXW?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": true,
+      "credits": 75.2
+    },
+    "notes": "Native Go binary (prod mode, fresh data dir, user qb via POST /api/v1/users), :8081, server reset before every Kane run. The first plain-Kane attempt used \"change the theme to Dark\" and ended 720 automation_bug: memos has both an Appearance select (Always dark) and a Theme select, and Kane mixed them up. The flow was made explicit (Appearance / Default memo visibility) before any Senyap run and A was re-run with it (attempt 1 kept in scratch/memos4978-A-attempt1-ambiguous-flow). A: failed 740 confirmed_product_bug: after reload Appearance was no longer Always dark (the bug: the second update wrote back an empty settings object). No network or console signal: every UpdateUserSetting returned OK. B (senyap 0.1.2): inconclusive. Both observe attempts ended 720 checkpoint_failed with verdict family automation_bug; Kane's checkpoint recorded unresolved placeholders (\"observed: {{appearance_always_dark_c...\") instead of page text, and the retry skipped selecting Public before the reload. The pack had 0 findings, as expected for a state-only bug. C (fixed build): inconclusive the same way (720 automation_bug twice, placeholder values), 0 findings. Not re-run: both columns failed on the same Kane checkpoint problem, which a re-run would not change."
+  },
+  {
+    "bug": "memos5865",
+    "app": "Memos",
+    "issue_url": "https://github.com/usememos/memos/issues/5865",
+    "fix_url": "https://github.com/usememos/memos/pull/5867",
+    "pre_sha": "d98f665919",
+    "fix_sha": "b5863d76be",
+    "flow": "Sign in with username qb and password QuietBench123!, on the home page find the memo with the checklist items 'alpha' and 'beta', open that memo's menu, choose Edit and click Save without changing anything, then tick the 'alpha' checkbox in the memo, open the memo's menu again, choose Edit and click Save without changing anything, reload the page, and check that 'alpha' is still ticked",
+    "A": {
+      "status": "failed",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "credits": 72.37,
+      "summary": "The edit view treated alpha as unchecked even though it was checked in the memo, then saved that unchecked version back to the memo.\nPreserve each checklist item's completed state when opening and saving the memo editor. Add a regression test that checks an item, saves an otherwise unchanged edit, reloads, and confirms it remains checked.\nevidence: objective_contradiction: Checkpoint assertion failed: \"'alpha' is still ticked.\""
+    },
+    "B": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "verdict_family": "application_issue",
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 740
+      },
+      "test_url": null,
+      "confirm_test_url": null,
+      "blocking": 2,
+      "findings": [
+        "blocking http_4xx POST http://localhost:8081/memos.api.v1.AuthService/RefreshToken 401 {\"code\":\"unauthenticated\",\"message\":\"rpc error: code = Unauthenticated desc = refresh token not found\"}",
+        "blocking request_failed GET http://localhost:8081/api/v1/sse 200 net::ERR_ABORTED"
+      ],
+      "falseGreen": false,
+      "confirm_status": "silent_failure",
+      "retried": false,
+      "credits": 140.05
+    },
+    "C": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 750,
+      "reason_code": "assertion_error.step_not_achievable",
+      "verdict_family": "automation_bug",
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 750
+      },
+      "test_url": null,
+      "confirm_test_url": null,
+      "blocking": 2,
+      "findings": [
+        "blocking http_4xx POST http://localhost:8081/memos.api.v1.AuthService/RefreshToken 401 {\"code\":\"unauthenticated\",\"message\":\"rpc error: code = Unauthenticated desc = refresh token not found\"}",
+        "blocking request_failed GET http://localhost:8081/api/v1/sse 200 net::ERR_ABORTED"
+      ],
+      "falseGreen": false,
+      "confirm_status": "silent_failure",
+      "retried": false,
+      "credits": 91.66
+    },
+    "notes": "Native Go binary (2026 build: no --mode flag), fresh data dir, :8081; user qb and the memo \"- [ ] alpha / - [ ] beta\" created via the API before every Kane run. A attempt 1 (first flow: tick, Edit, Save) PASSED, but the bug was not triggered: it needs a stale editor draft in localStorage, which only exists after the memo was opened in the editor once (useAutoSave flushes the draft on unmount). The flow was made explicit (Edit+Save first, then tick, then Edit+Save) before any Senyap run and A was re-run (attempt 1 kept in scratch/memos5865-A-attempt1-no-draft). A: failed 740 confirmed_product_bug (the edit view saved alpha back as unchecked). Kane returned no Test Manager link for these memos5865 runs (run_end has no test_url); session dirs are in the scratch folders. B (senyap 0.1.2): silent_failure; Kane's observe run itself ended 740. The pack also produced 2 blocking findings that are noise, not the bug: a pre-login POST /memos.api.v1.AuthService/RefreshToken -> 401 (refresh token not found) and GET /api/v1/sse ERR_ABORTED (the event stream cut by the reload). C (fixed build): silent_failure, a FALSE ALARM: Kane ended 750 automation_bug in both phases, the server state was correct (alpha still [x]), and the same two noise findings made the evidence policy fail. 0.1.2 treats only GET 401/403 as auth_probe, so a POST refresh-token 401 still blocks, and an aborted long-lived SSE request counts as request_failed."
+  },
+  {
+    "bug": "linkding1451",
+    "app": "linkding",
+    "issue_url": "https://github.com/sissbruecker/linkding/issues/1451",
+    "fix_url": "https://github.com/sissbruecker/linkding/pull/1452",
+    "pre_sha": "b58a7bb0b8",
+    "fix_sha": "96c4ef3f33",
+    "flow": "Log in with username qb and password QuietBench123!, open the Tags menu on the bookmarks page and choose 'Manage tags', then in the tags table click the bookmark count next to the tag 'qbtag', and check that the bookmarks page opens and lists the bookmark 'QB Example' filtered by #qbtag",
+    "A": {
+      "status": "passed",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M831N5KZB3KE5DA5RYG1F2VT/dashboard/share/US_AMI5UXF6NWI7P6RC56MTATJQM2ZYWMVUZEW1IQJLQ1AF1YTADWYSV803N1ED63HB?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 30.75,
+      "summary": "Logged in with the provided account credentials.\nOpened the Tags menu on the bookmarks page and selected Manage tags.\nSelected the bookmark count for the qbtag tag.\nThe bookmarks page displayed the #qbtag filter and listed the bookmark “QB Example,” confirming the requested result."
+    },
+    "B": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "verdict_family": "application_issue",
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 100,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M831TYCNS78CS21MHRAS6RVZ/dashboard/share/US_1Y7EQ37CLIIGIQ0WO1ETTL0BNDYRZVEN6NNRK335PN41G8JKIRT9WDJMIJD9GLQU?type=summary&agentView=true&fqdn=summary-page"
+      },
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M831TYCNS78CS21MHRAS6RVZ/dashboard/share/US_1Y7EQ37CLIIGIQ0WO1ETTL0BNDYRZVEN6NNRK335PN41G8JKIRT9WDJMIJD9GLQU?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8320PZTK4GZVN00GYDXN6CX/dashboard/share/US_UMQBIMHMDP06FFYSPNZUPOE90X12HF4ZMJCVKH1601HV6KPG4BYJYSZTDL8OU3BR?type=summary&agentView=true&fqdn=summary-page",
+      "blocking": 1,
+      "findings": [
+        "blocking console_error The response (200) did not contain the expected <turbo-frame id=\"tag-main\"> and will be ignored. To perform a full page visit instead, set turbo-visit-control t"
+      ],
+      "falseGreen": true,
+      "confirm_status": "silent_failure",
+      "retried": false,
+      "credits": 58.72
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "clean",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "verdict_family": null,
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8325D8VR5TWPG9VGN6PNVE5/dashboard/share/US_FLVBWV6FOZPI84FUM419FSLM9PW6DCVFCUV8PEF4NF04OYKDIKIB5BV82MYIEBIS?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": false,
+      "credits": 30.67
+    },
+    "notes": "Native, no Docker: Python 3.13 venv via uv (runtime deps from pyproject, without uwsgi/supervisor), JS built with npm run build, Django runserver on :9090 with the dev settings (so it serves static files), fresh SQLite, superuser qb and one bookmark tagged qbtag created via manage.py. Server reset before every Kane run; the fix only changes a template. A: PASSED, a false green. The server log shows GET /bookmarks?q=%23qbtag at 08:53:04 (the Turbo frame fetch the page silently ignored) and again at 08:54:01 (a second navigation by the agent), and Kane reported the filtered list as shown. B (senyap 0.1.2): silent_failure. Kane's observe run also PASSED (100, false green), but the pack held the Turbo console error \"The response (200) did not contain the expected <turbo-frame id=tag-main>\", and the confirm run ended 740 confirmed_product_bug. C (fixed build): clean, 100, 0 findings. This is the clearest case where Senyap catches what plain Kane misses."
+  },
+  {
+    "bug": "tududi904",
+    "app": "tududi",
+    "issue_url": "https://github.com/chrisvel/tududi/issues/904",
+    "fix_url": "https://github.com/chrisvel/tududi/pull/905",
+    "pre_sha": "47d270b242",
+    "fix_sha": "0bde44e460",
+    "flow": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'",
+    "A": {
+      "status": "failed",
+      "result_code": 750,
+      "reason_code": "assertion_error.step_not_achievable",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M830SWQT6DCW5MB6J4GHFSEM/dashboard/share/US_WP5E7DN9RDOXQO8NR78N1CGS0VE2MJGNTP7PVCVQNUVQUZF2G080OVHS57KYCTEN?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 35.02,
+      "summary": "The agent used reload at step 0-13 before any recorded rename commit. The first title-saving PATCH happened later at step 0-16, and the later successful commits were not followed by another reload and verification.\nCommit the name change, wait for the success message, then reload once and assert that the title is QB renamed."
+    },
+    "B": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "verdict_family": "application_issue",
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 740,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M83112S1C3EHHYPEPCB2F6DY/dashboard/share/US_SCN5BSQHMNBQLI4XAG8314QJ46KKCHFA6KJERZT87RE08VH75NQ09RMGX4V87UFI?type=summary&agentView=true&fqdn=summary-page"
+      },
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M83112S1C3EHHYPEPCB2F6DY/dashboard/share/US_SCN5BSQHMNBQLI4XAG8314QJ46KKCHFA6KJERZT87RE08VH75NQ09RMGX4V87UFI?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8318WQA1ZNBY31MC7400GGP/dashboard/share/US_6WPW5ZRMFT9981A2F0NFZ8Q1RNBGDPLJJEX5HSCIU16XH1ANI9CS9WV1OB6MD4FU?type=summary&agentView=true&fqdn=summary-page",
+      "blocking": 0,
+      "findings": [
+        "warning ambient_console http://localhost:3002/main.cc0591aeff8d30347c4e.js Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning ambient_console http://localhost:3002/main.cc0591aeff8d30347c4e.js Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning auth_probe GET http://localhost:3002/api/profile 401 {\"error\":\"Authentication required\"}"
+      ],
+      "falseGreen": false,
+      "confirm_status": "inconclusive",
+      "retried": false,
+      "credits": 84.05
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "clean",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "verdict_family": null,
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M831G7QP522YGN9C6TW1AXR3/dashboard/share/US_BPC3NVZW2X26NB828N1SZVGNR63G4ZCIX94TOW4GGRHZZ5Q96JGRY28ERICF1JCY?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [
+        "warning ambient_console http://localhost:3002/main.fde5ce3982b106982452.js Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning ambient_console http://localhost:3002/main.fde5ce3982b106982452.js Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+        "warning auth_probe GET http://localhost:3002/api/profile 401 {\"error\":\"Authentication required\"}"
+      ],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": false,
+      "credits": 29.9
+    },
+    "notes": "Native Node 26, production build, fresh SQLite, :3002, server reset before every Kane run. The bug returns PATCH /api/task/<uid> -> 200 with the old name and shows the success toast, so there is no network or console signal at all. A: failed 750 step_not_achievable, twice (attempt 1 kept in scratch/tududi904-A-attempt1, 50.9 credits). Kane kept renaming because the name never stuck after reload, then blamed its own step order; it never reached a 740, so A is not counted as a catch. B (senyap 0.1.2): silent_failure via Kane's own assertion: the observe run (Senyap's objective adds an explicit reload-and-verify step) ended 740 confirmed_product_bug (\"repeated successful rename toasts did not persist\"). The pack had 0 blocking findings (only the auth_probe and two ambient i18n warnings), so this catch came from the objective wording, not the evidence check. The confirm run ended 720 automation_bug. C (fixed build): clean, 100, 0 blocking findings."
+  },
+  {
+    "bug": "wallos459",
+    "app": "Wallos",
+    "issue_url": "https://github.com/ellite/Wallos/issues/459",
+    "fix_url": "https://github.com/ellite/Wallos/pull/460",
+    "pre_sha": "d7af7cc18b",
+    "fix_sha": "8cb43553fd",
+    "flow": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed",
+    "A": {
+      "status": "failed",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M823YZSWAJ4E3HYJYNXNPC7J/dashboard/share/US_8OOAE3G4JZUYP4RP0PNQEF20309HV4RWL7AL19S8XOR5JGYR2N5T80K9K96ZR1DX?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 56.37,
+      "summary": "The edit-form Delete action calls a stop action on something that is not an event, so the action stops before the subscription can be deleted.\nFix the edit-form Delete handler so it receives and uses the browser event correctly, then verify that deleting a subscription removes it after reload.\nevidence: console_error: event.stopPropagation is not a function\nevidence: console_error: event.stopPropagation is not a function\nevidence: console_error: event.stopPropagation is not a function"
+    },
+    "B": {
+      "senyap": "0.1.2",
+      "status": "silent_failure",
+      "result_code": 740,
+      "reason_code": "assertion_error.confirmed_product_bug",
+      "verdict_family": "application_issue",
+      "observe": {
+        "status": "silent_failure",
+        "result_code": 740,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M833SNHP12ZKGPF90J3N5V2V/dashboard/share/US_R73MV7T63Y4HYNLXY23R86T38OP1MV5730MT51TJKL0DUBOUGEF0Q4KJWLGF4VY0?type=summary&agentView=true&fqdn=summary-page"
+      },
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M833SNHP12ZKGPF90J3N5V2V/dashboard/share/US_R73MV7T63Y4HYNLXY23R86T38OP1MV5730MT51TJKL0DUBOUGEF0Q4KJWLGF4VY0?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M833YTKV13PSZY3FNS8EAKC3/dashboard/share/US_9GK4ADT2JUN7D4PA4YGVCNA37AVLVQRIRQCCXUX6O65ZE0KGLV0PN7LU7U04Z6S1?type=summary&agentView=true&fqdn=summary-page",
+      "blocking": 1,
+      "findings": [
+        "blocking console_error event.stopPropagation is not a function"
+      ],
+      "falseGreen": false,
+      "confirm_status": "silent_failure",
+      "retried": false,
+      "credits": 64.9
+    },
+    "C": {
+      "senyap": "0.1.1",
+      "status": "inconclusive",
+      "result_code": 720,
+      "reason_code": "assertion_error.checkpoint_failed",
+      "verdict_family": "automation_bug",
+      "observe": null,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M834FFBHBZRKHY6JAPSFJ01W/dashboard/share/US_NM7G1VP7X5P0MRJ08WUH9T8NHXBZPC9O720C8WKHKI0CYHXS4UVFTDHFNG6VRD1E?type=summary&agentView=true&fqdn=summary-page",
+      "confirm_test_url": null,
+      "blocking": 0,
+      "findings": [],
+      "falseGreen": false,
+      "confirm_status": null,
+      "retried": true,
+      "credits": 53.64
+    },
+    "superseded_v011": {
+      "B": {
+        "senyap": "0.1.1",
+        "status": "silent_failure",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "verdict_family": "application_issue",
+        "observe": null,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82459JGKXN6VPZC42XBGPFZ/dashboard/share/US_0MDYT53DXTVODPRHA3A3IZVNN5YZXC5SBXU72YI2MWJZK4E2KSAZGRBCZGCXDDJB?type=summary&agentView=true&fqdn=summary-page",
+        "confirm_test_url": null,
+        "blocking": 1,
+        "findings": [
+          "blocking console_error event.stopPropagation is not a function",
+          "warning slow_response GET http://localhost:8000/ 200 3779 ms",
+          "warning slow_response GET http://localhost:8000/styles/theme.css?v2.19.2 200 3868 ms",
+          "warning slow_response GET http://localhost:8000/styles/styles.css?v2.19.2 200 3868 ms",
+          "warning slow_response GET http://localhost:8000/styles/barlow.css 200 3871 ms",
+          "warning slow_response GET http://localhost:8000/styles/font-awesome.min.css 200 3855 ms",
+          "warning slow_response GET http://localhost:8000/styles/brands.css 200 3828 ms",
+          "warning slow_response GET http://localhost:8000/scripts/all.js?v2.19.2 200 3803 ms",
+          "warning slow_response GET http://localhost:8000/scripts/common.js?v2.19.2 200 5254 ms",
+          "warning slow_response GET http://localhost:8000/scripts/i18n/en.js?v2.19.2 200 5035 ms",
+          "warning slow_response GET http://localhost:8000/scripts/i18n/getlang.js?v2.19.2 200 5030 ms",
+          "warning slow_response GET http://localhost:8000/manifest.json 200 5477 ms",
+          "warning slow_response GET http://localhost:8000/images/avatars/0.svg 200 5303 ms",
+          "warning slow_response GET http://localhost:8000/images/uploads/icons/paypal.png 200 5280 ms",
+          "warning slow_response GET http://localhost:8000/scripts/dashboard.js?v2.19.2 200 3053 ms",
+          "warning slow_response GET http://localhost:8000/endpoints/subscription/get.php?id=1 200 8092 ms",
+          "warning slow_response GET http://localhost:8000/ 200 3200 ms",
+          "warning slow_response GET http://localhost:8000/styles/theme.css?v2.19.2 200 3553 ms",
+          "warning slow_response GET http://localhost:8000/styles/styles.css?v2.19.2 200 3579 ms",
+          "warning slow_response GET http://localhost:8000/styles/barlow.css 200 3527 ms",
+          "warning slow_response GET http://localhost:8000/styles/font-awesome.min.css 200 3492 ms",
+          "warning slow_response GET http://localhost:8000/styles/brands.css 200 3586 ms",
+          "warning slow_response GET http://localhost:8000/scripts/all.js?v2.19.2 200 3652 ms",
+          "warning slow_response GET http://localhost:8000/scripts/common.js?v2.19.2 200 3701 ms",
+          "warning slow_response GET http://localhost:8000/scripts/i18n/en.js?v2.19.2 200 3761 ms",
+          "warning slow_response GET http://localhost:8000/scripts/i18n/getlang.js?v2.19.2 200 3987 ms",
+          "warning slow_response GET http://localhost:8000/manifest.json 200 4096 ms",
+          "warning slow_response GET http://localhost:8000/images/avatars/0.svg 200 3943 ms",
+          "warning slow_response GET http://localhost:8000/images/uploads/icons/paypal.png 200 4318 ms",
+          "warning slow_response GET http://localhost:8000/scripts/dashboard.js?v2.19.2 200 4110 ms"
+        ],
+        "falseGreen": false,
+        "confirm_status": "inconclusive",
+        "retried": false,
+        "credits": 90.14
+      },
+      "C": null
+    },
+    "notes": "A is from 22 Nov (Docker php:8.2-cli; first attempt failed on the environment and is kept in scratch/wallos459-A-attempt1-envfail): failed 740 confirmed_product_bug on the console TypeError \"event.stopPropagation is not a function\". B and C on 23 Nov ran with portable PHP 8.2.36 for Windows (php -S :8000, fresh DB, user qb and subscription QB Netflix seeded via the app's own endpoints), because the Docker CLI still hangs. B (senyap 0.1.2): silent_failure; observe ended 740 and the pack held the blocking console_error; the confirm run agreed (740). The 22 Nov 0.1.1 B (silent_failure, 740) is kept in results/v011/. C (fixed build) run 1: silent_failure, a FALSE ALARM that did not come from Senyap's evidence (0 findings): Kane ended 740 confirmed_product_bug because QB Netflix was still listed after the reload. The fixed delete handler opens a native confirm() dialog and Kane never approved it, so no DELETE was sent (a DELETE via curl on the same server works: 3 -> 0 rows). C run 2 (the one allowed re-run, server reset): inconclusive, both attempts 720 with verdict family automation_bug (\"reloaded the page without evidence that it approved a confirmation\"). The table shows run 2; run 1 is kept at results/wallos459-post-run1.json."
+  }
+]

@@ -1,0 +1,206 @@
+{
+  "at": "2026-11-22T18:09:32.443Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused)",
+      "url": "http://localhost:3011",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused). Then reload the page and verify that the result of the flow is still there.",
+      "status": "clean",
+      "kane": {
+        "status": "passed",
+        "result_code": 100,
+        "reason_code": "success.complete",
+        "summary": "Opened the QB Self monitor page and reloaded it as requested.\nConfirmed that the Resume button remained visible, indicating the monitor was still paused.\nReloaded the page again and confirmed the flow result was still present.",
+        "verdict": null,
+        "credits": 49.247765,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826XH30THW15Q98D6MAYPD7/dashboard/share/US_X1XKMZUDNYYWIKOZKUNBA5HXO2RH882TU9XDAJHKKKPM2EWEKQV3680QQB5YPS4L?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 0
+      },
+      "falseGreen": false,
+      "findings": [],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\07b73d7e-ac32-4408-b776-0fa8f2ba9855\\evidence\\c3234bd7-f44d-4610-9722-9e878021aeb9.evidence",
+      "senyapPack": ".senyap\\packs\\c3234bd7-f44d-4610-9722-9e878021aeb9-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "c3234bd7-f44d-4610-9722-9e878021aeb9-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\kuma3713-pre\\.senyap\\packs\\c3234bd7-f44d-4610-9722-9e878021aeb9-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-22T18:09:31.479Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "c3234bd7-f44d-4610-9722-9e878021aeb9-senyap",
+                "sha256": "30800b2c1b07d3e9f0a66aee1b64e97e5e5d76b3703ed0f5f8a0cf7d255f90f1",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

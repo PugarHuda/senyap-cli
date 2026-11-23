@@ -1,0 +1,265 @@
+{
+  "at": "2026-11-23T02:44:03.469Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed",
+      "url": "http://localhost:8000",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed. Then reload the page and verify that the result of the flow is still there.",
+      "status": "inconclusive",
+      "kane": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The Delete click alone did not prove the subscription was removed. The run did not approve or check any follow-up confirmation and then reloaded the page.\nUpdate the automation to wait for and approve any delete confirmation, verify a successful deletion response or that the item disappears, and only then reload and assert that QB Netflix is absent.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "agent_misstep",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The Delete click alone did not prove the subscription was removed. The run did not approve or check any follow-up confirmation and then reloaded the page.",
+          "agent_fault_assessment": "The agent clicked the correct Delete button, but it did not verify that deletion completed or handle any follow-up confirmation before reloading. There is no recorded delete request, confirmation approval, or post-click success state, so the agent treated a click as a completed deletion without evidence.",
+          "bug_title": "Deletion flow reloaded before completion was verified",
+          "signals": [],
+          "confidence": 0.9,
+          "suggestion": "Update the automation to wait for and approve any delete confirmation, verify a successful deletion response or that the item disappears, and only then reload and assert that QB Netflix is absent.",
+          "one_liner": "The subscription remained because the run reloaded after clicking Delete without confirming that the deletion had completed.",
+          "relevant_steps": [
+            11,
+            13
+          ],
+          "culprit_step": "0-11",
+          "credits_consumed": 4.389099999999999,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 20.652856999999997,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M834FFBHBZRKHY6JAPSFJ01W/dashboard/share/US_NM7G1VP7X5P0MRJ08WUH9T8NHXBZPC9O720C8WKHKI0CYHXS4UVFTDHFNG6VRD1E?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\24ae1bdd-ddb1-4c10-914a-7480a9e5a861\\evidence\\7e8b47cf-2259-4a99-92a0-5c368a7a6c06.evidence",
+      "senyapPack": ".senyap\\packs\\7e8b47cf-2259-4a99-92a0-5c368a7a6c06-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "7e8b47cf-2259-4a99-92a0-5c368a7a6c06-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\wallos459-post\\.senyap\\packs\\7e8b47cf-2259-4a99-92a0-5c368a7a6c06-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-23T02:44:02.579Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "7e8b47cf-2259-4a99-92a0-5c368a7a6c06-senyap",
+                "sha256": "d64f08b19b93700453403c7133c4974d4a504187e0f7467ae6deea98bc0e81b9",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      },
+      "retriedAfter": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The agent performed the Delete click and then reloaded the page without evidence that it approved a confirmation or that the deletion was sent. The subscription therefore remained listed.\nUpdate the automation to wait for the deletion confirmation, approve it explicitly, and verify that a delete request or removed row occurs before reloading.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "agent_misstep",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The agent performed the Delete click and then reloaded the page without evidence that it approved a confirmation or that the deletion was sent. The subscription therefore remained listed.",
+          "agent_fault_assessment": "The agent correctly opened QB Netflix and clicked the Delete button, but it did not complete the deletion flow before reloading. The evidence contains no delete request or confirmed post-delete state, so the agent's incomplete action, rather than a demonstrated product failure, caused the failed check.",
+          "bug_title": "Deletion confirmation was not approved",
+          "signals": [],
+          "confidence": 0.86,
+          "suggestion": "Update the automation to wait for the deletion confirmation, approve it explicitly, and verify that a delete request or removed row occurs before reloading.",
+          "one_liner": "The subscription remained because the automation clicked Delete but did not complete the required deletion confirmation before reloading.",
+          "relevant_steps": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "culprit_step": "1-3",
+          "credits_consumed": 4.51045,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 32.986145,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M834BMRH7STQQT6462X38H3Z/dashboard/share/US_C5XBXV5EU591WS7MIL1BM840M0XPFV9Z202GY6VFFWTAX8JZ2JALWY8PAIBG6Y92?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "at": "2026-11-23T00:46:41.461Z",
+  "results": [
+    {
+      "flow": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value",
+      "url": "http://localhost:3002",
+      "phase": "observe",
+      "objective": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value. Then reload the page and verify that the result of the flow is still there.",
+      "status": "inconclusive",
+      "kane": {
+        "status": "failed",
+        "result_code": 750,
+        "reason_code": "assertion_error.step_not_achievable",
+        "summary": "The automation targeted the words “Show Metrics,” not the switch beside them. The setting therefore was not reliably changed before the reload and persistence check.\nUpdate the automation to click the switch control itself, then confirm its on/off state before reloading and checking persistence.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "agent_misstep",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The automation targeted the words “Show Metrics,” not the switch beside them. The setting therefore was not reliably changed before the reload and persistence check.",
+          "agent_fault_assessment": "The agent caused the failure: the step-11 screenshot marks the “Show Metrics” text while the actual toggle is a separate control on its right and remains off in that pre-action state. The run then lacked a confirmed new value to inspect after reload. There is no run evidence of a failed save request, application error, or unavailable settings caused by the product.",
+          "bug_title": "Show Metrics label clicked instead of switch",
+          "signals": [],
+          "confidence": 0.93,
+          "suggestion": "Update the automation to click the switch control itself, then confirm its on/off state before reloading and checking persistence.",
+          "one_liner": "The run could not verify persistence because it selected the Show Metrics label rather than the switch and never established the changed setting value.",
+          "relevant_steps": [
+            11
+          ],
+          "culprit_step": "0-11",
+          "credits_consumed": 4.0348999999999995,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 25.015667500000003,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82XS5NZJ2R97G07CWZXAD9R/dashboard/share/US_0EW1G3ZNJ3IJ2ROX8AF632QYJ4QVR3U3EKSY12BR9J3MQGLV01XNDSTX5A6KB1PC?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.30bb0ad27895b9ff4b00.js",
+          "detail": "Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.30bb0ad27895b9ff4b00.js",
+          "detail": "Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "auth_probe",
+          "severity": "warning",
+          "step": "0-1",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 401,
+          "ms": 42,
+          "detail": "{\"error\":\"Authentication required\"}"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\5e9e8f3c-c5fe-4b47-afdb-f2c19e460af2\\evidence\\b19c5e9a-9b59-4ee1-a977-f474bc64ca0f.evidence",
+      "senyapPack": ".senyap\\packs\\b19c5e9a-9b59-4ee1-a977-f474bc64ca0f-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "b19c5e9a-9b59-4ee1-a977-f474bc64ca0f-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\tududi1045-post\\.senyap\\packs\\b19c5e9a-9b59-4ee1-a977-f474bc64ca0f-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-23T00:46:40.598Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "b19c5e9a-9b59-4ee1-a977-f474bc64ca0f-senyap",
+                "sha256": "2a5910302fa8fac061248ca6fab9f5ae45ba3528936dae2626d25f963c3a6937",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      },
+      "retriedAfter": {
+        "status": "failed",
+        "result_code": 710,
+        "reason_code": "assertion_error.final_verification",
+        "summary": "The test made a final assertion that did not identify a specific visible result to check after reload. The available run record already marks the setting-persistence check as successful, but the later generic check failed without showing that the page or setting changed incorrectly.\nRewrite the final check to reopen the Today settings after the second reload and assert the actual Show Metrics switch value captured immediately after toggling. Record both the before and after values in the assertion output.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "state_transition_bug",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The test made a final assertion that did not identify a specific visible result to check after reload. The available run record already marks the setting-persistence check as successful, but the later generic check failed without showing that the page or setting changed incorrectly.",
+          "agent_fault_assessment": "The agent successfully logged in, opened the Today settings, and the run recorded the persistence check as successful at step 0-13. There is no run evidence that the agent clicked a wrong control, navigated away, or acted before the page was ready. The failure instead stems from the automation's final, undefined state check at step 0-16, which assumes a result it does not concretely establish or observe.",
+          "bug_title": "Final persistence assertion lacks an observable state",
+          "signals": [],
+          "confidence": 0.82,
+          "suggestion": "Rewrite the final check to reopen the Today settings after the second reload and assert the actual Show Metrics switch value captured immediately after toggling. Record both the before and after values in the assertion output.",
+          "one_liner": "The run’s final check failed even though the earlier reload check recorded that Show Metrics retained its new value.",
+          "relevant_steps": [
+            13,
+            16
+          ],
+          "culprit_step": "0-16",
+          "credits_consumed": 4.81875,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 33.9042005,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82XMS7G574V2YZ4QQGG1JWW/dashboard/share/US_AJ0COGS2NGR1B05BH6O7T3EFHHG13G30F5TDGOLP5RFUWKYATCOUV8K1JDQOZFLG?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      }
+    }
+  ]
+}

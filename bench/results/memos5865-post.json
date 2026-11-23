@@ -1,0 +1,325 @@
+{
+  "at": "2026-11-23T02:29:04.294Z",
+  "results": [
+    {
+      "flow": "Sign in with username qb and password QuietBench123!, on the home page find the memo with the checklist items 'alpha' and 'beta', open that memo's menu, choose Edit and click Save without changing anything, then tick the 'alpha' checkbox in the memo, open the memo's menu again, choose Edit and click Save without changing anything, reload the page, and check that 'alpha' is still ticked",
+      "url": "http://localhost:8081",
+      "phase": "observe",
+      "objective": "Sign in with username qb and password QuietBench123!, on the home page find the memo with the checklist items 'alpha' and 'beta', open that memo's menu, choose Edit and click Save without changing anything, then tick the 'alpha' checkbox in the memo, open the memo's menu again, choose Edit and click Save without changing anything, reload the page, and check that 'alpha' is still ticked. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 750,
+        "reason_code": "assertion_error.step_not_achievable",
+        "summary": "The test data provided a checklist-only memo with no title. The task requires the memo title before its menu can be opened and saved.\nProvide a matching memo with a non-empty title, or revise the task so a titleless memo can be identified and edited without requiring {{memo_title}}.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "test_data_issue",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The test data provided a checklist-only memo with no title. The task requires the memo title before its menu can be opened and saved.",
+          "agent_fault_assessment": "The agent did not cause the missing title. It successfully signed in and only analyzed the home page; it did not edit, delete, or otherwise change the matching memo. The title was already absent when the memo was inspected.",
+          "bug_title": "Checklist memo fixture has no title",
+          "signals": [],
+          "confidence": 0.96,
+          "suggestion": "Provide a matching memo with a non-empty title, or revise the task so a titleless memo can be identified and edited without requiring {{memo_title}}.",
+          "one_liner": "The memo containing “alpha” and “beta” exists, but it has no title to save as the required memo title.",
+          "relevant_steps": [
+            9,
+            10
+          ],
+          "culprit_step": "0-10",
+          "credits_consumed": 4.3584499999999995,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 34.27592,
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "http_4xx",
+          "severity": "blocking",
+          "step": "0-1",
+          "method": "POST",
+          "url": "http://localhost:8081/memos.api.v1.AuthService/RefreshToken",
+          "status": 401,
+          "ms": 2,
+          "detail": "{\"code\":\"unauthenticated\",\"message\":\"rpc error: code = Unauthenticated desc = refresh token not found\"}"
+        },
+        {
+          "kind": "request_failed",
+          "severity": "blocking",
+          "step": "1-6",
+          "method": "GET",
+          "url": "http://localhost:8081/api/v1/sse",
+          "status": 200,
+          "ms": 7,
+          "detail": "net::ERR_ABORTED"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\3b9b3ff6-44f1-4c88-9654-687a23c2f03e\\evidence\\eb4e4416-4b1f-4c7f-ba43-2811a381c6ba.evidence",
+      "senyapPack": ".senyap\\packs\\eb4e4416-4b1f-4c7f-ba43-2811a381c6ba-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "eb4e4416-4b1f-4c7f-ba43-2811a381c6ba-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-hidden-4xx"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\memos5865-post\\.senyap\\packs\\eb4e4416-4b1f-4c7f-ba43-2811a381c6ba-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T02:24:30.828Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "eb4e4416-4b1f-4c7f-ba43-2811a381c6ba-senyap",
+                "sha256": "764f548e44d23f161e9c36171adcee7fddb829955ffa595216f0bd7571a59f1e",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-hidden-4xx"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "The test data provided a checklist-only memo with no title. The task requires the memo title before its menu can be opened and saved.\nProvide a matching memo with a non-empty title, or revise the task so a titleless memo can be identified and edited without requiring {{memo_title}}.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "test_data_issue",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The test data provided a checklist-only memo with no title. The task requires the memo title before its menu can be opened and saved.",
+            "agent_fault_assessment": "The agent did not cause the missing title. It successfully signed in and only analyzed the home page; it did not edit, delete, or otherwise change the matching memo. The title was already absent when the memo was inspected.",
+            "bug_title": "Checklist memo fixture has no title",
+            "signals": [],
+            "confidence": 0.96,
+            "suggestion": "Provide a matching memo with a non-empty title, or revise the task so a titleless memo can be identified and edited without requiring {{memo_title}}.",
+            "one_liner": "The memo containing “alpha” and “beta” exists, but it has no title to save as the required memo title.",
+            "relevant_steps": [
+              9,
+              10
+            ],
+            "culprit_step": "0-10",
+            "credits_consumed": 4.3584499999999995,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 34.27592,
+          "exitCode": 1
+        },
+        "findings": 1
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "The test waited for its verification checks to finish, but they did not return in time on either attempt. As a result, the required checks and reload verification were never completed.\nUpdate the test's network and console collection wait logic, then rerun the flow and confirm the saved result remains after a reload.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "timing_sync",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The test waited for its verification checks to finish, but they did not return in time on either attempt. As a result, the required checks and reload verification were never completed.",
+            "agent_fault_assessment": "The agent/test did not complete its required pre-reload verification: the network and console checks timed out twice. The supplied evidence only confirms the pre-production-host check, so it cannot support a conclusion that the product produced an error or lost the result.",
+            "bug_title": "Pre-reload verification checks time out",
+            "signals": [],
+            "confidence": 0.9,
+            "suggestion": "Update the test's network and console collection wait logic, then rerun the flow and confirm the saved result remains after a reload.",
+            "one_liner": "The run stopped because its required network and console checks could not finish, not because the app was shown to fail.",
+            "relevant_steps": [
+              2
+            ],
+            "culprit_step": "2-2",
+            "credits_consumed": 2.3051,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 57.388435,
+          "exitCode": 1
+        },
+        "findings": 2
+      },
+      "credits": 91.664355
+    }
+  ]
+}

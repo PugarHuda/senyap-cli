@@ -1,0 +1,360 @@
+{
+  "at": "2026-11-23T01:48:56.179Z",
+  "results": [
+    {
+      "flow": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'",
+      "url": "http://localhost:3002",
+      "phase": "observe",
+      "objective": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "Saving the new task title appears to acknowledge success without retaining the changed title for the next page load.\nInvestigate the task-title save path and the task fetch after reload. Ensure the title submitted as \"QB renamed\" is stored and returned consistently before displaying a success message.\nevidence: network_failure: PATCH http://localhost:3002/api/task/mpgte4imtn4mmsd -> 200\nevidence: objective_contradiction: Repeated successful rename toasts did not persist; reloads always show 'New Task' instead of 'QB renamed'.",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "functional_defect",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "Saving the new task title appears to acknowledge success without retaining the changed title for the next page load.",
+          "agent_fault_assessment": "The agent followed the requested rename flow: it entered the intended title and committed it at step 0-26. The application returned 200 for both the rename request and the subsequent task fetch, yet the reported post-reload state was still \"New Task.\" There is no evidence that the agent reloaded before committing this rename in this run.",
+          "bug_title": "Task-title rename does not persist after reload",
+          "signals": [
+            {
+              "step": "0-26",
+              "kind": "network_failure",
+              "excerpt": "PATCH http://localhost:3002/api/task/mpgte4imtn4mmsd -> 200"
+            },
+            {
+              "step": "0-26",
+              "kind": "objective_contradiction",
+              "excerpt": "Repeated successful rename toasts did not persist; reloads always show 'New Task' instead of 'QB renamed'."
+            }
+          ],
+          "confidence": 0.96,
+          "suggestion": "Investigate the task-title save path and the task fetch after reload. Ensure the title submitted as \"QB renamed\" is stored and returned consistently before displaying a success message.",
+          "one_liner": "The task reports that its title was updated, but reloading restores the title to \"New Task\" instead of \"QB renamed.\"",
+          "relevant_steps": [
+            14,
+            16,
+            17,
+            22,
+            26
+          ],
+          "culprit_step": "0-26",
+          "credits_consumed": 5.070749999999999,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 43.55753249999999,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M83112S1C3EHHYPEPCB2F6DY/dashboard/share/US_SCN5BSQHMNBQLI4XAG8314QJ46KKCHFA6KJERZT87RE08VH75NQ09RMGX4V87UFI?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.cc0591aeff8d30347c4e.js",
+          "detail": "Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.cc0591aeff8d30347c4e.js",
+          "detail": "Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "auth_probe",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 401,
+          "ms": 76,
+          "detail": "{\"error\":\"Authentication required\"}"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\828e88d5-0d23-400b-99dd-019a740771a7\\evidence\\a2216b93-13c7-4af0-8c8c-94df320759ce.evidence",
+      "senyapPack": ".senyap\\packs\\a2216b93-13c7-4af0-8c8c-94df320759ce-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "a2216b93-13c7-4af0-8c8c-94df320759ce-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\tududi904-pre\\.senyap\\packs\\a2216b93-13c7-4af0-8c8c-94df320759ce-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-23T01:45:26.699Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "a2216b93-13c7-4af0-8c8c-94df320759ce-senyap",
+                "sha256": "505455a095e8b0c8f650fc91dd834c9655787a50db05463289e8e6cf355d3dbd",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "Saving the new task title appears to acknowledge success without retaining the changed title for the next page load.\nInvestigate the task-title save path and the task fetch after reload. Ensure the title submitted as \"QB renamed\" is stored and returned consistently before displaying a success message.\nevidence: network_failure: PATCH http://localhost:3002/api/task/mpgte4imtn4mmsd -> 200\nevidence: objective_contradiction: Repeated successful rename toasts did not persist; reloads always show 'New Task' instead of 'QB renamed'.",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "Saving the new task title appears to acknowledge success without retaining the changed title for the next page load.",
+            "agent_fault_assessment": "The agent followed the requested rename flow: it entered the intended title and committed it at step 0-26. The application returned 200 for both the rename request and the subsequent task fetch, yet the reported post-reload state was still \"New Task.\" There is no evidence that the agent reloaded before committing this rename in this run.",
+            "bug_title": "Task-title rename does not persist after reload",
+            "signals": [
+              {
+                "step": "0-26",
+                "kind": "network_failure",
+                "excerpt": "PATCH http://localhost:3002/api/task/mpgte4imtn4mmsd -> 200"
+              },
+              {
+                "step": "0-26",
+                "kind": "objective_contradiction",
+                "excerpt": "Repeated successful rename toasts did not persist; reloads always show 'New Task' instead of 'QB renamed'."
+              }
+            ],
+            "confidence": 0.96,
+            "suggestion": "Investigate the task-title save path and the task fetch after reload. Ensure the title submitted as \"QB renamed\" is stored and returned consistently before displaying a success message.",
+            "one_liner": "The task reports that its title was updated, but reloading restores the title to \"New Task\" instead of \"QB renamed.\"",
+            "relevant_steps": [
+              14,
+              16,
+              17,
+              22,
+              26
+            ],
+            "culprit_step": "0-26",
+            "credits_consumed": 5.070749999999999,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 43.55753249999999,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M83112S1C3EHHYPEPCB2F6DY/dashboard/share/US_SCN5BSQHMNBQLI4XAG8314QJ46KKCHFA6KJERZT87RE08VH75NQ09RMGX4V87UFI?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 3
+      },
+      "confirm": {
+        "status": "inconclusive",
+        "kane": {
+          "status": "failed",
+          "result_code": 720,
+          "reason_code": "assertion_error.checkpoint_failed",
+          "summary": "The task title was typed, but the page was reloaded before the save action. The Enter key that sent the successful save request was pressed only afterward.\nUpdate the flow to press Enter and wait for the save confirmation before reloading. Then reload and verify the persisted title.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "state_transition_bug",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The task title was typed, but the page was reloaded before the save action. The Enter key that sent the successful save request was pressed only afterward.",
+            "agent_fault_assessment": "The agent reloaded the task page at step 0-13 before committing the edited title. It did not press Enter to save until step 0-16, so the later check could not establish that the rename survived a reload. The agent's ordering directly caused the failed checkpoint.",
+            "bug_title": "Rename persistence asserted before commit",
+            "signals": [],
+            "confidence": 0.99,
+            "suggestion": "Update the flow to press Enter and wait for the save confirmation before reloading. Then reload and verify the persisted title.",
+            "one_liner": "The reload happened before the renamed task title was saved.",
+            "relevant_steps": [
+              11,
+              12,
+              13,
+              16,
+              19
+            ],
+            "culprit_step": "0-13",
+            "credits_consumed": 4.5014,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 40.4915325,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8318WQA1ZNBY31MC7400GGP/dashboard/share/US_6WPW5ZRMFT9981A2F0NFZ8Q1RNBGDPLJJEX5HSCIU16XH1ANI9CS9WV1OB6MD4FU?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 4
+      },
+      "credits": 84.04906499999998
+    }
+  ]
+}

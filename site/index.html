@@ -134,6 +134,7 @@ footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .9rem; border-t
         <p class="lede">Senyap makes Kane CLI look under the screen of your app: failed requests, console errors, calls to staging. It turns what Kane finds into a verdict Kane itself enforces, and your coding agent can't stop until the flow is clean.</p>
         <div class="cta">
           <span class="cmd"><span id="cmdtext">npx senyap init --agent claude</span><button type="button" id="copy" aria-label="Copy the install command">Copy</button></span>
+          <a href="https://youtu.be/Q2OyksshMQo">Watch the 3-minute demo</a>
           <a href="https://github.com/PugarHuda/senyap-cli">Read the source</a>
         </div>
       </div>
@@ -204,6 +205,27 @@ footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .9rem; border-t
         <div class="turn"><span class="who">Claude Code</span><span class="what">"The browser was still being sent an old copy of the page." The server read index.html once at startup. A third bug nobody planted.</span></div>
         <div class="turn done"><span class="who">Senyap</span><span class="what">Clean. Kane result code 100, no findings in the evidence pack.</span></div>
       </div>
+    </section>
+
+    <section id="bench">
+      <h2>Eight real bugs from open-source apps</h2>
+      <p class="sub">QuietBench: closed GitHub issues, each run on the commit before its fix and on the fix itself. Same flow sentence, one Kane run at a time, fresh data. Every run links to Kane's Test Manager in <a href="https://github.com/PugarHuda/senyap-cli/blob/main/bench/RESULTS.md">bench/RESULTS.md</a>, and so does every miss.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Bug</th><th>Plain Kane, buggy</th><th>Senyap, buggy</th><th>Senyap, fixed</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/chrisvel/tududi/issues/1045">tududi #1045</a></td><td class="v-pass">caught</td><td class="v-pass">caught</td><td>inconclusive</td></tr>
+            <tr><td><a href="https://github.com/louislam/uptime-kuma/issues/3713">Uptime Kuma #3713</a></td><td class="v-fail">missed</td><td class="v-fail">missed</td><td class="v-pass">clean</td></tr>
+            <tr><td><a href="https://github.com/usememos/memos/issues/5011">Memos #5011</a></td><td class="v-pass">caught</td><td class="v-pass">caught</td><td class="v-pass">clean</td></tr>
+            <tr><td><a href="https://github.com/usememos/memos/issues/4978">Memos #4978</a></td><td class="v-pass">caught</td><td>inconclusive</td><td>inconclusive</td></tr>
+            <tr><td><a href="https://github.com/usememos/memos/issues/5865">Memos #5865</a></td><td class="v-pass">caught</td><td class="v-pass">caught</td><td class="v-fail">false alarm (fixed in 0.1.3)</td></tr>
+            <tr><td><a href="https://github.com/sissbruecker/linkding/issues/1451">linkding #1451</a></td><td class="v-fail">missed</td><td class="v-pass">caught</td><td class="v-pass">clean</td></tr>
+            <tr><td><a href="https://github.com/chrisvel/tududi/issues/904">tududi #904</a></td><td>no verdict</td><td class="v-pass">caught</td><td class="v-pass">clean</td></tr>
+            <tr><td><a href="https://github.com/ellite/Wallos/issues/459">Wallos #459</a></td><td class="v-pass">caught</td><td class="v-pass">caught</td><td>inconclusive</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sub" style="margin-top:1.5rem">Plain Kane caught 5. Senyap caught 6, including two that plain Kane passed. A bug that leaves nothing in the network or console, like Uptime Kuma #3713, is only as visible to Senyap as it is to Kane's own check.</p>
     </section>
 
     <section id="install">

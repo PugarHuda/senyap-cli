@@ -1,0 +1,231 @@
+{
+  "at": "2026-11-23T01:51:44.788Z",
+  "results": [
+    {
+      "flow": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'",
+      "url": "http://localhost:3002",
+      "phase": "observe",
+      "objective": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'. Then reload the page and verify that the result of the flow is still there.",
+      "status": "clean",
+      "kane": {
+        "status": "passed",
+        "result_code": 100,
+        "reason_code": "success.complete",
+        "summary": "Logged in with the provided email and password.\nCreated a task named “QB original” and renamed it to “QB renamed.”\nWaited for the rename confirmation, then reloaded the task page twice.\nAfter both reloads, the task was still named “QB renamed” and its result remained visible.",
+        "verdict": null,
+        "credits": 29.895197499999995,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M831G7QP522YGN9C6TW1AXR3/dashboard/share/US_BPC3NVZW2X26NB828N1SZVGNR63G4ZCIX94TOW4GGRHZZ5Q96JGRY28ERICF1JCY?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 0
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.fde5ce3982b106982452.js",
+          "detail": "Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.fde5ce3982b106982452.js",
+          "detail": "Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "auth_probe",
+          "severity": "warning",
+          "step": "0-1",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 401,
+          "ms": 37,
+          "detail": "{\"error\":\"Authentication required\"}"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\5911da75-22f0-4c18-81c6-bdd6e62bea9e\\evidence\\de801655-e541-4b0f-8ef8-0ecd332c34ac.evidence",
+      "senyapPack": ".senyap\\packs\\de801655-e541-4b0f-8ef8-0ecd332c34ac-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "de801655-e541-4b0f-8ef8-0ecd332c34ac-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\tududi904-post\\.senyap\\packs\\de801655-e541-4b0f-8ef8-0ecd332c34ac-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-23T01:51:43.952Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "de801655-e541-4b0f-8ef8-0ecd332c34ac-senyap",
+                "sha256": "07062e60deb8945f9ac41945ef239de0960cd0a073dd0ec548b132281dc241ad",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

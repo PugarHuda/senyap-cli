@@ -1,0 +1,362 @@
+{
+  "at": "2026-11-23T02:34:21.366Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed",
+      "url": "http://localhost:8000",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The Delete button tries to use an event value that is not a real browser event, so the deletion stops before the subscription is removed.\nFix the edit-form Delete handler so it receives and uses the click event correctly, then verify that deletion removes the subscription and remains removed after a reload.\nevidence: console_error: event.stopPropagation is not a function\nevidence: console_error: event.stopPropagation is not a function\nevidence: console_error: event.stopPropagation is not a function",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "script_error",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The Delete button tries to use an event value that is not a real browser event, so the deletion stops before the subscription is removed.",
+          "agent_fault_assessment": "The agent followed the requested path: it opened QB Netflix's menu, selected Edit, and activated the Delete button in the loaded edit form. Repeating the same correct action and using Enter produced the same exception, so the agent did not cause the failure.",
+          "bug_title": "Edit-form Delete button throws a JavaScript exception",
+          "signals": [
+            {
+              "excerpt": "event.stopPropagation is not a function",
+              "kind": "console_error",
+              "step": "0-11"
+            },
+            {
+              "excerpt": "event.stopPropagation is not a function",
+              "kind": "console_error",
+              "step": "0-12"
+            },
+            {
+              "excerpt": "event.stopPropagation is not a function",
+              "kind": "console_error",
+              "step": "0-13"
+            }
+          ],
+          "confidence": 0.99,
+          "suggestion": "Fix the edit-form Delete handler so it receives and uses the click event correctly, then verify that deletion removes the subscription and remains removed after a reload.",
+          "one_liner": "QB Netflix cannot be deleted from its edit form because the Delete action immediately crashes.",
+          "relevant_steps": [
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "culprit_step": "0-11",
+          "credits_consumed": 4.39115,
+          "known_bug_id": "BUG-14",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 27.519465000000004,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M833YTKV13PSZY3FNS8EAKC3/dashboard/share/US_9GK4ADT2JUN7D4PA4YGVCNA37AVLVQRIRQCCXUX6O65ZE0KGLV0PN7LU7U04Z6S1?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-13",
+          "url": "",
+          "detail": "event.stopPropagation is not a function"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\9c4a97de-78ed-4d02-9100-becd0fcf74d5\\evidence\\aa0be8f0-57e7-4aba-ba8e-edab502b99d2.evidence",
+      "senyapPack": ".senyap\\packs\\aa0be8f0-57e7-4aba-ba8e-edab502b99d2-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "aa0be8f0-57e7-4aba-ba8e-edab502b99d2-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-console-errors"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\wallos459-pre\\.senyap\\packs\\aa0be8f0-57e7-4aba-ba8e-edab502b99d2-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T02:32:22.328Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "aa0be8f0-57e7-4aba-ba8e-edab502b99d2-senyap",
+                "sha256": "74f94047669227fa12826e48fff8f9ed0c3d96f65c1824dd3c36dccac5c52b83",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 2,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-console-errors"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The edit-form Delete button passes the wrong value to its delete action. When a user clicks it, the page tries to stop an event that is not an event, so deletion stops before the subscription is removed.\nFix the edit-form Delete button so it passes the real click event and the selected subscription ID to the delete action, then verify the subscription is removed and remains absent after reload.\nevidence: console_error: event.stopPropagation is not a function",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "script_error",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The edit-form Delete button passes the wrong value to its delete action. When a user clicks it, the page tries to stop an event that is not an event, so deletion stops before the subscription is removed.",
+            "agent_fault_assessment": "The agent followed the requested path: it opened QB Netflix's menu, selected Edit, and clicked the visible Delete button inside the loaded edit form. The error occurred on that correct user action, so the agent did not cause the failure.",
+            "bug_title": "Edit-form Delete button throws a JavaScript exception",
+            "signals": [
+              {
+                "step": "0-15",
+                "kind": "console_error",
+                "excerpt": "event.stopPropagation is not a function"
+              }
+            ],
+            "confidence": 0.99,
+            "suggestion": "Fix the edit-form Delete button so it passes the real click event and the selected subscription ID to the delete action, then verify the subscription is removed and remains absent after reload.",
+            "one_liner": "Deleting QB Netflix from its edit form fails because the Delete button triggers an application error.",
+            "relevant_steps": [
+              10,
+              12,
+              15,
+              16
+            ],
+            "culprit_step": "0-15",
+            "credits_consumed": 4.4167,
+            "known_bug_id": "BUG-14",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 37.380400000000016,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M833SNHP12ZKGPF90J3N5V2V/dashboard/share/US_R73MV7T63Y4HYNLXY23R86T38OP1MV5730MT51TJKL0DUBOUGEF0Q4KJWLGF4VY0?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 2
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The Delete button tries to use an event value that is not a real browser event, so the deletion stops before the subscription is removed.\nFix the edit-form Delete handler so it receives and uses the click event correctly, then verify that deletion removes the subscription and remains removed after a reload.\nevidence: console_error: event.stopPropagation is not a function\nevidence: console_error: event.stopPropagation is not a function\nevidence: console_error: event.stopPropagation is not a function",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "script_error",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The Delete button tries to use an event value that is not a real browser event, so the deletion stops before the subscription is removed.",
+            "agent_fault_assessment": "The agent followed the requested path: it opened QB Netflix's menu, selected Edit, and activated the Delete button in the loaded edit form. Repeating the same correct action and using Enter produced the same exception, so the agent did not cause the failure.",
+            "bug_title": "Edit-form Delete button throws a JavaScript exception",
+            "signals": [
+              {
+                "excerpt": "event.stopPropagation is not a function",
+                "kind": "console_error",
+                "step": "0-11"
+              },
+              {
+                "excerpt": "event.stopPropagation is not a function",
+                "kind": "console_error",
+                "step": "0-12"
+              },
+              {
+                "excerpt": "event.stopPropagation is not a function",
+                "kind": "console_error",
+                "step": "0-13"
+              }
+            ],
+            "confidence": 0.99,
+            "suggestion": "Fix the edit-form Delete handler so it receives and uses the click event correctly, then verify that deletion removes the subscription and remains removed after a reload.",
+            "one_liner": "QB Netflix cannot be deleted from its edit form because the Delete action immediately crashes.",
+            "relevant_steps": [
+              9,
+              10,
+              11,
+              12,
+              13
+            ],
+            "culprit_step": "0-11",
+            "credits_consumed": 4.39115,
+            "known_bug_id": "BUG-14",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 27.519465000000004,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M833YTKV13PSZY3FNS8EAKC3/dashboard/share/US_9GK4ADT2JUN7D4PA4YGVCNA37AVLVQRIRQCCXUX6O65ZE0KGLV0PN7LU7U04Z6S1?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 3
+      },
+      "credits": 64.89986500000002
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+{
+  "at": "2026-11-22T18:04:24.597Z",
+  "results": [
+    {
+      "flow": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value",
+      "url": "http://localhost:3002",
+      "phase": "observe",
+      "objective": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 710,
+        "reason_code": "assertion_error.final_verification",
+        "summary": "The agent targeted the “Show Metrics” text rather than the switch control. The setting remained off in the following screen, so the later persistence check was based on a change that never happened.\nUpdate the automation to click the toggle itself and assert its visual state changes before reloading. Only then check that the same state remains after each reload.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "agent_misstep",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The agent targeted the “Show Metrics” text rather than the switch control. The setting remained off in the following screen, so the later persistence check was based on a change that never happened.",
+          "agent_fault_assessment": "The agent caused the outcome by clicking the Show Metrics label area instead of confirming that the adjacent toggle switched state. The next screenshot still shows Show Metrics off, and the supplied network evidence contains no failed save request or other product error. The agent then continued to reload and assert persistence without verifying that its requested change had taken effect.",
+          "bug_title": "Show Metrics switch was not toggled",
+          "signals": [],
+          "confidence": 0.92,
+          "suggestion": "Update the automation to click the toggle itself and assert its visual state changes before reloading. Only then check that the same state remains after each reload.",
+          "one_liner": "The run did not change the Show Metrics setting, so there was no changed result to verify after the reload.",
+          "relevant_steps": [
+            11,
+            12,
+            16,
+            17
+          ],
+          "culprit_step": "0-11",
+          "credits_consumed": 4.757549999999999,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 40.124902500000005,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826DPPHXGTRPMB3T3Z4XZA0/dashboard/share/US_QL9Y096J7IHN5JVMV51KSKB8KCJ3BUT4438WM30CA1O43AR4FLYJL5SK7VJAAHDL?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-5",
+          "url": "http://localhost:3002/api/profile",
+          "detail": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.30bb0ad27895b9ff4b00.js",
+          "detail": "Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.30bb0ad27895b9ff4b00.js",
+          "detail": "Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "http_4xx",
+          "severity": "blocking",
+          "step": "0-5",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 401,
+          "ms": 60,
+          "detail": "{\"error\":\"Authentication required\"}"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\b57deda6-f4d6-437b-b102-7cbac526ad66\\evidence\\e7983915-7575-4a16-b99f-89ca9d010ef1.evidence",
+      "senyapPack": ".senyap\\packs\\e7983915-7575-4a16-b99f-89ca9d010ef1-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "e7983915-7575-4a16-b99f-89ca9d010ef1-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 2,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-hidden-4xx",
+                "no-console-errors"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\tududi1045-post\\.senyap\\packs\\e7983915-7575-4a16-b99f-89ca9d010ef1-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-22T17:59:04.767Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "e7983915-7575-4a16-b99f-89ca9d010ef1-senyap",
+                "sha256": "301292bf2c3d7b1483749dbcee06d9ec3914ac6b7bdc4b08b17252b59bcfa4de",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 3,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-hidden-4xx",
+                "no-console-errors"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "The browser run continued to load the Today page normally, but the network capture used for the required checks did not return results in time on three inspections.\nRepair or increase the timeout for network capture, then rerun the flow and target the Show Metrics switch control itself before checking persistence.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "environment_issue",
+            "category": "platform_failure",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The browser run continued to load the Today page normally, but the network capture used for the required checks did not return results in time on three inspections.",
+            "agent_fault_assessment": "The agent’s page actions did not cause the recorded terminal outcome. It reached the Today page and the listed requests completed successfully; the failure was the inspection system timing out while collecting the required network evidence. Separately, the screenshot for step 0-11 indicates the agent clicked the “Show Metrics” label rather than the switch, so the intended setting change is not demonstrated, but that is not the stated terminal trigger.",
+            "bug_title": "Network checkpoint capture timed out",
+            "signals": [],
+            "confidence": 0.86,
+            "suggestion": "Repair or increase the timeout for network capture, then rerun the flow and target the Show Metrics switch control itself before checking persistence.",
+            "one_liner": "The run could not complete because its network-inspection tool timed out, leaving required network checks unverified.",
+            "relevant_steps": [
+              14,
+              18
+            ],
+            "culprit_step": "0-18",
+            "credits_consumed": 5.0440499999999995,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 52.186364499999996,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M826JYC7ZPR8AY4V8EHDJ1NV/dashboard/share/US_6Q37HF2AIX629KBMNMI0OL8IQO24G55XPS4SJ31VGJ1WOD56YBPCZ6ODGK87N31K?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 6
+      }
+    }
+  ]
+}

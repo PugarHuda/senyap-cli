@@ -1,0 +1,354 @@
+{
+  "at": "2026-11-23T02:21:35.507Z",
+  "results": [
+    {
+      "flow": "Sign in with username qb and password QuietBench123!, on the home page find the memo with the checklist items 'alpha' and 'beta', open that memo's menu, choose Edit and click Save without changing anything, then tick the 'alpha' checkbox in the memo, open the memo's menu again, choose Edit and click Save without changing anything, reload the page, and check that 'alpha' is still ticked",
+      "url": "http://localhost:8081",
+      "phase": "observe",
+      "objective": "Sign in with username qb and password QuietBench123!, on the home page find the memo with the checklist items 'alpha' and 'beta', open that memo's menu, choose Edit and click Save without changing anything, then tick the 'alpha' checkbox in the memo, open the memo's menu again, choose Edit and click Save without changing anything, reload the page, and check that 'alpha' is still ticked. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The memo was checked successfully, but opening it for editing and saving it again stored alpha as unchecked.\nPreserve each checklist item's checked state when the memo editor loads and saves an unchanged memo. Add a regression test that checks an item, opens Edit, saves without edits, reloads, and verifies it remains checked.\nevidence: objective_contradiction: Checkpoint assertion failed: \"the 'alpha' checkbox is still ticked\"",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "functional_defect",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The memo was checked successfully, but opening it for editing and saving it again stored alpha as unchecked.",
+          "agent_fault_assessment": "The agent followed the requested sequence: it checked alpha, chose Edit from that memo's menu, and clicked Save without changing the memo. The run recorded successful update requests for both the initial check and the subsequent save. The failure occurred because the product did not retain the checked state across that otherwise valid edit-and-save flow, not because the agent selected the wrong item or action.",
+          "bug_title": "Saving an unchanged memo clears completed checklist items",
+          "signals": [
+            {
+              "step": "1-7",
+              "kind": "objective_contradiction",
+              "excerpt": "Checkpoint assertion failed: \"the 'alpha' checkbox is still ticked\""
+            }
+          ],
+          "confidence": 0.94,
+          "suggestion": "Preserve each checklist item's checked state when the memo editor loads and saves an unchanged memo. Add a regression test that checks an item, opens Edit, saves without edits, reloads, and verifies it remains checked.",
+          "one_liner": "Saving the memo after editing it without changes removed the completed state of the alpha checklist item.",
+          "relevant_steps": [
+            1,
+            3,
+            4,
+            5,
+            7
+          ],
+          "culprit_step": "1-5",
+          "credits_consumed": 4.49745,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 48.27083999999999,
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "http_4xx",
+          "severity": "blocking",
+          "step": "0-1",
+          "method": "POST",
+          "url": "http://localhost:8081/memos.api.v1.AuthService/RefreshToken",
+          "status": 401,
+          "ms": 4,
+          "detail": "{\"code\":\"unauthenticated\",\"message\":\"rpc error: code = Unauthenticated desc = refresh token not found\"}"
+        },
+        {
+          "kind": "request_failed",
+          "severity": "blocking",
+          "step": "0-17",
+          "method": "GET",
+          "url": "http://localhost:8081/api/v1/sse",
+          "status": 200,
+          "ms": 7,
+          "detail": "net::ERR_ABORTED"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\8679fcd1-6183-472b-b3fa-009e4cdd133d\\evidence\\fa9e5699-6237-4843-a139-93b16e5475c7.evidence",
+      "senyapPack": ".senyap\\packs\\fa9e5699-6237-4843-a139-93b16e5475c7-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "fa9e5699-6237-4843-a139-93b16e5475c7-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 2,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-hidden-4xx",
+                "no-dropped-requests"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\memos5865-pre\\.senyap\\packs\\fa9e5699-6237-4843-a139-93b16e5475c7-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T02:16:20.851Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "fa9e5699-6237-4843-a139-93b16e5475c7-senyap",
+                "sha256": "2efadbe91857ce22a1288e4dca482bd90189b11a80ccf07d141c75ff870e8363",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-hidden-4xx",
+                "no-dropped-requests"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The memo was checked successfully, but opening it for editing and saving it again stored alpha as unchecked.\nPreserve each checklist item's checked state when the memo editor loads and saves an unchanged memo. Add a regression test that checks an item, opens Edit, saves without edits, reloads, and verifies it remains checked.\nevidence: objective_contradiction: Checkpoint assertion failed: \"the 'alpha' checkbox is still ticked\"",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The memo was checked successfully, but opening it for editing and saving it again stored alpha as unchecked.",
+            "agent_fault_assessment": "The agent followed the requested sequence: it checked alpha, chose Edit from that memo's menu, and clicked Save without changing the memo. The run recorded successful update requests for both the initial check and the subsequent save. The failure occurred because the product did not retain the checked state across that otherwise valid edit-and-save flow, not because the agent selected the wrong item or action.",
+            "bug_title": "Saving an unchanged memo clears completed checklist items",
+            "signals": [
+              {
+                "step": "1-7",
+                "kind": "objective_contradiction",
+                "excerpt": "Checkpoint assertion failed: \"the 'alpha' checkbox is still ticked\""
+              }
+            ],
+            "confidence": 0.94,
+            "suggestion": "Preserve each checklist item's checked state when the memo editor loads and saves an unchanged memo. Add a regression test that checks an item, opens Edit, saves without edits, reloads, and verifies it remains checked.",
+            "one_liner": "Saving the memo after editing it without changes removed the completed state of the alpha checklist item.",
+            "relevant_steps": [
+              1,
+              3,
+              4,
+              5,
+              7
+            ],
+            "culprit_step": "1-5",
+            "credits_consumed": 4.49745,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 48.27083999999999,
+          "exitCode": 1
+        },
+        "findings": 2
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 330,
+          "reason_code": "stuck.ap_stuck",
+          "summary": "The agent clicked alpha again after completing the second edit and save. That action was not part of the required ending and could change the checkbox back, while the required page reload was not recorded.\nUpdate the automation flow to reload immediately after the second Save, then inspect alpha once. Do not click the checkbox again after that save.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "agent_misstep",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The agent clicked alpha again after completing the second edit and save. That action was not part of the required ending and could change the checkbox back, while the required page reload was not recorded.",
+            "agent_fault_assessment": "The agent caused the failed run by taking an extra action at step 0-16, \"Ticking the alpha checkbox in the memo,\" after the second Save at step 0-15. The required next action was to reload the page and verify that alpha remained ticked. No reload action is present in the supplied evidence, so the agent left the intended flow and exhausted its viable actions. The successful 200 responses do not show a product failure.",
+            "bug_title": "Agent reticked alpha after the final save",
+            "signals": [],
+            "confidence": 0.97,
+            "suggestion": "Update the automation flow to reload immediately after the second Save, then inspect alpha once. Do not click the checkbox again after that save.",
+            "one_liner": "The run stopped because the agent performed an extra checkbox action instead of finishing the reload-and-check step.",
+            "relevant_steps": [
+              0,
+              10,
+              0,
+              12,
+              0,
+              15,
+              0,
+              16,
+              0,
+              18
+            ],
+            "culprit_step": "0-16",
+            "credits_consumed": 5.17385,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 91.77875999999998,
+          "exitCode": 1
+        },
+        "findings": 2
+      },
+      "credits": 140.04959999999997
+    }
+  ]
+}

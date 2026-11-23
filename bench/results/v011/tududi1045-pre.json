@@ -1,0 +1,378 @@
+{
+  "at": "2026-11-22T17:54:03.573Z",
+  "results": [
+    {
+      "flow": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value",
+      "url": "http://localhost:3002",
+      "phase": "observe",
+      "objective": "Log in with email qb@example.com and password QuietBench123!, open the Today page, open the Today page settings dropdown, toggle the 'Show Metrics' option, reload the page, open the settings dropdown again, and check that 'Show Metrics' kept its new value. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The app failed while saving the Today page setting, so it kept the older saved value after reload.\nInvestigate the Today settings save endpoint and ensure it stores the changed preference successfully; then rerun the persistence and clean-network/console checks.\nevidence: network_failure: PUT http://localhost:3002/api/profile/today-settings -> 500 body: {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERRO\nevidence: console_error: Failed to save settings\nevidence: console_error: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "api_error",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The app failed while saving the Today page setting, so it kept the older saved value after reload.",
+          "agent_fault_assessment": "The agent followed the requested flow: it opened Today settings and clicked Show Metrics. The save request itself returned a 500 error, which is a product-side failure rather than an incorrect action or timing issue.",
+          "bug_title": "Today settings save returns an internal server error",
+          "signals": [
+            {
+              "excerpt": "PUT http://localhost:3002/api/profile/today-settings -> 500 body: {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERROR\"}",
+              "kind": "network_failure",
+              "step": "0-10"
+            },
+            {
+              "excerpt": "Failed to save settings",
+              "kind": "console_error",
+              "step": "0-10"
+            },
+            {
+              "excerpt": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+              "kind": "console_error",
+              "step": "0-10"
+            }
+          ],
+          "confidence": 0.99,
+          "suggestion": "Investigate the Today settings save endpoint and ensure it stores the changed preference successfully; then rerun the persistence and clean-network/console checks.",
+          "one_liner": "Changing Show Metrics could not be saved, so the setting did not persist after the page was reloaded.",
+          "relevant_steps": [
+            9,
+            10,
+            13
+          ],
+          "culprit_step": "0-10",
+          "credits_consumed": 4.5664,
+          "known_bug_id": "BUG-15",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 36.52394,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8263FV2GKW8XY3MYXF71TND/dashboard/share/US_TB0T3G569HN9MLDNRADXRATKIEDMW62LEXWXNU712SWE8HONTOVBV9MVPHO8DZ7C?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": true,
+      "findings": [
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-5",
+          "url": "http://localhost:3002/api/profile",
+          "detail": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.db6f287330be3acd7c83.js",
+          "detail": "Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.db6f287330be3acd7c83.js",
+          "detail": "Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-10",
+          "url": "http://localhost:3002/api/profile/today-settings",
+          "detail": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+        },
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-10",
+          "url": "http://localhost:3002/main.db6f287330be3acd7c83.js",
+          "detail": "Failed to save settings"
+        },
+        {
+          "kind": "http_4xx",
+          "severity": "blocking",
+          "step": "0-5",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 401,
+          "ms": 97,
+          "detail": "{\"error\":\"Authentication required\"}"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-6",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 200,
+          "ms": 3375,
+          "detail": "3375 ms"
+        },
+        {
+          "kind": "http_5xx",
+          "severity": "blocking",
+          "step": "0-10",
+          "method": "PUT",
+          "url": "http://localhost:3002/api/profile/today-settings",
+          "status": 500,
+          "ms": 64,
+          "detail": "{\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERROR\"}"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\331e7a48-6a9c-49b3-a57e-ef776620e85c\\evidence\\81fb0ace-feda-4a85-a72c-7871a6391d92.evidence",
+      "senyapPack": ".senyap\\packs\\81fb0ace-feda-4a85-a72c-7871a6391d92-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "81fb0ace-feda-4a85-a72c-7871a6391d92-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 4,
+                "warned": 1,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-false-green",
+                "no-hidden-5xx",
+                "no-hidden-4xx",
+                "no-console-errors"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\tududi1045-pre\\.senyap\\packs\\81fb0ace-feda-4a85-a72c-7871a6391d92-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-22T17:50:36.756Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "81fb0ace-feda-4a85-a72c-7871a6391d92-senyap",
+                "sha256": "609e6e02d93af7c283fe2f3568f7ec43f2e8d66e18e2178ab998ad261ddf5c99",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 5,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 1,
+                  "status": "warn",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-false-green",
+                "no-hidden-5xx",
+                "no-hidden-4xx",
+                "no-console-errors"
+              ],
+              "warnings": [
+                "no-slow-responses"
+              ],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The app failed while saving the Today page setting, so it kept the older saved value after reload.\nInvestigate the Today settings save endpoint and ensure it stores the changed preference successfully; then rerun the persistence and clean-network/console checks.\nevidence: network_failure: PUT http://localhost:3002/api/profile/today-settings -> 500 body: {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERRO\nevidence: console_error: Failed to save settings\nevidence: console_error: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "api_error",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The app failed while saving the Today page setting, so it kept the older saved value after reload.",
+            "agent_fault_assessment": "The agent followed the requested flow: it opened Today settings and clicked Show Metrics. The save request itself returned a 500 error, which is a product-side failure rather than an incorrect action or timing issue.",
+            "bug_title": "Today settings save returns an internal server error",
+            "signals": [
+              {
+                "excerpt": "PUT http://localhost:3002/api/profile/today-settings -> 500 body: {\"error\":\"Internal server error\",\"code\":\"INTERNAL_ERROR\"}",
+                "kind": "network_failure",
+                "step": "0-10"
+              },
+              {
+                "excerpt": "Failed to save settings",
+                "kind": "console_error",
+                "step": "0-10"
+              },
+              {
+                "excerpt": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+                "kind": "console_error",
+                "step": "0-10"
+              }
+            ],
+            "confidence": 0.99,
+            "suggestion": "Investigate the Today settings save endpoint and ensure it stores the changed preference successfully; then rerun the persistence and clean-network/console checks.",
+            "one_liner": "Changing Show Metrics could not be saved, so the setting did not persist after the page was reloaded.",
+            "relevant_steps": [
+              9,
+              10,
+              13
+            ],
+            "culprit_step": "0-10",
+            "credits_consumed": 4.5664,
+            "known_bug_id": "BUG-15",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 36.52394,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8263FV2GKW8XY3MYXF71TND/dashboard/share/US_TB0T3G569HN9MLDNRADXRATKIEDMW62LEXWXNU712SWE8HONTOVBV9MVPHO8DZ7C?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 9
+      }
+    }
+  ]
+}

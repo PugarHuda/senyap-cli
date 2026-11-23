@@ -1,0 +1,268 @@
+{
+  "at": "2026-11-23T00:52:16.472Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused)",
+      "url": "http://localhost:3011",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused). Then reload the page and verify that the result of the flow is still there.",
+      "status": "inconclusive",
+      "kane": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The run started with QB Self active, despite the test requiring it to already be paused. Saving the unchanged monitor did not pause it, so the later Resume-button check could not pass.\nReset or seed QB Self as paused before the run, and add a precondition check for Resume before editing. If the test is intended to pause the monitor itself, include an explicit Pause action before saving and reloading.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "test_data_issue",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The run started with QB Self active, despite the test requiring it to already be paused. Saving the unchanged monitor did not pause it, so the later Resume-button check could not pass.",
+          "agent_fault_assessment": "The agent followed the recorded Edit, Save, and navigation actions and did not click Pause or Resume. It did not cause the active state, but the test/run setup supplied or assumed the wrong starting monitor state and the agent did not validate that prerequisite before continuing.",
+          "bug_title": "QB Self fixture was active instead of paused",
+          "signals": [],
+          "confidence": 0.98,
+          "suggestion": "Reset or seed QB Self as paused before the run, and add a precondition check for Resume before editing. If the test is intended to pause the monitor itself, include an explicit Pause action before saving and reloading.",
+          "one_liner": "The check expected a paused monitor, but QB Self was active and showed Pause rather than Resume.",
+          "relevant_steps": [
+            0,
+            8,
+            9,
+            10,
+            12,
+            13
+          ],
+          "culprit_step": "0-13",
+          "credits_consumed": 4.39265,
+          "known_bug_id": "BUG-23",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 27.5666975,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82Y3KRDFJFA434NW8S5JN8F/dashboard/share/US_X2BHLY068FL92J6ZR5M6YVLMORXWXZKTI34TICVZUL0PY9YV44WFK6GO11TOHH4C?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\7fdd3697-fe53-4e90-b2aa-64ad9847442c\\evidence\\ce3b088c-a06b-4d97-8b20-9ab331e305bc.evidence",
+      "senyapPack": ".senyap\\packs\\ce3b088c-a06b-4d97-8b20-9ab331e305bc-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "ce3b088c-a06b-4d97-8b20-9ab331e305bc-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\kuma3713-pre\\.senyap\\packs\\ce3b088c-a06b-4d97-8b20-9ab331e305bc-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-23T00:52:15.635Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "ce3b088c-a06b-4d97-8b20-9ab331e305bc-senyap",
+                "sha256": "97dde83b4c4c204f9ccedee9e937d8ad5bc3824ea9abcdb4f1119b299176a2f3",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      },
+      "retriedAfter": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The test checked for the Resume button without first putting QB Self into the paused state. After reload, the page showed Pause, meaning the monitor was active.\nUpdate the flow to click Pause and confirm the control changes to Resume before reloading. Then verify Resume remains visible and the existing result is still present.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "state_transition_bug",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The test checked for the Resume button without first putting QB Self into the paused state. After reload, the page showed Pause, meaning the monitor was active.",
+          "agent_fault_assessment": "The agent did not perform any pause action in the supplied run. It clicked the monitor link and reloaded the dashboard, then asserted that the monitor was paused. The dashboard instead showed a \"Pause\" control, which indicates the monitor was active and could be paused. The failed expectation came from an assumed starting state, not from evidence that the product failed to preserve a paused state.",
+          "bug_title": "Paused-state assertion ran without pausing the monitor",
+          "signals": [],
+          "confidence": 0.98,
+          "suggestion": "Update the flow to click Pause and confirm the control changes to Resume before reloading. Then verify Resume remains visible and the existing result is still present.",
+          "one_liner": "The run expected a paused monitor even though the supplied actions never paused it.",
+          "relevant_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "culprit_step": "1-4",
+          "credits_consumed": 3.6180499999999998,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 35.7457525,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82XZ1R0JSHA1VJ2NRTDN76Y/dashboard/share/US_P2CSHOVYJQQ6U6ZVR1EXMLAJWOX3E7KN6OB8C0V5YNRUHFMEZ6AOP77WYYHKUTP0?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      }
+    }
+  ]
+}

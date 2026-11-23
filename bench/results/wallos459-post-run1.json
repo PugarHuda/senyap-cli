@@ -1,0 +1,342 @@
+{
+  "at": "2026-11-23T02:38:28.500Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed",
+      "url": "http://localhost:8000",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The Delete button accepted the click but did not complete the subscription removal. The record remained after a fresh page reload.\nInvestigate the edit-form Delete handler and ensure it sends and completes the removal before closing or reloading the page. Add a regression test that confirms the subscription is absent after reload.\nevidence: objective_contradiction: Checkpoint assertion failed: \"'QB Netflix' is no longer listed\"\nevidence: objective_contradiction: click: Clicking the Delete button in the edit subscription dialog\nevidence: objective_contradiction: GET http://localhost:8000/ -> 200",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "functional_defect",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The Delete button accepted the click but did not complete the subscription removal. The record remained after a fresh page reload.",
+          "agent_fault_assessment": "The agent followed the requested path: it opened QB Netflix's menu, selected Edit, clicked the Delete button inside the loaded edit form, and waited for the reload. The edit form was available and the post-action reload completed, so this was not caused by a wrong target, missing page state, or acting before the page was ready.",
+          "bug_title": "Edit-form Delete button leaves subscription undeleted",
+          "signals": [
+            {
+              "step": "0-13",
+              "kind": "objective_contradiction",
+              "excerpt": "Checkpoint assertion failed: \"'QB Netflix' is no longer listed\""
+            },
+            {
+              "step": "0-11",
+              "kind": "objective_contradiction",
+              "excerpt": "click: Clicking the Delete button in the edit subscription dialog"
+            },
+            {
+              "step": "0-12",
+              "kind": "objective_contradiction",
+              "excerpt": "GET http://localhost:8000/ -> 200"
+            }
+          ],
+          "confidence": 0.91,
+          "suggestion": "Investigate the edit-form Delete handler and ensure it sends and completes the removal before closing or reloading the page. Add a regression test that confirms the subscription is absent after reload.",
+          "one_liner": "Deleting QB Netflix from its edit form did not remove it; it was still listed after the page reloaded.",
+          "relevant_steps": [
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "culprit_step": "0-11",
+          "credits_consumed": 4.852449999999999,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 28.879427500000002,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8342TMWSNWFVQPAVNGVGFWF/dashboard/share/US_ZG8NZ8FYRU8N3LR461HTF2X9SREMIY8TB56HFM9ZB9RYK74P1XTS599MA2MY2YVX?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\ee37ec32-41f3-4a5c-b5aa-1c003a484c40\\evidence\\39fe77e0-1f61-41fd-8292-ff78a4026c12.evidence",
+      "senyapPack": ".senyap\\packs\\39fe77e0-1f61-41fd-8292-ff78a4026c12-senyap.evidence",
+      "policyVerdict": {
+        "passed": true,
+        "doc": {
+          "evidence_id": "39fe77e0-1f61-41fd-8292-ff78a4026c12-senyap",
+          "result": "pass",
+          "exit_code": 0,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "pass",
+              "exit_code": 0,
+              "counts": {
+                "total": 9,
+                "failed": 0,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\wallos459-post\\.senyap\\packs\\39fe77e0-1f61-41fd-8292-ff78a4026c12-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "pass",
+              "evaluated_at": "2026-11-23T02:36:28.162Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "39fe77e0-1f61-41fd-8292-ff78a4026c12-senyap",
+                "sha256": "ac60cf014ebdfd5e69772b110dca79c353f23d86e7faecd82f08fc56254446ac",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 0
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The Delete button accepted the click but did not complete the subscription removal. The record remained after a fresh page reload.\nInvestigate the edit-form Delete handler and ensure it sends and completes the removal before closing or reloading the page. Add a regression test that confirms the subscription is absent after reload.\nevidence: objective_contradiction: Checkpoint assertion failed: \"'QB Netflix' is no longer listed\"\nevidence: objective_contradiction: click: Clicking the Delete button in the edit subscription dialog\nevidence: objective_contradiction: GET http://localhost:8000/ -> 200",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The Delete button accepted the click but did not complete the subscription removal. The record remained after a fresh page reload.",
+            "agent_fault_assessment": "The agent followed the requested path: it opened QB Netflix's menu, selected Edit, clicked the Delete button inside the loaded edit form, and waited for the reload. The edit form was available and the post-action reload completed, so this was not caused by a wrong target, missing page state, or acting before the page was ready.",
+            "bug_title": "Edit-form Delete button leaves subscription undeleted",
+            "signals": [
+              {
+                "step": "0-13",
+                "kind": "objective_contradiction",
+                "excerpt": "Checkpoint assertion failed: \"'QB Netflix' is no longer listed\""
+              },
+              {
+                "step": "0-11",
+                "kind": "objective_contradiction",
+                "excerpt": "click: Clicking the Delete button in the edit subscription dialog"
+              },
+              {
+                "step": "0-12",
+                "kind": "objective_contradiction",
+                "excerpt": "GET http://localhost:8000/ -> 200"
+              }
+            ],
+            "confidence": 0.91,
+            "suggestion": "Investigate the edit-form Delete handler and ensure it sends and completes the removal before closing or reloading the page. Add a regression test that confirms the subscription is absent after reload.",
+            "one_liner": "Deleting QB Netflix from its edit form did not remove it; it was still listed after the page reloaded.",
+            "relevant_steps": [
+              9,
+              10,
+              11,
+              12,
+              13
+            ],
+            "culprit_step": "0-11",
+            "credits_consumed": 4.852449999999999,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 28.879427500000002,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8342TMWSNWFVQPAVNGVGFWF/dashboard/share/US_ZG8NZ8FYRU8N3LR461HTF2X9SREMIY8TB56HFM9ZB9RYK74P1XTS599MA2MY2YVX?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 0
+      },
+      "confirm": {
+        "status": "inconclusive",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "Deleting required approval in a native browser confirmation. The automation did not approve it, so the application correctly kept QB Netflix.\nConfigure the automation to wait for the native delete confirmation and explicitly accept it before reloading and checking the list.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "agent_misstep",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "Deleting required approval in a native browser confirmation. The automation did not approve it, so the application correctly kept QB Netflix.",
+            "agent_fault_assessment": "The agent successfully opened the QB Netflix edit form and clicked its Delete button at step 0-11, but its native confirmation handling dismissed the required approval by default. Because deletion was never confirmed, the application had no instruction to remove the subscription; the reload at step 0-12 correctly continued to show it. The agent’s confirmation handling caused the failed assertion, not a demonstrated product defect.",
+            "bug_title": "Native delete confirmation dismissed by automation",
+            "signals": [],
+            "confidence": 0.99,
+            "suggestion": "Configure the automation to wait for the native delete confirmation and explicitly accept it before reloading and checking the list.",
+            "one_liner": "The automation clicked Delete but dismissed the browser’s required confirmation, so the subscription was not removed.",
+            "relevant_steps": [
+              11,
+              12
+            ],
+            "culprit_step": "0-11",
+            "credits_consumed": 3.8522,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 22.6168325,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M8346AHFDQYAX78FC5Y7ZND9/dashboard/share/US_3NXIEX0QZD5BNJC9ROMCU5BHIZLVMTUM4Z33S26KE1ETMYHG00I6LEEOKJ6EAQ11?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 0
+      },
+      "credits": 51.49626000000001
+    }
+  ]
+}

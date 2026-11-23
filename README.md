@@ -51,6 +51,23 @@ A notes page that shows "Saved!" whatever the server says, while `POST /api/save
 
 The first run's evidence pack already held the 500 and the console error. Nothing read them. Senyap does.
 
+## QuietBench: 8 real bugs from open-source apps
+
+Each bug is a closed GitHub issue with its fix commit, run three ways: plain Kane on the buggy commit (`kane-cli run "<flow>. Then verify that it worked." --bug-detection continue`), Senyap on the buggy commit, Senyap on the fix commit. Same flow sentence for all three, one Kane run at a time, fresh app data. Full table with every Kane run link, the scripts that start each app, and every miss: [bench/RESULTS.md](bench/RESULTS.md).
+
+| Bug | Plain Kane, buggy | Senyap, buggy | Senyap, fixed |
+|---|---|---|---|
+| [tududi #1045](https://github.com/chrisvel/tududi/issues/1045) settings toggle 500s | caught (740) | caught (Kane passed; hidden 500 in the pack) | inconclusive |
+| [Uptime Kuma #3713](https://github.com/louislam/uptime-kuma/issues/3713) save resumes a paused monitor | missed (passed) | missed | clean |
+| [Memos #5011](https://github.com/usememos/memos/issues/5011) theme change fails on a fresh install | caught (740) | caught | clean |
+| [Memos #4978](https://github.com/usememos/memos/issues/4978) preferences wipe each other | caught (740) | inconclusive | inconclusive |
+| [Memos #5865](https://github.com/usememos/memos/issues/5865) ticked boxes untick after edit | caught (740) | caught | false alarm (fixed in 0.1.3, see below) |
+| [linkding #1451](https://github.com/sissbruecker/linkding/issues/1451) uncaught Turbo error | missed (passed) | **caught** (console error in the pack) | clean |
+| [tududi #904](https://github.com/chrisvel/tududi/issues/904) title "updated" but not saved | no verdict (750) | **caught** (Kane 740 under the reload check) | clean |
+| [Wallos #459](https://github.com/ellite/Wallos/issues/459) delete in modal does nothing | caught (740) | caught | inconclusive |
+
+Plain Kane caught 5/8; Senyap caught 6/8, including two plain Kane passed. On fixed builds (senyap 0.1.2, live): 4 clean, 3 inconclusive, 1 false alarm. The rule behind that false alarm shipped in 0.1.3; re-judging the same evidence it becomes inconclusive. What Senyap can't see: bugs that leave nothing in the network or console (Uptime Kuma #3713, Memos #4978) are only as good as Kane's own assertion. Its retry also doesn't reset app state between attempts.
+
 ## Install
 
 ```bash

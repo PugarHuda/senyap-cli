@@ -1,0 +1,352 @@
+{
+  "at": "2026-11-23T01:05:11.544Z",
+  "results": [
+    {
+      "flow": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, change the theme to Dark, reload the page, and check that the theme setting still shows Dark",
+      "url": "http://localhost:8081",
+      "phase": "observe",
+      "objective": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, change the theme to Dark, reload the page, and check that the theme setting still shows Dark. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The app cannot find the user setting it needs to save the theme choice, so it leaves the theme at Default Light after reload.\nFix the theme-setting save path so the required user setting is available or created before the update, and surface a failed save to the user instead of reporting a successful request.\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "functional_defect",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The app cannot find the user setting it needs to save the theme choice, so it leaves the theme at Default Light after reload.",
+          "agent_fault_assessment": "The agent navigated to Preferences and selected Default Dark twice using the visible theme menu. The same save error occurred on each attempt, and the setting reverted after reload; repeating the correct interaction did not cause the failure.",
+          "bug_title": "Theme preference is not saved after selecting Default Dark",
+          "signals": [
+            {
+              "excerpt": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+              "kind": "console_error",
+              "step": "0-12"
+            },
+            {
+              "excerpt": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+              "kind": "console_error",
+              "step": "0-14"
+            }
+          ],
+          "confidence": 0.99,
+          "suggestion": "Fix the theme-setting save path so the required user setting is available or created before the update, and surface a failed save to the user instead of reporting a successful request.",
+          "one_liner": "Choosing Default Dark does not keep the selected theme after the page is reloaded.",
+          "relevant_steps": [
+            12,
+            14
+          ],
+          "culprit_step": "0-14",
+          "credits_consumed": 4.427899999999999,
+          "known_bug_id": "BUG-18",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 31.878319999999995,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YTJ2G6HFTR5E0HCYP504X/dashboard/share/US_VGA6F5X5FNP7V19IUFV3ZD2JBLBC8HT3C6MYOXXXK8O76UMQCQ7KKMS63OU6O4XZ?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-14",
+          "url": "",
+          "detail": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\0ccc2b06-94c2-4b6b-8582-496bccadc354\\evidence\\fdb382b4-6c2f-49e7-9a61-49e96eca1043.evidence",
+      "senyapPack": ".senyap\\packs\\fdb382b4-6c2f-49e7-9a61-49e96eca1043-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "fdb382b4-6c2f-49e7-9a61-49e96eca1043-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-console-errors"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\memos5011-pre\\.senyap\\packs\\fdb382b4-6c2f-49e7-9a61-49e96eca1043-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T01:02:39.900Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "fdb382b4-6c2f-49e7-9a61-49e96eca1043-senyap",
+                "sha256": "0f16cf8ab3eef722117f6ccf94a5aabf09fda3beae66ef18c60823f50d37f0f5",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 3,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-console-errors"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The app cannot find the saved preference it is trying to update, so the selected Dark theme is not retained.\nFix saving the theme preference so the selected setting can be found and updated, then verify that Default Dark remains selected after reloading.\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The app cannot find the saved preference it is trying to update, so the selected Dark theme is not retained.",
+            "agent_fault_assessment": "The agent followed the intended Settings > Preferences flow and selected the visible Default Dark option. It retried the selection using the keyboard, and the same save error occurred. The agent did not cause the setting to revert.",
+            "bug_title": "Theme preference does not persist after selecting Default Dark",
+            "signals": [
+              {
+                "step": "0-12",
+                "kind": "console_error",
+                "excerpt": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found"
+              },
+              {
+                "step": "0-19",
+                "kind": "console_error",
+                "excerpt": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found"
+              }
+            ],
+            "confidence": 0.98,
+            "suggestion": "Fix saving the theme preference so the selected setting can be found and updated, then verify that Default Dark remains selected after reloading.",
+            "one_liner": "Selecting Default Dark does not save the theme, so it returns to Default Light after a reload.",
+            "relevant_steps": [
+              10,
+              11,
+              12,
+              14,
+              19
+            ],
+            "culprit_step": "0-12",
+            "credits_consumed": 4.449649999999999,
+            "known_bug_id": "BUG-18",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 39.50947,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YMM4DM8C2PN13QATC63C6/dashboard/share/US_LI7YQD3YNP1O0R5W9MH8ITBQ4SQ8J6DO3U3NNXY5VZKAWL8LS3TU722CELQPD1SP?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 3
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The app cannot find the user setting it needs to save the theme choice, so it leaves the theme at Default Light after reload.\nFix the theme-setting save path so the required user setting is available or created before the update, and surface a failed save to the user instead of reporting a successful request.\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found\nevidence: console_error: /memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The app cannot find the user setting it needs to save the theme choice, so it leaves the theme at Default Light after reload.",
+            "agent_fault_assessment": "The agent navigated to Preferences and selected Default Dark twice using the visible theme menu. The same save error occurred on each attempt, and the setting reverted after reload; repeating the correct interaction did not cause the failure.",
+            "bug_title": "Theme preference is not saved after selecting Default Dark",
+            "signals": [
+              {
+                "excerpt": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+                "kind": "console_error",
+                "step": "0-12"
+              },
+              {
+                "excerpt": "/memos.api.v1.UserService/UpdateUserSetting NOT_FOUND: GENERAL not found",
+                "kind": "console_error",
+                "step": "0-14"
+              }
+            ],
+            "confidence": 0.99,
+            "suggestion": "Fix the theme-setting save path so the required user setting is available or created before the update, and surface a failed save to the user instead of reporting a successful request.",
+            "one_liner": "Choosing Default Dark does not keep the selected theme after the page is reloaded.",
+            "relevant_steps": [
+              12,
+              14
+            ],
+            "culprit_step": "0-14",
+            "credits_consumed": 4.427899999999999,
+            "known_bug_id": "BUG-18",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 31.878319999999995,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82YTJ2G6HFTR5E0HCYP504X/dashboard/share/US_VGA6F5X5FNP7V19IUFV3ZD2JBLBC8HT3C6MYOXXXK8O76UMQCQ7KKMS63OU6O4XZ?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 2
+      },
+      "credits": 71.38779
+    }
+  ]
+}

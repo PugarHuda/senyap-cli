@@ -1,0 +1,554 @@
+{
+  "at": "2026-11-22T17:25:54.600Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed",
+      "url": "http://localhost:8000",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the menu of the subscription 'QB Netflix' and choose Edit, then click the Delete button inside the edit form, reload the page, and check that 'QB Netflix' is no longer listed. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The Delete action encounters an error while handling the click, so it stops before removing the subscription.\nFix the Delete button's click handling so it uses a valid event object and completes the removal, then verify that the subscription stays absent after reload.\nevidence: console_error: event.stopPropagation is not a function\nevidence: objective_contradiction: 'QB Netflix' is no longer listed.",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "script_error",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The Delete action encounters an error while handling the click, so it stops before removing the subscription.",
+          "agent_fault_assessment": "The agent followed the requested path: it opened the QB Netflix menu, chose Edit, and clicked the visible Delete button in the loaded edit form. The failure was not caused by an incorrect click or an assumed state; the product threw an exception while processing that valid action.",
+          "bug_title": "Subscription deletion crashes in the edit form",
+          "signals": [
+            {
+              "excerpt": "event.stopPropagation is not a function",
+              "kind": "console_error",
+              "step": "0-12"
+            },
+            {
+              "excerpt": "'QB Netflix' is no longer listed.",
+              "kind": "objective_contradiction",
+              "step": "0-14"
+            }
+          ],
+          "confidence": 0.99,
+          "suggestion": "Fix the Delete button's click handling so it uses a valid event object and completes the removal, then verify that the subscription stays absent after reload.",
+          "one_liner": "Deleting QB Netflix from its edit form fails, so the subscription remains listed after the page is reloaded.",
+          "relevant_steps": [
+            10,
+            12,
+            13,
+            14
+          ],
+          "culprit_step": "0-12",
+          "credits_consumed": 3.7493,
+          "known_bug_id": "BUG-14",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 28.3930325,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M82459JGKXN6VPZC42XBGPFZ/dashboard/share/US_0MDYT53DXTVODPRHA3A3IZVNN5YZXC5SBXU72YI2MWJZK4E2KSAZGRBCZGCXDDJB?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "console_error",
+          "severity": "blocking",
+          "step": "0-12",
+          "url": "",
+          "detail": "event.stopPropagation is not a function"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/",
+          "status": 200,
+          "ms": 3779,
+          "detail": "3779 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/theme.css?v2.19.2",
+          "status": 200,
+          "ms": 3868,
+          "detail": "3868 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/styles.css?v2.19.2",
+          "status": 200,
+          "ms": 3868,
+          "detail": "3868 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/barlow.css",
+          "status": 200,
+          "ms": 3871,
+          "detail": "3871 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/font-awesome.min.css",
+          "status": 200,
+          "ms": 3855,
+          "detail": "3855 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/brands.css",
+          "status": 200,
+          "ms": 3828,
+          "detail": "3828 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/all.js?v2.19.2",
+          "status": 200,
+          "ms": 3803,
+          "detail": "3803 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/common.js?v2.19.2",
+          "status": 200,
+          "ms": 5254,
+          "detail": "5254 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/i18n/en.js?v2.19.2",
+          "status": 200,
+          "ms": 5035,
+          "detail": "5035 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/i18n/getlang.js?v2.19.2",
+          "status": 200,
+          "ms": 5030,
+          "detail": "5030 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/manifest.json",
+          "status": 200,
+          "ms": 5477,
+          "detail": "5477 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/images/avatars/0.svg",
+          "status": 200,
+          "ms": 5303,
+          "detail": "5303 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/images/uploads/icons/paypal.png",
+          "status": 200,
+          "ms": 5280,
+          "detail": "5280 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-8",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/dashboard.js?v2.19.2",
+          "status": 200,
+          "ms": 3053,
+          "detail": "3053 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-10",
+          "method": "GET",
+          "url": "http://localhost:8000/endpoints/subscription/get.php?id=1",
+          "status": 200,
+          "ms": 8092,
+          "detail": "8092 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/",
+          "status": 200,
+          "ms": 3200,
+          "detail": "3200 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/theme.css?v2.19.2",
+          "status": 200,
+          "ms": 3553,
+          "detail": "3553 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/styles.css?v2.19.2",
+          "status": 200,
+          "ms": 3579,
+          "detail": "3579 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/barlow.css",
+          "status": 200,
+          "ms": 3527,
+          "detail": "3527 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/font-awesome.min.css",
+          "status": 200,
+          "ms": 3492,
+          "detail": "3492 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/styles/brands.css",
+          "status": 200,
+          "ms": 3586,
+          "detail": "3586 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/all.js?v2.19.2",
+          "status": 200,
+          "ms": 3652,
+          "detail": "3652 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/common.js?v2.19.2",
+          "status": 200,
+          "ms": 3701,
+          "detail": "3701 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/i18n/en.js?v2.19.2",
+          "status": 200,
+          "ms": 3761,
+          "detail": "3761 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/i18n/getlang.js?v2.19.2",
+          "status": 200,
+          "ms": 3987,
+          "detail": "3987 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/manifest.json",
+          "status": 200,
+          "ms": 4096,
+          "detail": "4096 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/images/avatars/0.svg",
+          "status": 200,
+          "ms": 3943,
+          "detail": "3943 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/images/uploads/icons/paypal.png",
+          "status": 200,
+          "ms": 4318,
+          "detail": "4318 ms"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "step": "0-13",
+          "method": "GET",
+          "url": "http://localhost:8000/scripts/dashboard.js?v2.19.2",
+          "status": 200,
+          "ms": 4110,
+          "detail": "4110 ms"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\e3fe9b89-65ac-4df8-ab0b-1b14c080b034\\evidence\\4356fdc2-d022-401d-af51-7c03c57da4aa.evidence",
+      "senyapPack": ".senyap\\packs\\4356fdc2-d022-401d-af51-7c03c57da4aa-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "4356fdc2-d022-401d-af51-7c03c57da4aa-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 9,
+                "failed": 1,
+                "warned": 1,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-console-errors"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\wallos459-pre\\.senyap\\packs\\4356fdc2-d022-401d-af51-7c03c57da4aa-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-22T17:20:05.515Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "4356fdc2-d022-401d-af51-7c03c57da4aa-senyap",
+                "sha256": "2de81678393f5eb5a21f1363fe66527a4195d6f8d9da7de78430b6f9eb80594d",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "cfbda4f915f729e7d0d35268d28239fc4737fe0698b570718034e0062e49c2e2"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 1,
+                "sha256": "563b501e83d0ea5fea3a7591170145c0e6e394cc812ffe17e221bf859f6954a0",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 29,
+                  "status": "warn",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-console-errors"
+              ],
+              "warnings": [
+                "no-slow-responses"
+              ],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "confirm": {
+        "status": "inconclusive",
+        "kane": {
+          "verdict": null,
+          "exitCode": 3
+        },
+        "findings": 0
+      }
+    }
+  ]
+}
