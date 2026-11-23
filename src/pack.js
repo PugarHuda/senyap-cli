@@ -17,13 +17,17 @@ export function classifyRequest(entry, surfaceHost, loadStep = null) {
   const url = entry.request?.url ?? '';
   if (NOISE.some((re) => re.test(url))) return null;
   const status = entry.response?.status ?? 0;
-  const base = { step: entry._step ?? null, method: entry.request?.method, url, status, ms: Math.round(entry.time ?? 0) };
+  const body = entry.request?.postData?.text;
+  const base = { step: entry._step ?? null, method: entry.request?.method, url, status, ms: Math.round(entry.time ?? 0), ...(body ? { requestBody: body.slice(0, 300) } : {}) };
   let host = '';
   try { host = new URL(url).hostname; } catch { /* data: or blob: url */ }
   // A call to another environment is the root cause even when it also failed.
   if (host && surfaceHost && host !== surfaceHost && envOf(host) !== 'prod' && envOf(host) !== envOf(surfaceHost)) {
     return { kind: 'env_leak', severity: 'blocking', ...base, detail: `page on ${surfaceHost} called ${host}${entry._failed ? ` (${entry._failure_reason ?? 'failed'})` : ''}` };
   }
+  // A payment/API test key sent from production: the env leak that still answers 200.
+  const key = host && surfaceHost && envOf(surfaceHost) === 'prod' && TEST_KEY.exec(`${url} ${body ?? ''} ${(entry.request?.headers ?? []).map((h) => h.value).join(' ')}`);
+  if (key) return { kind: 'env_leak', severity: 'blocking', ...base, detail: `test key ${key[0].slice(0, 12)}… sent from production ${surfaceHost}` };
   // ERR_ABORTED is the browser cancelling a request because the page navigated away,
   // e.g. an open event stream cut by the reload check (QuietBench: memos GET /api/v1/sse).
   if (entry._failed && /ERR_ABORTED/.test(entry._failure_reason ?? '')) return { kind: 'aborted', severity: 'warning', ...base, detail: entry._failure_reason };
@@ -37,6 +41,21 @@ export function classifyRequest(entry, surfaceHost, loadStep = null) {
   if (url.startsWith('http://') && surfaceHost && base.url && pageIsHttps(entry)) return { kind: 'mixed_content', severity: 'warning', ...base, detail: 'http request from an https page' };
   if (base.ms > SLOW_MS) return { kind: 'slow_response', severity: 'warning', ...base, detail: `${base.ms} ms` };
   return null;
+}
+
+const TEST_KEY = /\b(?:pk|sk|rk)_test_[A-Za-z0-9]{8,}/;
+const SESSION_COOKIE = /sess|auth|token|sid|jwt|login/i;
+
+/** Session cookies an https page sets without Secure or HttpOnly (reported, never blocking). */
+export function classifyCookies(entry) {
+  const url = entry.request?.url ?? '';
+  if (!url.startsWith('https://')) return [];
+  return (entry.response?.headers ?? [])
+    .filter((h) => /^set-cookie$/i.test(h.name))
+    .flatMap((h) => String(h.value).split('\n'))
+    .map((c) => ({ name: c.split('=')[0].trim(), missing: [!/;\s*secure/i.test(c) && 'Secure', !/;\s*httponly/i.test(c) && 'HttpOnly'].filter(Boolean) }))
+    .filter((c) => SESSION_COOKIE.test(c.name) && c.missing.length)
+    .map((c) => ({ kind: 'insecure_cookie', severity: 'warning', step: entry._step ?? null, url, detail: `cookie ${c.name} set without ${c.missing.join(' and ')}` }));
 }
 
 const pageIsHttps = (entry) => (entry.request?.headers ?? []).some((h) => /^referer$/i.test(h.name) && h.value.startsWith('https://'));
@@ -75,11 +94,13 @@ export async function readPack(packPath) {
       const text = entry.isDir ? null : await pack.readText(`tests/${id}/logs/${entry.name}`);
       if (!text) continue;
       if (entry.name.endsWith('-network.har')) {
-        for (const e of JSON.parse(text).log?.entries ?? []) { const f = classifyRequest(e, surfaceHost, loadStep); if (f) findings.push(f); }
+        for (const e of JSON.parse(text).log?.entries ?? []) { const f = classifyRequest(e, surfaceHost, loadStep); if (f) findings.push(f); findings.push(...classifyCookies(e)); }
       } else if (entry.name.endsWith('-console.ndjson')) {
         for (const raw of text.split('\n')) { if (!raw.trim()) continue; const f = classifyConsole(JSON.parse(raw), loadStep); if (f) findings.push(f); }
       }
     }
+    const kinds = Object.fromEntries((result.steps ?? []).map((st) => [st.id, st.kind]));
+    for (const f of findings) if (f.step && kinds[f.step]) f.stepKind = kinds[f.step];
     const blocking = findings.filter((f) => f.severity === 'blocking');
     tests.push({
       id, kaneStatus: result.status, testUrl: result.external_id?.sharable_link ?? null, executionId: result.external_id?.execution_id ?? null,

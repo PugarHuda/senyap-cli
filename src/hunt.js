@@ -1,6 +1,7 @@
 // Hunt one flow: Kane drives it with silent-failure checks, then Senyap reads the
 // evidence pack, seals a senyap pack, and lets Kane's verdict judge it. A flow
 // fails if Kane confirms a product bug (740) OR the pack shows a silent failure.
+import { execFileSync, execSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -60,7 +61,22 @@ export async function huntFlow(opts) {
 
 const dedupe = (fs) => [...new Map(fs.map((f) => [`${f.kind}|${f.method ?? ''}|${f.url ?? ''}|${f.detail ?? ''}`, f])).values()];
 
-async function huntOnce({ url, flow, phase, workDir = '.senyap', timeoutSec = 300, headless = true, persistence = true, onEvent }) {
+/** Run a user shell command (reset/probe); never throws. */
+export function sh(cmd, { timeoutSec = 120 } = {}) {
+  try { return { ok: true, out: execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: timeoutSec * 1000 }) }; }
+  catch (e) { return { ok: false, code: e.status ?? null, out: `${e.stdout ?? ''}${e.stderr ?? ''}`.trim() || e.message }; }
+}
+
+/** A failed probe as a finding: the data is wrong though the screen and the traffic looked right. */
+export const probeFinding = (probe, r) => ({ kind: 'probe_failed', severity: 'blocking', step: null, url: null, detail: `\`${probe}\` exited ${r.code ?? 'with an error'}: ${r.out.slice(-300)}` });
+
+async function huntOnce({ url, flow, probe, reset, phase, workDir = '.senyap', timeoutSec = 300, headless = true, persistence = true, onEvent }) {
+  // Every attempt starts from the same app state (QuietBench: Uptime Kuma's retry ran
+  // against a monitor the first attempt had already resumed).
+  if (reset) {
+    const r = sh(reset);
+    if (!r.ok) return { flow, url, phase, status: 'not_run', kane: { status: 'not_run', reason_code: 'reset_failed', summary: r.out.slice(-300) }, falseGreen: false, findings: [] };
+  }
   const objective = phase === 'observe' ? observeObjective(flow, { persistence }) : huntObjective(flow, { persistence, url });
   const args = ['run', objective, '--url', url, '--agent', '--bug-detection', 'continue', '--timeout', String(timeoutSec), '--max-steps', '30'];
   if (headless) args.push('--headless');
@@ -68,24 +84,56 @@ async function huntOnce({ url, flow, phase, workDir = '.senyap', timeoutSec = 30
   const end = run.end ?? {};
   const kanePack = packOf(end);
   let pack = null, senyapPack = null, judged = null;
+  // The probe asks the app's own data whether the flow really happened.
+  const probed = probe && run.exitCode !== 2 ? sh(probe) : null;
+  const probeFail = probed && !probed.ok ? probeFinding(probe, probed) : null;
   if (kanePack) {
     pack = await readPack(kanePack);
+    if (probeFail && pack.tests[0]) { pack.tests[0].findings.push(probeFail); pack.tests[0].falseGreen ||= pack.tests[0].kaneStatus === 'passed'; }
     mkdirSync(join(workDir, 'packs'), { recursive: true });
     senyapPack = await producePack(pack, { outDir: join(workDir, 'packs'), sourcePack: kanePack });
     judged = await verdict(senyapPack, POLICY);
   }
-  const findings = pack?.tests.flatMap((t) => t.findings) ?? [];
+  const findings = pack?.tests.flatMap((t) => t.findings) ?? (probeFail ? [probeFail] : []);
   return {
     flow, url, phase, objective,
-    status: classify({ exitCode: run.exitCode, end, policyPassed: judged ? judged.passed : null }),
+    status: classify({ exitCode: run.exitCode, end, policyPassed: judged ? judged.passed : probeFail ? false : null }),
     kane: { status: end.status, result_code: end.result_code, reason_code: end.reason_code, summary: end.summary, verdict: end.verdict ?? null, credits: end.credits_consumed, test_url: end.test_url, exitCode: run.exitCode },
     falseGreen: pack?.tests.some((t) => t.falseGreen) ?? false,
     findings, kanePack, senyapPack, policyVerdict: judged && { passed: judged.passed, doc: judged.doc },
   };
 }
 
+/** Static part of a URL path an agent can grep for: /api/notes/42 -> /api/notes. */
+export function routeOf(url) {
+  let path = '';
+  try { path = new URL(url).pathname; } catch { return null; }
+  const keep = [];
+  for (const seg of path.split('/').filter(Boolean)) {
+    if (/^\d+$|^[0-9a-f-]{16,}$|^[A-Za-z0-9_-]{20,}$/i.test(seg)) break;
+    keep.push(seg);
+  }
+  return keep.length ? '/' + keep.join('/') : null;
+}
+
+/** Where the code behind a failing call probably lives: tracked files that mention its route. */
+export function suspects(findings, cwd = process.cwd()) {
+  const out = new Map();
+  for (const f of findings) {
+    const route = f.url && routeOf(f.url);
+    if (!route || out.has(route)) continue;
+    let hits = [];
+    try {
+      hits = execFileSync('git', ['grep', '-n', '-I', '-F', '-e', route, '--', '.', ':!*.min.js', ':!*.map', ':!.senyap', ':!*.lock', ':!package-lock.json', ':!*.md'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+        .split('\n').filter(Boolean).slice(0, 3).map((l) => l.split(':').slice(0, 2).join(':'));
+    } catch { /* not a git repo, or no match */ }
+    out.set(route, hits);
+  }
+  return [...out].filter(([, hits]) => hits.length);
+}
+
 /** Markdown brief a coding agent can act on. */
-export function brief(results) {
+export function brief(results, { cwd } = {}) {
   const bad = results.filter((r) => r.status === 'silent_failure' || r.status === 'failed');
   if (!bad.length) {
     const unsure = results.filter((r) => r.status !== 'clean');
@@ -96,7 +144,14 @@ export function brief(results) {
   for (const r of bad) {
     out.push(`## ${r.flow}`, `- Kane: \`${r.kane.status}\` (result_code ${r.kane.result_code}${r.kane.reason_code ? `, ${r.kane.reason_code}` : ''})${r.falseGreen ? ' — **Kane passed the screen, the network/console did not**' : ''}`, `- Run: ${r.kane.test_url ?? 'n/a'}`);
     if (r.kane.summary) out.push(`- Kane summary: ${r.kane.summary.replace(/\n+/g, ' / ')}`);
-    for (const f of r.findings.filter((x) => x.severity === 'blocking')) out.push(`- \`${f.kind}\` ${f.method ?? ''} ${f.url ?? ''} ${f.status ? `→ ${f.status}` : ''} ${f.detail ? `: ${f.detail}` : ''}`.replace(/\s+/g, ' '));
+    const blocking = r.findings.filter((x) => x.severity === 'blocking');
+    for (const f of blocking) {
+      out.push(`- \`${f.kind}\` ${f.method ?? ''} ${f.url ?? ''} ${f.status ? `→ ${f.status}` : ''} ${f.detail ? `: ${f.detail}` : ''}${f.step ? ` (Kane step ${f.step}${f.stepKind ? `, ${f.stepKind}` : ''})` : ''}`.replace(/\s+/g, ' '));
+      if (f.requestBody) out.push(`  - request body: \`${f.requestBody.replace(/\s+/g, ' ')}\``);
+    }
+    const sus = suspects(blocking, cwd);
+    if (sus.length) out.push('- Code that calls these routes:', ...sus.map(([route, hits]) => `  - \`${route}\`: ${hits.join(', ')}`));
+    out.push(`- Re-check just this flow: \`npx senyap hunt --flow ${JSON.stringify(r.flow)}\``);
     out.push('');
   }
   return out.join('\n');
@@ -106,4 +161,5 @@ export function saveReport(results, workDir = '.senyap') {
   mkdirSync(workDir, { recursive: true });
   writeFileSync(join(workDir, 'report.json'), JSON.stringify({ at: new Date().toISOString(), results }, null, 2));
   writeFileSync(join(workDir, 'BRIEF.md'), brief(results));
+  return join(workDir, 'BRIEF.md');
 }

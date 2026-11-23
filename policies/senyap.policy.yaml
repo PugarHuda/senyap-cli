@@ -7,5 +7,7 @@ gates:
   - { id: no-console-errors, metric: metrics.silent.console_errors, equals: 0, severity: blocking }
   - { id: no-js-exceptions, metric: metrics.silent.js_exceptions, equals: 0, severity: blocking }
   - { id: no-env-leaks, metric: metrics.silent.env_leaks, equals: 0, severity: blocking }
+  - { id: no-probe-failures, metric: metrics.silent.probe_failures, equals: 0, severity: blocking }
   - { id: no-mixed-content, metric: metrics.silent.mixed_content, equals: 0, severity: warning }
   - { id: no-slow-responses, metric: metrics.silent.slow_responses, equals: 0, severity: warning }
+  - { id: no-insecure-session-cookies, metric: metrics.silent.insecure_cookies, equals: 0, severity: warning }

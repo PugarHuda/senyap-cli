@@ -7,7 +7,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { kane, packOf } from './kane.js';
 import { lockAsserts } from './objectives.js';
-import { loadConfig } from './config.js';
+import { loadConfig, flowsOf } from './config.js';
 
 export const LOCK_POLICY = resolve(fileURLToPath(import.meta.url), '../../policies/senyap-lock.policy.yaml');
 export const TEST_DIR = 'senyap-tests';
@@ -47,7 +47,7 @@ export async function runLocked(file, { timeoutSec = 400 } = {}) {
 export async function lockCommand(values) {
   const cfg = loadConfig();
   const url = values.url ?? cfg.url;
-  const flows = values.flow ?? cfg.flows ?? [];
+  const flows = values.flow ?? flowsOf(cfg).map((f) => f.flow);
   if (!url || !flows.length) throw new Error('need --url and --flow (or senyap.config.json)');
   const { readPack } = await import('./pack.js');
   let worst = 0;

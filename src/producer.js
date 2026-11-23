@@ -9,7 +9,7 @@ import { finalize } from '@testmuai/evidence-cli';
 import { stringify } from 'yaml';
 import { VERSION } from './version.js';
 
-const COUNTED = ['http_5xx', 'http_4xx', 'request_failed', 'console_error', 'js_exception', 'env_leak', 'mixed_content', 'slow_response'];
+const COUNTED = ['http_5xx', 'http_4xx', 'request_failed', 'console_error', 'js_exception', 'env_leak', 'mixed_content', 'slow_response', 'probe_failed', 'insecure_cookie'];
 
 const sumMetric = (label, kind) => ({
   type: 'count', unit: 'findings', label, per_test: true,
@@ -19,7 +19,7 @@ const sumMetric = (label, kind) => ({
 
 export const CATALOG = {
   catalog: 'senyap',
-  version: 1,
+  version: 2,
   description: 'Silent failures Senyap reads from Kane evidence packs (logs/*-network.har, logs/*-console.ndjson).',
   metrics: {
     'silent.http_5xx': sumMetric('Hidden 5xx responses', 'http_5xx'),
@@ -30,6 +30,8 @@ export const CATALOG = {
     'silent.env_leaks': sumMetric('Calls to another environment', 'env_leak'),
     'silent.mixed_content': sumMetric('http calls from https pages', 'mixed_content'),
     'silent.slow_responses': sumMetric('Responses over 3 s', 'slow_response'),
+    'silent.probe_failures': sumMetric('Data probes that disagreed with the screen', 'probe_failed'),
+    'silent.insecure_cookies': sumMetric('Session cookies without Secure/HttpOnly', 'insecure_cookie'),
     'false_green_tests': {
       type: 'count', unit: 'tests', label: 'Tests Kane passed while the page failed underneath', per_test: true,
       verify: { aggregate: 'count', where: 'has(test.senyap) && test.senyap.false_green == true' }, merge: 'recompute',

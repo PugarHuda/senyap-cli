@@ -79,11 +79,39 @@ senyap init --agent claude       # or codex, cursor, all
 
 `init` writes `senyap.config.json` (your URL and the flows that matter), registers `senyap guard` as the Stop hook of the agents you pick, and installs Kane's own agent skill (`kane-cli install skill`) so the agent can call Kane itself while it fixes.
 
-| Agent | Hook file | How Senyap keeps it working |
-|---|---|---|
-| Claude Code | `.claude/settings.json` | `{"decision":"block","reason":<brief>}` |
-| Codex CLI | `.codex/hooks.json` (trust once with `/hooks`) | same shape as Claude Code |
-| Cursor | `.cursor/hooks.json` | `{"followup_message":<brief>}` |
+| Agent | Hook file | How Senyap keeps it working | Run in a live agent session? |
+|---|---|---|---|
+| Claude Code | `.claude/settings.json` (Stop + PreToolUse) | `{"decision":"block","reason":<brief>}` | **yes** (the session above) |
+| Codex CLI | `.codex/hooks.json` (trust once with `/hooks`) | same shape as Claude Code | not yet: built to Codex's documented hook format |
+| Cursor | `.cursor/hooks.json` | `{"followup_message":<brief>}` | not yet: built to Cursor's documented hook format |
+
+### The agent can't talk its way past the gate
+
+A coding agent that is blocked will sometimes "fix" the check instead of the app. Senyap closes the easy routes:
+
+- **The checks are pinned.** `senyap.config.json` and `senyap-tests/` are pinned to what a human approved (at `init`, or with `senyap approve`). If they change, the stop is blocked without a hunt: *"the checks were changed; put them back"*.
+- **The agent can only add checks.** It may write extra flows to `.senyap/proposed-flows.json`. They are hunted on the next stop (stricter, never looser), and a human promotes them with `senyap approve`, which refuses to run without a terminal. With only the placeholder flow from `init`, the first stop asks the agent to propose flows for what it just built.
+- **The guard's memory lives outside the repo** (`~/.senyap/state`), so the agent can't reset its attempt count or mark a tree clean.
+- **Claude Code also gets a PreToolUse hook** (`senyap protect`) that denies edits to the checks, `senyap approve`, and writes to the state directory. A determined agent with a shell can still get around a hook; the pinned hash at stop time is what actually catches it.
+
+### Probes and resets: bugs that leave no trace
+
+Some bugs never touch the network or console: the API answers 200 and simply doesn't store the change. For those, give a flow a **probe**, a command that reads the app's own data after Kane's run, and a **reset** that puts the app back before every attempt:
+
+```json
+{
+  "url": "http://localhost:3011",
+  "reset": "node scripts/seed-paused-monitor.js",
+  "flows": [
+    {
+      "flow": "Open the paused monitor, click Edit, click Save without changing anything, reload, and check it is still paused",
+      "probe": "node scripts/assert-monitor-never-ran.js"
+    }
+  ]
+}
+```
+
+A non-zero probe exit is a blocking `probe_failed` finding with the command's output, so Kane's own verdict fails the pack even when the screen and the traffic looked right. Probes and resets come only from the human-approved config, never from agent proposals.
 
 ## Commands
 
@@ -93,7 +121,11 @@ senyap check <kane .evidence pack>...           Judge packs Kane already wrote (
 senyap guard                                    Agent Stop hook
 senyap lock  [--flow "<flow>"]                  Freeze clean flows as regression *_test.md files
 senyap init  [--agent claude|codex|cursor|all]  Config + hooks + Kane skill
+senyap approve                                  (a human) promote proposed flows, re-pin the checks
+senyap protect                                  Claude Code PreToolUse hook: the agent can't edit the checks
 ```
+
+The brief the agent gets names each failing call with its method, status, response and request body, the Kane step it happened in, the files that call that route (`git grep`), Kane's run link, and the one command to re-check just that flow.
 
 Exit codes: `0` clean, `1` silent failure, `2` Kane did not run.
 
@@ -106,8 +138,10 @@ Read from the HAR and console logs Kane writes into every evidence pack:
 | `http_5xx`, `http_4xx` | blocking | `POST /api/notes → 500` behind a "Saved!" toast |
 | `request_failed` | blocking | `net::ERR_NAME_NOT_RESOLVED` |
 | `console_error`, `js_exception` | blocking | `save failed 500` |
-| `env_leak` | blocking | a page on `127.0.0.1` or production calling `staging.*`, or production calling `localhost` |
+| `env_leak` | blocking | a page on `127.0.0.1` or production calling `staging.*`, production calling `localhost`, or production sending a payment test key (`pk_test_…`, `sk_test_…`) |
+| `probe_failed` | blocking | the flow's probe found the data unchanged although the screen said it was saved |
 | `mixed_content`, `slow_response` (> 3 s) | warning | |
+| `insecure_cookie` | warning | an https page sets a session cookie without `Secure` or `HttpOnly` |
 | **false green** | blocking | Kane passed the test while any blocking finding exists |
 
 ## Kane CLI primitives Senyap is built on
@@ -154,7 +188,7 @@ Found the hard way on a real app (tududi, QuietBench), where the fixed build was
 ## Development
 
 ```bash
-npm test                 # unit tests for the classifiers, objectives and *_test.md shape
+npm test                 # classifiers, objectives, the guard's block/escalate/tamper paths, protect, probes
 node bin/senyap.js check ~/.testmuai/kaneai/sessions/*/evidence/*.evidence
 ```
 
@@ -177,4 +211,4 @@ Apache-2.0
     kane-access-key: ${{ secrets.KANE_ACCESS_KEY }}
 ```
 
-Or judge the packs your own `kane-cli testmd run` steps wrote: `packs: .testmuai/evidence/*.evidence`. The job fails on any silent failure and the agent brief goes to the job summary. `.github/workflows/demo.yml` runs it against the hosted demo and expects the buggy app to fail and the fixed one to pass.
+Or judge the packs your own `kane-cli testmd run` steps wrote: `packs: .testmuai/evidence/*.evidence`. The job fails on any silent failure and the agent brief goes to the job summary. On pull requests it also keeps one comment up to date with the brief and Kane's run links (give the job `permissions: pull-requests: write`; turn it off with `comment: false`). `.github/workflows/demo.yml` runs it against the hosted demo and expects the buggy app to fail and the fixed one to pass.
