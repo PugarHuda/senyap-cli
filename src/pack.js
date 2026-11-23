@@ -58,8 +58,9 @@ export function redact(text) {
     // JSON string values, including one cut off by the 2 KB cap (no closing quote).
     .replace(/"([^"\\]{1,200})"(\s*:\s*)"((?:[^"\\]|\\.)*)("|$)/g, (m, key, sep, _v, end) => (secret(key) ? `"${key}"${sep}"***${end}` : m))
     // key=value pairs anywhere (form bodies, query strings, strings inside JSON).
-    // The value runs to the next & or closing quote, spaces included ("password=my secret pass").
-    .replace(/(^|[?&\s"])([^=&\s"]{1,200})=((?:[^&"\\]|\\.)*)/g, (m, pre, key) => (secret(key) ? `${pre}${key}=***` : m))
+    // A value runs to the next &, closing quote, next `key=` or the end, spaces included
+    // ("password=my secret pass"), without swallowing a following pair ("user=bob password=x").
+    .replace(/(^|[?&\s"])([^=&\s"]{1,200})=((?:[^&"\\]|\\.)*?)(?=[&"]|\s+[^=&\s"]{1,200}=|$)/g, (m, pre, key) => (secret(key) ? `${pre}${key}=***` : m))
     .replace(/\b((?:pk|sk|rk)_(?:test|live)_)[A-Za-z0-9]{4,}/g, '$1***')
     .replace(/\b(Bearer\s+)[A-Za-z0-9._~+/-]+=*/gi, '$1***');
 }
