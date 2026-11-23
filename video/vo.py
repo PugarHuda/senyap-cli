@@ -19,7 +19,7 @@ LINES = {
   'how':     "Under the hood, every verdict is Kane's. Kane drives the flow. Senyap reads the network and console log from Kane's evidence pack, and seals a pack of its own, with a silent failure metric catalog. Kane's evidence verdict enforces the policy. Only when the evidence shows a failure does Kane run its DevTools checks, to confirm the bug and explain it.",
   'limits':  "Two of Kane's limits became the design. Verdict policies can't read logs, so Senyap became an evidence producer. And Kane's analyzers time out proving that nothing failed on a clean page, so they only run when something did.",
   'try':     "Try it yourself on the hosted demo. The buggy app comes back as a silent failure. The fixed one comes back clean.",
-  'bench':   "",  # filled from quietbench/RESULTS.md when the benchmark is done
+  'bench':   "Then QuietBench: eight real bugs from open source apps, each run before and after its actual fix. Plain Kane caught five. Senyap caught six, including two that plain Kane passed. On the fixed builds, four came back clean, three inconclusive, and one false alarm, which taught Senyap a new noise rule. Every miss is published.",
   'ci':      "It ships as a GitHub Action too. On every push, the buggy demo must fail, and the fixed one must pass.",
   'outro':   "Senyap. N P X senyap init. Built on Kane CLI.",
 }

@@ -18,9 +18,13 @@ const brief = loop.find((x) => x.who === 'Senyap' && /Stop hook feedback/.test(x
 const fixMsg = loop.filter((x) => x.who === 'Claude Code').at(-1).text;
 const finalMsg = loop.filter((x) => x.who === 'Senyap').at(-1).text.replace(/^Stop says: /, '');
 
+// QuietBench rows, straight from quietbench/results.json (live runs, senyap 0.1.2).
+const plainCell = (a) => (a?.result_code === 740 ? 'caught (740)' : a?.status === 'passed' ? 'missed (passed)' : `no verdict (${a?.result_code ?? '?'})`);
+const buggyCell = (b) => ({ silent_failure: 'caught', failed: 'caught', inconclusive: 'inconclusive', clean: 'missed' }[b?.status] ?? b?.status ?? '?');
+const fixedCell = (c) => ({ clean: 'clean', inconclusive: 'inconclusive', silent_failure: 'false alarm*', failed: 'false alarm*' }[c?.status] ?? c?.status ?? '?');
 let bench = null;
 const qb = new URL('../../quietbench/results.json', import.meta.url);
-if (existsSync(qb)) bench = JSON.parse(readFileSync(qb, 'utf8'));
+if (existsSync(qb)) bench = JSON.parse(readFileSync(qb, 'utf8')).map((r) => ({ bug: r.bug, plain: plainCell(r.A), buggy: buggyCell(r.B), fixed: fixedCell(r.C) }));
 
 writeFileSync(new URL('./src/data.json', import.meta.url), JSON.stringify({
   durations,

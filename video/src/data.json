@@ -14,6 +14,7 @@
   "how": 21.6,
   "limits": 13.344,
   "try": 7.56,
+  "bench": 20.352,
   "ci": 6.528,
   "outro": 4.632
  },
@@ -51,5 +52,54 @@
  "brief": "Stop hook feedback:\n# Senyap found silent failures\n\nKane CLI drove these flows in a real browser. The screen may look fine; what is listed below failed underneath. Fix the application code (not the test), then stop again so Senyap can re-check.\n\n## Add a note that says \"Don't forget the milk\" and save it\n- Kane: `failed` (result_code 740, assertion_error.confirmed_product_bug)\n- Run: https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M821S8DGS147ADY82AWBQESR/dashboard/share/US_AXAVZG3OCBCN4R4VKVKASAZUB1PFYLVRQA521U7LLRKJQ4R91AHHI4HSFM2OBLNU?type=summary&agentView=true&fqdn=summary-page\n- Kane summary: The save service cannot handle the apostrophe in the note text, so it returns an error instead of storing the note. The page is also set up to send analytics to a staging address. / Fix note saving so apostrophes are handled safely, remove the staging analytics endpoint from this build, and then retest saving and reloading the note. / evidence: network_failure: POST http://127.0.0.1:4820/api/notes -> 500 body: {\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"} / evidence: console_error: save failed 500 / evidence: network_failure: POST http://staging.notes-analytics.test/collect -> None FAILED (net::ERR_NAME_NOT_RESOLVED) / evidence: console_error: Failed to load resource: net::ERR_NAME_NOT_RESOLVED\n- `console_error` http://127.0.0.1:4820/api/notes : Failed to load resource: the server responded with a status of 500 (Internal Server Error)\n- `console_error` http://127.0.0.1:4820/ : save failed 500\n- `console_error` http://staging.notes-analytics.test/collect : Failed to load resource: net::ERR_NAME_NOT_RESOLVED\n- `http_5xx` POST http://127.0.0.1:4820/api/notes → 500 : {\"error\":\"syntax error near \\\"Don't forget the milk\\\"\"}\n- `env_leak` POST http://staging.notes-analytics.test/collect : page on 127.0.0.1 called staging.notes-analytics.test (net::ERR_NAME_NOT_RESOLVED)\n\n\nAttempt 1 of 3. The full report is .senyap/report.json; Kane's evidence packs are linked there.",
  "fixMsg": "I fixed both problems Senyap reported. I haven't checked them myself: running a temporary server to test them needed your approval, which I didn't get. Senyap's next check will be the real test.\n\n- **Notes with apostrophes failing:** `server.js` built its query by pasting the note text straight in, so a `'` broke it and the server returned 500. The query now passes the text in as a separate value, so quotes can't break it.\n- **Analytics sent to staging:** I removed the call to `staging.notes-analytics.test` from `index.html`.\n- **\"Saved!\" on failure:** when a save fails, the page now shows a red \"Could not save note\" message instead. The note isn't added to the list and the counter doesn't go up.\n- **Blank notes:** I also made the server reject empty or missing note text with an error, instead of storing nothing.\n\nIf your notes server is already running on port 4820, restart it so it picks up the server fix.",
  "finalMsg": "Senyap: Kane checked every flow; nothing failed underneath the screen.",
- "bench": null
+ "bench": [
+  {
+   "bug": "tududi1045",
+   "plain": "caught (740)",
+   "buggy": "caught",
+   "fixed": "inconclusive"
+  },
+  {
+   "bug": "kuma3713",
+   "plain": "missed (passed)",
+   "buggy": "missed",
+   "fixed": "clean"
+  },
+  {
+   "bug": "memos5011",
+   "plain": "caught (740)",
+   "buggy": "caught",
+   "fixed": "clean"
+  },
+  {
+   "bug": "memos4978",
+   "plain": "caught (740)",
+   "buggy": "inconclusive",
+   "fixed": "inconclusive"
+  },
+  {
+   "bug": "memos5865",
+   "plain": "caught (740)",
+   "buggy": "caught",
+   "fixed": "false alarm*"
+  },
+  {
+   "bug": "linkding1451",
+   "plain": "missed (passed)",
+   "buggy": "caught",
+   "fixed": "clean"
+  },
+  {
+   "bug": "tududi904",
+   "plain": "no verdict (750)",
+   "buggy": "caught",
+   "fixed": "clean"
+  },
+  {
+   "bug": "wallos459",
+   "plain": "caught (740)",
+   "buggy": "caught",
+   "fixed": "inconclusive"
+  }
+ ]
 }

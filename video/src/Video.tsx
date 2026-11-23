@@ -146,8 +146,8 @@ const Limits: React.FC = () => {
 
 const Bench: React.FC = () => {
   const f = useCurrentFrame();
-  const rows = bench ?? [];
-  const tag = (s?: string) => (s === 'clean' ? { t: 'clean', c: C.ok } : s === 'silent_failure' || s === 'failed' ? { t: s.replace('_', ' '), c: C.fail } : s === 'passed' ? { t: 'passed', c: C.ok } : { t: s ?? '–', c: C.muted });
+  const rows = (bench ?? []) as Array<{ bug: string; plain: string; buggy: string; fixed: string }>;
+  
   return (
     <Page>
       <div style={{ fontSize: 44, fontWeight: 700, marginBottom: 26 }}>QuietBench: real bugs from open-source apps</div>
@@ -155,13 +155,14 @@ const Bench: React.FC = () => {
         <div>Bug</div><div>Plain Kane, buggy</div><div>Senyap, buggy</div><div>Senyap, fixed</div>
       </div>
       {rows.map((r, i) => {
-        const a = tag(r.A?.status), b = tag(r.B?.status), c = tag(r.C?.status);
+        const col = (t: string) => (/^caught|^clean/.test(t) ? C.ok : /missed|false alarm/.test(t) ? C.fail : C.muted);
         return (
-          <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr', fontSize: 30, padding: '14px 0', borderBottom: `1px solid ${C.rule}`, opacity: fadeIn(f, 8 + i * 8) }}>
-            <div>{r.bug}</div><div style={{ color: a.c }}>{a.t}</div><div style={{ color: b.c, fontWeight: 700 }}>{b.t}</div><div style={{ color: c.c }}>{c.t}</div>
+          <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr', fontSize: 30, padding: '12px 0', borderBottom: `1px solid ${C.rule}`, opacity: fadeIn(f, 8 + i * 8) }}>
+            <div style={{ fontFamily: MONO, fontSize: 26 }}>{r.bug}</div><div style={{ color: col(r.plain) }}>{r.plain}</div><div style={{ color: col(r.buggy), fontWeight: 700 }}>{r.buggy}</div><div style={{ color: col(r.fixed) }}>{r.fixed}</div>
           </div>
         );
       })}
+      <div style={{ fontSize: 24, color: C.muted, marginTop: 22, opacity: fadeIn(f, 90) }}>Live runs with senyap 0.1.2, real issues and their fix commits. * The two requests behind this false alarm are reported as noise since 0.1.3; re-judged, it is inconclusive.</div>
     </Page>
   );
 };
