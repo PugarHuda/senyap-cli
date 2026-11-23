@@ -53,12 +53,12 @@ const SECRET_FIELD = /pass(?:word|wd)?|token|secret|api[_-]?key|access[_-]?key|p
  * tested in a callback, and form bodies are split on & (no backtracking over the body).
  */
 export function redact(text) {
-  const s = String(text).slice(0, 2048)
-    .replace(/"([^"\\]{1,64})"(\s{0,4}:\s{0,4})"(?:[^"\\]|\\.){0,2048}"/g, (m, key, sep) => (SECRET_FIELD.test(key) ? `"${key}"${sep}"***"` : m));
-  const form = s.includes('=') && !/^\s*[[{]/.test(s)
-    ? s.split('&').map((pair) => { const i = pair.indexOf('='); return i > 0 && SECRET_FIELD.test(pair.slice(0, i)) ? `${pair.slice(0, i)}=***` : pair; }).join('&')
-    : s;
-  return form
+  const secret = (key) => key.length > 64 || SECRET_FIELD.test(key);
+  return String(text).slice(0, 2048)
+    // JSON string values, including one cut off by the 2 KB cap (no closing quote).
+    .replace(/"([^"\\]{1,200})"(\s*:\s*)"((?:[^"\\]|\\.)*)("|$)/g, (m, key, sep, _v, end) => (secret(key) ? `"${key}"${sep}"***${end}` : m))
+    // key=value pairs anywhere (form bodies, query strings, strings inside JSON).
+    .replace(/(^|[?&\s"])([^=&\s"]{1,200})=([^&\s"]*)/g, (m, pre, key) => (secret(key) ? `${pre}${key}=***` : m))
     .replace(/\b((?:pk|sk|rk)_(?:test|live)_)[A-Za-z0-9]{4,}/g, '$1***')
     .replace(/\b(Bearer\s+)[A-Za-z0-9._~+/-]+=*/gi, '$1***');
 }
