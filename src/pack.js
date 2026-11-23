@@ -13,7 +13,7 @@ export const envOf = (host) => (LOCAL_HOST.test(host) ? 'local' : PRE_PROD.test(
 export const SLOW_MS = 3000; // ponytail: same default as `kane-cli explore --slow-budget response=3s`
 
 /** Classify one HAR entry; returns a finding or null. */
-export function classifyRequest(entry, surfaceHost) {
+export function classifyRequest(entry, surfaceHost, loadStep = null) {
   const url = entry.request?.url ?? '';
   if (NOISE.some((re) => re.test(url))) return null;
   const status = entry.response?.status ?? 0;
@@ -24,11 +24,15 @@ export function classifyRequest(entry, surfaceHost) {
   if (host && surfaceHost && host !== surfaceHost && envOf(host) !== 'prod' && envOf(host) !== envOf(surfaceHost)) {
     return { kind: 'env_leak', severity: 'blocking', ...base, detail: `page on ${surfaceHost} called ${host}${entry._failed ? ` (${entry._failure_reason ?? 'failed'})` : ''}` };
   }
+  // ERR_ABORTED is the browser cancelling a request because the page navigated away,
+  // e.g. an open event stream cut by the reload check (QuietBench: memos GET /api/v1/sse).
+  if (entry._failed && /ERR_ABORTED/.test(entry._failure_reason ?? '')) return { kind: 'aborted', severity: 'warning', ...base, detail: entry._failure_reason };
   if (entry._failed || status === 0) return { kind: 'request_failed', severity: 'blocking', ...base, detail: entry._failure_reason ?? 'no response' };
   if (status >= 500) return { kind: 'http_5xx', severity: 'blocking', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
-  // A GET that answers 401/403 is how most apps ask "am I logged in?" before the login form.
-  // Measured on tududi (QuietBench): the fixed build answers GET /api/profile 401 before login.
-  if ((status === 401 || status === 403) && (base.method ?? 'GET') === 'GET') return { kind: 'auth_probe', severity: 'warning', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
+  // How apps ask "am I logged in?" before the login form: a GET answering 401/403 at any
+  // time, or any 401/403 while the page first loads (QuietBench: tududi GET /api/profile,
+  // memos POST .../AuthService/RefreshToken). A write refused after the flow acts still blocks.
+  if ((status === 401 || status === 403) && ((base.method ?? 'GET') === 'GET' || (loadStep && base.step === loadStep))) return { kind: 'auth_probe', severity: 'warning', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
   if (status >= 400 && entry._resource_type !== 'document') return { kind: 'http_4xx', severity: 'blocking', ...base, detail: entry.response?.content?.text?.slice(0, 300) ?? '' };
   if (url.startsWith('http://') && surfaceHost && base.url && pageIsHttps(entry)) return { kind: 'mixed_content', severity: 'warning', ...base, detail: 'http request from an https page' };
   if (base.ms > SLOW_MS) return { kind: 'slow_response', severity: 'warning', ...base, detail: `${base.ms} ms` };
@@ -71,7 +75,7 @@ export async function readPack(packPath) {
       const text = entry.isDir ? null : await pack.readText(`tests/${id}/logs/${entry.name}`);
       if (!text) continue;
       if (entry.name.endsWith('-network.har')) {
-        for (const e of JSON.parse(text).log?.entries ?? []) { const f = classifyRequest(e, surfaceHost); if (f) findings.push(f); }
+        for (const e of JSON.parse(text).log?.entries ?? []) { const f = classifyRequest(e, surfaceHost, loadStep); if (f) findings.push(f); }
       } else if (entry.name.endsWith('-console.ndjson')) {
         for (const raw of text.split('\n')) { if (!raw.trim()) continue; const f = classifyConsole(JSON.parse(raw), loadStep); if (f) findings.push(f); }
       }

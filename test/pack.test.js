@@ -68,3 +68,13 @@ test('noise every app makes is reported, not blocking (QuietBench: tududi)', asy
   assert.equal(classify({ exitCode: 1, end: { result_code: 710, verdict: { family: 'automation_bug' } }, policyPassed: true }), 'inconclusive');
   assert.equal(classify({ exitCode: 1, end: { result_code: 710, verdict: { family: 'application_issue' } }, policyPassed: true }), 'failed');
 });
+
+test('reload-cut streams and load-time token refreshes are noise (QuietBench: memos)', () => {
+  const sse = classifyRequest({ request: { method: 'GET', url: 'http://127.0.0.1:8081/api/v1/sse', headers: [] }, response: { status: 200 }, _failed: true, _failure_reason: 'net::ERR_ABORTED', _step: '1-6', time: 9 }, '127.0.0.1', '0-1');
+  assert.equal(sse.kind, 'aborted'); assert.equal(sse.severity, 'warning');
+  const refresh = classifyRequest({ request: { method: 'POST', url: 'http://127.0.0.1:8081/memos.api.v1.AuthService/RefreshToken', headers: [] }, response: { status: 401 }, _step: '0-1', time: 5 }, '127.0.0.1', '0-1');
+  assert.equal(refresh.kind, 'auth_probe');
+  const laterWrite = classifyRequest({ request: { method: 'POST', url: 'http://127.0.0.1:8081/api/save', headers: [] }, response: { status: 401 }, _step: '0-7', time: 5 }, '127.0.0.1', '0-1');
+  assert.equal(laterWrite.kind, 'http_4xx', 'a write refused after the flow acts still blocks');
+  assert.equal(classifyRequest({ request: { method: 'POST', url: 'http://x.test/a', headers: [] }, response: { status: 0 }, _failed: true, _failure_reason: 'net::ERR_CONNECTION_REFUSED', time: 1 }, 'x.test').kind, 'request_failed');
+});
