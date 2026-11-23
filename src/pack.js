@@ -44,16 +44,21 @@ export function classifyRequest(entry, surfaceHost, loadStep = null) {
 }
 
 const TEST_KEY = /\b(?:pk|sk|rk)_test_[A-Za-z0-9]{8,}/;
-const SECRET_FIELD = 'pass(?:word|wd)?|token|secret|api[_-]?key|access[_-]?key|private[_-]?key|authorization|auth|credential|otp|card|cvc|cvv|ssn|payment[_-]?key';
+const SECRET_FIELD = /pass(?:word|wd)?|token|secret|api[_-]?key|access[_-]?key|private[_-]?key|authorization|auth|credential|otp|card|cvc|cvv|ssn|payment[_-]?key/i;
 
 /**
  * Mask secrets in a request body before it goes into a brief, a report or a PR comment:
  * JSON and form fields whose name looks secret (login forms Kane fills in), and API keys.
+ * Bounded: only the first 2 KB is looked at, key names are capped at 64 characters and
+ * tested in a callback, and form bodies are split on & (no backtracking over the body).
  */
 export function redact(text) {
-  return String(text)
-    .replace(new RegExp(`("[^"]*(?:${SECRET_FIELD})[^"]*"\\s*:\\s*)"(?:[^"\\\\]|\\\\.)*"`, 'gi'), '$1"***"')
-    .replace(new RegExp(`((?:^|[&?])[^=&]*(?:${SECRET_FIELD})[^=&]*=)[^&]*`, 'gi'), '$1***')
+  const s = String(text).slice(0, 2048)
+    .replace(/"([^"\\]{1,64})"(\s{0,4}:\s{0,4})"(?:[^"\\]|\\.){0,2048}"/g, (m, key, sep) => (SECRET_FIELD.test(key) ? `"${key}"${sep}"***"` : m));
+  const form = s.includes('=') && !/^\s*[[{]/.test(s)
+    ? s.split('&').map((pair) => { const i = pair.indexOf('='); return i > 0 && SECRET_FIELD.test(pair.slice(0, i)) ? `${pair.slice(0, i)}=***` : pair; }).join('&')
+    : s;
+  return form
     .replace(/\b((?:pk|sk|rk)_(?:test|live)_)[A-Za-z0-9]{4,}/g, '$1***')
     .replace(/\b(Bearer\s+)[A-Za-z0-9._~+/-]+=*/gi, '$1***');
 }
