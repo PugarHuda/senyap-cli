@@ -123,6 +123,16 @@ Senyap drives no browser of its own. Every verdict comes from Kane.
 | Kane's DevTools analyzers time out proving that *nothing* failed on a clean page (result_code 750, seen repeatedly), but answer fast when something did | Two phases: observe without analyzers and judge the pack; run the analyzers only to confirm a failure the evidence already shows |
 | An environment rule like "no request to localhost" is impossible for an app served from localhost (Kane got stuck, 330) | The rule is derived from the app's own host: local apps must not call staging, production must call neither |
 | Kane-side failures (3xx/4xx/750, timeouts) look like test failures | Classified `inconclusive`, retried once, and never counted against the agent |
+| Two kane-cli runs started in the same second wrote the same mixed traffic into both evidence packs (found on QuietBench) | Senyap serializes its browser runs with a lock file |
+| A failed assertion can be Kane's own mistake (QuietBench: it clicked a label instead of the switch, verdict family `automation_bug`) | 7xx results whose Kane verdict family is `automation_bug` or `environment_issue` are `inconclusive` |
+
+### Noise that is reported but never blocks
+
+Found the hard way on a real app (tududi, QuietBench), where the fixed build was flagged: a pre-login `GET /api/profile → 401`, Chrome's console echo of it, and an i18n error logged on every page load. Since 0.1.2:
+
+- `auth_probe`: a GET answered 401/403 (a refused write still blocks).
+- Console lines that only echo a request the HAR already records are dropped; the HAR entry carries the severity.
+- `ambient_console`: console errors logged while the page first loads, before the flow does anything.
 
 ## Development
 
