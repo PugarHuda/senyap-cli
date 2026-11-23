@@ -91,6 +91,9 @@ test('request bodies are redacted before they reach a brief', () => {
   assert.equal(redact('user=bob password=secret'), 'user=bob password=***');
   assert.equal(redact('password=my secret pass&next=1'), 'password=***&next=1');
   assert.equal(redact('note=hello world token=a b'), 'note=hello world token=***');
+  assert.equal(redact('password=abc def=ghi&next=1'), 'password=***&next=1');
+  assert.equal(redact('token=YWJj ZA== tail=x'), 'token=***');
+  assert.equal(redact('{"q":"pass=a\\"b c=d","n":1}'), '{"q":"pass=***","n":1}');
   assert.equal(redact(`{"${'k'.repeat(70)}":"v"}`), `{"${'k'.repeat(70)}":"***"}`);
   const f = classifyRequest({ request: { method: 'POST', url: 'http://127.0.0.1:1/api/login', headers: [], postData: { text: '{"password":"QuietBench123!"}' } }, response: { status: 500 }, time: 1 }, '127.0.0.1');
   assert.doesNotMatch(f.requestBody, /QuietBench123/);

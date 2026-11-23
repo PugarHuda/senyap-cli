@@ -49,18 +49,22 @@ const SECRET_FIELD = /pass(?:word|wd)?|token|secret|api[_-]?key|access[_-]?key|p
 /**
  * Mask secrets in a request body before it goes into a brief, a report or a PR comment:
  * JSON and form fields whose name looks secret (login forms Kane fills in), and API keys.
- * Bounded: only the first 2 KB is looked at, key names are capped at 64 characters and
- * tested in a callback, and form bodies are split on & (no backtracking over the body).
+ * Bounded: only the first 2 KB is looked at, and key names are tested in a callback.
  */
 export function redact(text) {
   const secret = (key) => key.length > 64 || SECRET_FIELD.test(key);
-  return String(text).slice(0, 2048)
+  const json = String(text).slice(0, 2048)
     // JSON string values, including one cut off by the 2 KB cap (no closing quote).
-    .replace(/"([^"\\]{1,200})"(\s*:\s*)"((?:[^"\\]|\\.)*)("|$)/g, (m, key, sep, _v, end) => (secret(key) ? `"${key}"${sep}"***${end}` : m))
-    // key=value pairs anywhere (form bodies, query strings, strings inside JSON).
-    // A value runs to the next &, closing quote, next `key=` or the end, spaces included
-    // ("password=my secret pass"), without swallowing a following pair ("user=bob password=x").
-    .replace(/(^|[?&\s"])([^=&\s"]{1,200})=((?:[^&"\\]|\\.)*?)(?=[&"]|\s+[^=&\s"]{1,200}=|$)/g, (m, pre, key) => (secret(key) ? `${pre}${key}=***` : m))
+    .replace(/"([^"\\]{1,200})"(\s*:\s*)"((?:[^"\\]|\\.)*)("|$)/g, (m, key, sep, _v, end) => (secret(key) ? `"${key}"${sep}"***${end}` : m));
+  // key=value pairs anywhere (form bodies, query strings, strings inside JSON). A value
+  // never crosses & or an unescaped quote, so split on those; inside a segment, everything
+  // from the first secret key on is masked ("user=bob password=a b=c" keeps only user=bob).
+  return json.split(/(&|(?<!\\)")/).map((seg) => {
+    for (const m of seg.matchAll(/(^|[?\s])([^=\s?]{1,200})=/g)) {
+      if (secret(m[2])) return `${seg.slice(0, m.index + m[1].length + m[2].length)}=***`;
+    }
+    return seg;
+  }).join('')
     .replace(/\b((?:pk|sk|rk)_(?:test|live)_)[A-Za-z0-9]{4,}/g, '$1***')
     .replace(/\b(Bearer\s+)[A-Za-z0-9._~+/-]+=*/gi, '$1***');
 }
