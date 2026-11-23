@@ -68,6 +68,15 @@ senyap.config.json or senyap-tests/ changed since a human approved them, so Seny
 - To check MORE, add plain-English flows to \`${PROPOSED.replace(/\\/g, '/')}\` (a JSON array of strings) instead.
 - If the change is intended, the human runs \`npx senyap approve\` in a terminal.`;
 
+const NOT_APPROVED = `# Senyap: no human-approved checks on record
+
+Senyap has no record of a human approving senyap.config.json for this repo (it was never approved, or its state was removed), so it won't trust the checks as they are now. Ask the human to run \`npx senyap approve\` (or \`senyap init\`) in a terminal.`;
+
+/** Pin the current config and locked tests as human-approved (init, approve). */
+export function pin(cwd = process.cwd()) {
+  writeState(cwd, { ...readState(cwd), approved: guardedHash(cwd), attempts: 0, cleanHash: null });
+}
+
 const NEED_FLOW = `# Senyap needs a user flow
 
 senyap.config.json has no real user flow yet, so Kane has nothing to drive. Write 1-3 plain-English flows that exercise what you just built or changed into \`${PROPOSED.replace(/\\/g, '/')}\` as a JSON array, for example:
@@ -84,7 +93,6 @@ export async function guard({ agent, payload = readStdin(), hunt = huntFlow, cwd
   const max = cfg.maxAttempts ?? 3;
   const state = readState(cwd);
   const guarded = guardedHash(cwd);
-  state.approved ??= guarded; // first stop after install: trust what is there (init approves too)
 
   /** One failed attempt: block with the reason, or hand over to the human after `max`. */
   const strike = (reason, extra = '') => {
@@ -97,6 +105,9 @@ export async function guard({ agent, payload = readStdin(), hunt = huntFlow, cwd
     return block(`${reason}\n\nAttempt ${state.attempts} of ${max}.${extra}`);
   };
 
+  // Fail closed: no approval on record (never approved, or the state was deleted) is not
+  // a reason to trust whatever config is on disk now. Only init and approve pin it.
+  if (!state.approved) return strike(NOT_APPROVED);
   if (guarded !== state.approved) return strike(CHANGED);
   const hash = treeHash(cwd);
   if (hash && hash === state.cleanHash) return allow(null);
@@ -134,7 +145,7 @@ export async function approve({ cwd = process.cwd(), tty = process.stdin.isTTY }
   if (!ok) return 1;
   if (proposed.length) writeFileSync(cfgPath, JSON.stringify({ ...cfg, flows: [...flowsOf(cfg).map((f) => (f.probe ? f : f.flow)), ...proposed] }, null, 2) + '\n');
   rmSync(join(cwd, PROPOSED), { force: true });
-  writeState(cwd, { ...readState(cwd), approved: guardedHash(cwd), attempts: 0, cleanHash: null });
+  pin(cwd);
   process.stderr.write('approved\n');
   return 0;
 }

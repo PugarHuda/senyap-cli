@@ -4,9 +4,10 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { guard, protect, PROPOSED } from '../src/guard.js';
+import { rmSync } from 'node:fs';
+import { guard, protect, pin, stateFile, PROPOSED } from '../src/guard.js';
 import { classify, brief, routeOf, sh, probeFinding } from '../src/hunt.js';
-import { classifyRequest, classifyCookies } from '../src/pack.js';
+import { classifyRequest, classifyCookies, redact } from '../src/pack.js';
 import { DEFAULT_FLOW } from '../src/config.js';
 
 process.env.SENYAP_STATE_DIR = mkdtempSync(join(tmpdir(), 'senyap-state-'));
@@ -20,6 +21,7 @@ function repo(config) {
   writeFileSync(join(cwd, 'app.js'), "fetch('/api/notes', { method: 'POST' });\n");
   writeFileSync(join(cwd, 'senyap.config.json'), JSON.stringify(config));
   git('add', '.'); git('commit', '-qm', 'init');
+  pin(cwd); // what `senyap init` does
   return cwd;
 }
 
@@ -60,7 +62,6 @@ test('a clean tree is remembered and not re-hunted', async () => {
 
 test('an agent that weakens the checks is blocked without a hunt', async () => {
   const cwd = repo({ url: 'http://127.0.0.1:4800', flows: ['Add a note and save it'] });
-  await stop(cwd, clean); // first stop pins the config
   writeFileSync(join(cwd, 'senyap.config.json'), JSON.stringify({ url: 'http://127.0.0.1:4800', flows: [] }));
   const r = await stop(cwd, clean);
   assert.equal(r.out.decision, 'block');
@@ -69,6 +70,24 @@ test('an agent that weakens the checks is blocked without a hunt', async () => {
   mkdirSync(join(cwd, 'senyap-tests'));
   writeFileSync(join(cwd, 'senyap-tests', 'x_test.md'), '# weaker');
   assert.equal((await stop(cwd, clean)).out.decision, 'block');
+});
+
+test('deleting the guard state fails closed: no approval on record, no hunt', async () => {
+  const cwd = repo({ url: 'http://127.0.0.1:4800', flows: ['Add a note and save it'] });
+  rmSync(stateFile(cwd));
+  const r = await stop(cwd, clean);
+  assert.equal(r.out.decision, 'block');
+  assert.match(r.out.reason, /no human-approved checks/);
+  assert.equal(r.calls.length, 0);
+});
+
+test('request bodies are redacted before they reach a brief', () => {
+  assert.equal(redact('{"username":"qb","password":"QuietBench123!","text":"hi"}'), '{"username":"qb","password":"***","text":"hi"}');
+  assert.equal(redact('user=qb&passwd=hunter2&next=%2F'), 'user=qb&passwd=***&next=%2F');
+  assert.equal(redact('{"api_key":"abc","payment_key":"pk_test_51QbZoo"}'), '{"api_key":"***","payment_key":"***"}');
+  assert.equal(redact('key sk_live_abcdef123 and Bearer eyJhbGciOi.x.y'), 'key sk_live_*** and Bearer ***');
+  const f = classifyRequest({ request: { method: 'POST', url: 'http://127.0.0.1:1/api/login', headers: [], postData: { text: '{"password":"QuietBench123!"}' } }, response: { status: 500 }, time: 1 }, '127.0.0.1');
+  assert.doesNotMatch(f.requestBody, /QuietBench123/);
 });
 
 test('with only the placeholder flow the agent is asked to propose one, and proposals are hunted', async () => {

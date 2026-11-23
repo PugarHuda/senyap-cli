@@ -91,7 +91,7 @@ A coding agent that is blocked will sometimes "fix" the check instead of the app
 
 - **The checks are pinned.** `senyap.config.json` and `senyap-tests/` are pinned to what a human approved (at `init`, or with `senyap approve`). If they change, the stop is blocked without a hunt: *"the checks were changed; put them back"*.
 - **The agent can only add checks.** It may write extra flows to `.senyap/proposed-flows.json`. They are hunted on the next stop (stricter, never looser), and a human promotes them with `senyap approve`, which refuses to run without a terminal. With only the placeholder flow from `init`, the first stop asks the agent to propose flows for what it just built.
-- **The guard's memory lives outside the repo** (`~/.senyap/state`), so the agent can't reset its attempt count or mark a tree clean.
+- **The guard's memory lives outside the repo** (`~/.senyap/state`), so the agent can't reset its attempt count or mark a tree clean. It fails closed: with no approval on record (say the state was deleted), the stop is blocked until a human runs `senyap approve`.
 - **Claude Code also gets a PreToolUse hook** (`senyap protect`) that denies edits to the checks, `senyap approve`, and writes to the state directory. A determined agent with a shell can still get around a hook; the pinned hash at stop time is what actually catches it.
 
 ### Probes and resets: bugs that leave no trace
@@ -125,7 +125,7 @@ senyap approve                                  (a human) promote proposed flows
 senyap protect                                  Claude Code PreToolUse hook: the agent can't edit the checks
 ```
 
-The brief the agent gets names each failing call with its method, status, response and request body, the Kane step it happened in, the files that call that route (`git grep`), Kane's run link, and the one command to re-check just that flow.
+The brief the agent gets names each failing call with its method, status, response and request body, the Kane step it happened in, the files that call that route (`git grep`), Kane's run link, and the one command to re-check just that flow. Secrets in request bodies (password, token and key fields, API keys, bearer tokens) are masked first, because the brief can end up in a PR comment.
 
 Exit codes: `0` clean, `1` silent failure, `2` Kane did not run.
 

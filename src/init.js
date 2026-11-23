@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { kane } from './kane.js';
 import { VERSION } from './version.js';
 import { DEFAULT_FLOW } from './config.js';
-import { guardedHash, readState, writeState } from './guard.js';
+import { pin } from './guard.js';
 
 const BIN = resolve(fileURLToPath(import.meta.url), '../../bin/senyap.js');
 // Installed from npm -> npx pinned to this exact version (never "whatever is latest" on
@@ -69,7 +69,7 @@ export async function init({ agent = 'all', url, flow } = {}) {
     console.error(`hooked ${a}: ${INSTALLERS[a]()}`);
   }
   // The human ran init: what the config says now is what the guard holds the agent to.
-  writeState(process.cwd(), { ...readState(process.cwd()), approved: guardedHash(), attempts: 0, cleanHash: null });
+  pin();
   const skill = await kane(['install', 'skill'], { timeoutSec: 120 });
   console.error(skill.exitCode === 0 ? 'installed Kane CLI agent skill (kane-cli install skill)' : 'Kane skill not installed; run: npx @testmuai/kane-cli-skill');
   return 0;

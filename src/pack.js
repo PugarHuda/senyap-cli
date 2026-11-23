@@ -18,7 +18,7 @@ export function classifyRequest(entry, surfaceHost, loadStep = null) {
   if (NOISE.some((re) => re.test(url))) return null;
   const status = entry.response?.status ?? 0;
   const body = entry.request?.postData?.text;
-  const base = { step: entry._step ?? null, method: entry.request?.method, url, status, ms: Math.round(entry.time ?? 0), ...(body ? { requestBody: body.slice(0, 300) } : {}) };
+  const base = { step: entry._step ?? null, method: entry.request?.method, url, status, ms: Math.round(entry.time ?? 0), ...(body ? { requestBody: redact(body).slice(0, 300) } : {}) };
   let host = '';
   try { host = new URL(url).hostname; } catch { /* data: or blob: url */ }
   // A call to another environment is the root cause even when it also failed.
@@ -44,7 +44,21 @@ export function classifyRequest(entry, surfaceHost, loadStep = null) {
 }
 
 const TEST_KEY = /\b(?:pk|sk|rk)_test_[A-Za-z0-9]{8,}/;
-const SESSION_COOKIE = /sess|auth|token|sid|jwt|login/i;
+const SECRET_FIELD = 'pass(?:word|wd)?|token|secret|api[_-]?key|access[_-]?key|private[_-]?key|authorization|auth|credential|otp|card|cvc|cvv|ssn|payment[_-]?key';
+
+/**
+ * Mask secrets in a request body before it goes into a brief, a report or a PR comment:
+ * JSON and form fields whose name looks secret (login forms Kane fills in), and API keys.
+ */
+export function redact(text) {
+  return String(text)
+    .replace(new RegExp(`("[^"]*(?:${SECRET_FIELD})[^"]*"\\s*:\\s*)"(?:[^"\\\\]|\\\\.)*"`, 'gi'), '$1"***"')
+    .replace(new RegExp(`((?:^|[&?])[^=&]*(?:${SECRET_FIELD})[^=&]*=)[^&]*`, 'gi'), '$1***')
+    .replace(/\b((?:pk|sk|rk)_(?:test|live)_)[A-Za-z0-9]{4,}/g, '$1***')
+    .replace(/\b(Bearer\s+)[A-Za-z0-9._~+/-]+=*/gi, '$1***');
+}
+
+const SESSION_COOKIE =/sess|auth|token|sid|jwt|login/i;
 
 /** Session cookies an https page sets without Secure or HttpOnly (reported, never blocking). */
 export function classifyCookies(entry) {
