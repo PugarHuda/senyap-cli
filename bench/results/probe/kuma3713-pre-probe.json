@@ -1,0 +1,367 @@
+{
+  "at": "2026-11-23T16:03:02.646Z",
+  "results": [
+    {
+      "flow": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused)",
+      "url": "http://localhost:3011",
+      "phase": "observe",
+      "objective": "Log in with username qb and password QuietBench123!, open the monitor 'QB Self' (it is currently paused, so its page shows a Resume button), click Edit, click Save without changing anything, then go to the 'QB Self' monitor page, reload it, and check that it still shows the Resume button (meaning the monitor is still paused). Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The save operation did not preserve QB Self's paused setting, so the monitor became active after an unchanged edit was saved.\nFix saving a monitor so that an unchanged edit keeps its existing paused state. Add a regression check that saves a paused monitor, reloads its detail page, and verifies that Resume remains available.\nevidence: objective_contradiction: Reloaded QB Self shows Pause, not required Resume; unchanged save unexpectedly resumed it.",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "functional_defect",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The save operation did not preserve QB Self's paused setting, so the monitor became active after an unchanged edit was saved.",
+          "agent_fault_assessment": "The agent followed the intended sequence: it opened the monitor while the Resume action was available, chose Edit, and clicked Save without changing form values. The state changed immediately after that save; no agent action instructed the monitor to resume.",
+          "bug_title": "Saving an unchanged paused monitor resumes it",
+          "signals": [
+            {
+              "step": "0-9",
+              "kind": "objective_contradiction",
+              "excerpt": "Reloaded QB Self shows Pause, not required Resume; unchanged save unexpectedly resumed it."
+            }
+          ],
+          "confidence": 0.96,
+          "suggestion": "Fix saving a monitor so that an unchanged edit keeps its existing paused state. Add a regression check that saves a paused monitor, reloads its detail page, and verifies that Resume remains available.",
+          "one_liner": "Saving QB Self without making changes changed it from paused to active.",
+          "relevant_steps": [
+            8,
+            9,
+            10
+          ],
+          "culprit_step": "0-9",
+          "credits_consumed": 4.68295,
+          "known_bug_id": "BUG-33",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 22.9987925,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84J74RVAJPEMKCNY1N9EFM8/dashboard/share/US_VT4J4SEUK1W3QIWEBOQQO5V58XSGYHA6TK9H0BOBVKHDVKYV9N1S9IDD3U363K1S?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "probe_failed",
+          "severity": "blocking",
+          "step": null,
+          "url": null,
+          "detail": "`node \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/tools/probes/check.cjs\" probe kuma3713 \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/scratch/kuma-data-1f29fabe64/kuma.db\"` exited 1: [{\"beats\":2}]"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\331242ad-3c8e-401c-a59f-9ee31577df35\\evidence\\06ce9507-9862-48c7-9456-3cc8e3571ac7.evidence",
+      "senyapPack": ".senyap\\packs\\06ce9507-9862-48c7-9456-3cc8e3571ac7-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "06ce9507-9862-48c7-9456-3cc8e3571ac7-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 11,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-probe-failures"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\kuma3713-probe-pre\\.senyap\\packs\\06ce9507-9862-48c7-9456-3cc8e3571ac7-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T15:45:21.395Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "06ce9507-9862-48c7-9456-3cc8e3571ac7-senyap",
+                "sha256": "c302a927ffd528861645a16ffb32a7b09742b9c67425bba1c9ab0a22e8e0bb38",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 2,
+                "sha256": "13d9adf76b992fdc522f0dc136320692ba410caa1f8679261755a024ef2ad98c",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-probe-failures",
+                  "metric": "metrics.silent.probe_failures",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-insecure-session-cookies",
+                  "metric": "metrics.silent.insecure_cookies",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-probe-failures"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The monitor was paused before editing, but saving the unchanged form did not keep that paused setting. After returning to the monitor and reloading, it was active instead.\nInvestigate why Save rewrites a paused monitor as active when no settings were changed. Add a regression test that pauses a monitor, saves its unchanged edit form, reloads the monitor page, and confirms Resume remains visible.\nevidence: objective_contradiction: Checkpoint assertion failed: \"it still shows the Resume button (meaning the monitor is still paused)\"",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The monitor was paused before editing, but saving the unchanged form did not keep that paused setting. After returning to the monitor and reloading, it was active instead.",
+            "agent_fault_assessment": "The agent followed the requested sequence: it opened Edit, saved without changing fields, returned to QB Self, and reloaded. The screenshots show Resume before Edit and Pause after the save-and-return sequence, so the agent did not cause the state change by clicking Resume or Pause.",
+            "bug_title": "Saving an unchanged paused monitor resumes it",
+            "signals": [
+              {
+                "step": "0-12",
+                "kind": "objective_contradiction",
+                "excerpt": "Checkpoint assertion failed: \"it still shows the Resume button (meaning the monitor is still paused)\""
+              }
+            ],
+            "confidence": 0.92,
+            "suggestion": "Investigate why Save rewrites a paused monitor as active when no settings were changed. Add a regression test that pauses a monitor, saves its unchanged edit form, reloads the monitor page, and confirms Resume remains visible.",
+            "one_liner": "Saving QB Self without any edits changed it from paused to active, so the expected Resume button was replaced by Pause after reload.",
+            "relevant_steps": [
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "culprit_step": "0-9",
+            "credits_consumed": 4.7867999999999995,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 32.642264999999995,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84H6SSC33PKMNQYFDNCNCH6/dashboard/share/US_7QOTGMVMIY1XH0B3EA5OS6PX8RQE612V7MBTOLULMLD97BUDYQKT7OBCMB4QIW0Z?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 1
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The save operation did not preserve QB Self's paused setting, so the monitor became active after an unchanged edit was saved.\nFix saving a monitor so that an unchanged edit keeps its existing paused state. Add a regression check that saves a paused monitor, reloads its detail page, and verifies that Resume remains available.\nevidence: objective_contradiction: Reloaded QB Self shows Pause, not required Resume; unchanged save unexpectedly resumed it.",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The save operation did not preserve QB Self's paused setting, so the monitor became active after an unchanged edit was saved.",
+            "agent_fault_assessment": "The agent followed the intended sequence: it opened the monitor while the Resume action was available, chose Edit, and clicked Save without changing form values. The state changed immediately after that save; no agent action instructed the monitor to resume.",
+            "bug_title": "Saving an unchanged paused monitor resumes it",
+            "signals": [
+              {
+                "step": "0-9",
+                "kind": "objective_contradiction",
+                "excerpt": "Reloaded QB Self shows Pause, not required Resume; unchanged save unexpectedly resumed it."
+              }
+            ],
+            "confidence": 0.96,
+            "suggestion": "Fix saving a monitor so that an unchanged edit keeps its existing paused state. Add a regression check that saves a paused monitor, reloads its detail page, and verifies that Resume remains available.",
+            "one_liner": "Saving QB Self without making changes changed it from paused to active.",
+            "relevant_steps": [
+              8,
+              9,
+              10
+            ],
+            "culprit_step": "0-9",
+            "credits_consumed": 4.68295,
+            "known_bug_id": "BUG-33",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 22.9987925,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84J74RVAJPEMKCNY1N9EFM8/dashboard/share/US_VT4J4SEUK1W3QIWEBOQQO5V58XSGYHA6TK9H0BOBVKHDVKYV9N1S9IDD3U363K1S?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 1
+      },
+      "credits": 55.641057499999995
+    }
+  ]
+}

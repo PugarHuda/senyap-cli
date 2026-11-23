@@ -1,0 +1,390 @@
+{
+  "at": "2026-11-23T16:11:29.507Z",
+  "results": [
+    {
+      "flow": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'",
+      "url": "http://localhost:3002",
+      "phase": "observe",
+      "objective": "Log in with email qb@example.com and password QuietBench123!, create a task named 'QB original', open the task, rename it to 'QB renamed', wait for the success message, reload the page, and check that the task is still named 'QB renamed'. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The run treated text entered in the title box as a completed rename even though there is no evidence that the edit was committed. Reloading then restored the task's saved name.\nUpdate the flow to explicitly commit the title change, such as by pressing Enter or moving focus away as required by the page, then wait for the actual save confirmation or update request before reloading.\nevidence: objective_contradiction: check FAILED: the task is still named 'QB renamed' — expected: QB renamed | observed: {{task_name_check}}",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "agent_misstep",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The run treated text entered in the title box as a completed rename even though there is no evidence that the edit was committed. Reloading then restored the task's saved name.",
+          "agent_fault_assessment": "The agent changed the title field but did not show a distinct save or commit action before reloading. The captured traffic contains only unrelated notification/profile requests before reload and no evidenced title-update request, so the unsaved edit was lost on reload.",
+          "bug_title": "Rename assertion ran without a committed rename",
+          "signals": [
+            {
+              "excerpt": "check FAILED: the task is still named 'QB renamed' — expected: QB renamed | observed: {{task_name_check}}",
+              "kind": "objective_contradiction",
+              "step": "1-5"
+            }
+          ],
+          "confidence": 0.91,
+          "suggestion": "Update the flow to explicitly commit the title change, such as by pressing Enter or moving focus away as required by the page, then wait for the actual save confirmation or update request before reloading.",
+          "one_liner": "The check failed because the title change was typed but was not shown to have been saved before the page was reloaded.",
+          "relevant_steps": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "culprit_step": "1-5",
+          "credits_consumed": 4.506749999999999,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 43.7279475,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84HAPT3CDN90E16Y0YWJGEH/dashboard/share/US_XZXT77BRVUDV4PTO0GJ56VVGM1967DV6DPPIFUQWQ8QDUH2LT5PA7MX6C3IN3LBK?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.cc0591aeff8d30347c4e.js",
+          "detail": "Error loading translations: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+          "stepKind": "navigate"
+        },
+        {
+          "kind": "ambient_console",
+          "severity": "warning",
+          "step": "0-1",
+          "url": "http://localhost:3002/main.cc0591aeff8d30347c4e.js",
+          "detail": "Error manually fetching translation file: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+          "stepKind": "navigate"
+        },
+        {
+          "kind": "auth_probe",
+          "severity": "warning",
+          "step": "0-6",
+          "method": "GET",
+          "url": "http://localhost:3002/api/profile",
+          "status": 401,
+          "ms": 54,
+          "detail": "{\"error\":\"Authentication required\"}",
+          "stepKind": "type"
+        },
+        {
+          "kind": "probe_failed",
+          "severity": "blocking",
+          "step": null,
+          "url": null,
+          "detail": "`node \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/tools/probes/check.cjs\" probe tududi904 \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/scratch/tududi-db-47d270b242/db.sqlite3\"` exited 1: []"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\68213a39-d32a-43c3-9287-e9ee44f365ee\\evidence\\91062719-1825-48a7-9e7d-216881c6ac7e.evidence",
+      "senyapPack": ".senyap\\packs\\91062719-1825-48a7-9e7d-216881c6ac7e-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "91062719-1825-48a7-9e7d-216881c6ac7e-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 11,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-probe-failures"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\tududi904-probe-pre\\.senyap\\packs\\91062719-1825-48a7-9e7d-216881c6ac7e-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T15:49:09.997Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "91062719-1825-48a7-9e7d-216881c6ac7e-senyap",
+                "sha256": "08e1027f456229117676d2cb719a9017d5f4903c52b534415a9f81516d9c3d46",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 2,
+                "sha256": "13d9adf76b992fdc522f0dc136320692ba410caa1f8679261755a024ef2ad98c",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-probe-failures",
+                  "metric": "metrics.silent.probe_failures",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-insecure-session-cookies",
+                  "metric": "metrics.silent.insecure_cookies",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-probe-failures"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 720,
+          "reason_code": "assertion_error.checkpoint_failed",
+          "summary": "The run treated text entered in the title box as a completed rename even though there is no evidence that the edit was committed. Reloading then restored the task's saved name.\nUpdate the flow to explicitly commit the title change, such as by pressing Enter or moving focus away as required by the page, then wait for the actual save confirmation or update request before reloading.\nevidence: objective_contradiction: check FAILED: the task is still named 'QB renamed' — expected: QB renamed | observed: {{task_name_check}}",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "agent_misstep",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The run treated text entered in the title box as a completed rename even though there is no evidence that the edit was committed. Reloading then restored the task's saved name.",
+            "agent_fault_assessment": "The agent changed the title field but did not show a distinct save or commit action before reloading. The captured traffic contains only unrelated notification/profile requests before reload and no evidenced title-update request, so the unsaved edit was lost on reload.",
+            "bug_title": "Rename assertion ran without a committed rename",
+            "signals": [
+              {
+                "excerpt": "check FAILED: the task is still named 'QB renamed' — expected: QB renamed | observed: {{task_name_check}}",
+                "kind": "objective_contradiction",
+                "step": "1-5"
+              }
+            ],
+            "confidence": 0.91,
+            "suggestion": "Update the flow to explicitly commit the title change, such as by pressing Enter or moving focus away as required by the page, then wait for the actual save confirmation or update request before reloading.",
+            "one_liner": "The check failed because the title change was typed but was not shown to have been saved before the page was reloaded.",
+            "relevant_steps": [
+              1,
+              2,
+              3,
+              5
+            ],
+            "culprit_step": "1-5",
+            "credits_consumed": 4.506749999999999,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 43.7279475,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84HAPT3CDN90E16Y0YWJGEH/dashboard/share/US_XZXT77BRVUDV4PTO0GJ56VVGM1967DV6DPPIFUQWQ8QDUH2LT5PA7MX6C3IN3LBK?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 4
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "The test runner repeatedly waited too long for its network and console checkpoint captures instead of completing or recording those checks. The provided evidence does not show a failed product request, a browser error, or that the renamed task disappeared after reload.\nFix the checkpoint collection logic: wait for a bounded, settled capture, record an explicit capture failure when it cannot be collected, and retry or separate diagnostic collection from the task-flow assertion.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "timing_sync",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The test runner repeatedly waited too long for its network and console checkpoint captures instead of completing or recording those checks. The provided evidence does not show a failed product request, a browser error, or that the renamed task disappeared after reload.",
+            "agent_fault_assessment": "The agent's task actions do not appear to have caused the outcome: the supplied screenshots show the task titled “QB renamed,” and the listed requests completed with HTTP 200. However, the automation/test flow is at fault for treating unavailable or slow diagnostic capture as a terminal assertion failure rather than handling the checkpoint timeout reliably. There is no evidence that an application action failed.",
+            "bug_title": "Diagnostic checkpoint captures time out",
+            "signals": [],
+            "confidence": 0.88,
+            "suggestion": "Fix the checkpoint collection logic: wait for a bounded, settled capture, record an explicit capture failure when it cannot be collected, and retry or separate diagnostic collection from the task-flow assertion.",
+            "one_liner": "The task rename appears to have completed, but the automation could not finish the required network and console checks because its diagnostic captures timed out.",
+            "relevant_steps": [
+              12,
+              15,
+              17,
+              18,
+              20
+            ],
+            "culprit_step": "0-20",
+            "credits_consumed": 4.0807,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 50.515384999999995,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JH7K11VF1QKTDQWXCJYRF/dashboard/share/US_4AEPR4R4GPAMVQUDEX53M6C0BU0G03C9CNWZS4HFP295ESR5HYKNCGSD31MNBBN5?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 5
+      },
+      "credits": 94.2433325
+    }
+  ]
+}
