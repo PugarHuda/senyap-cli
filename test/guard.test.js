@@ -165,6 +165,16 @@ test('test keys from production and insecure session cookies', () => {
   assert.equal(cookies[0].severity, 'warning');
 });
 
+test('a Cloudflare bot challenge is the CDN, not the app', () => {
+  const challenged = { request: { method: 'GET', url: 'https://demo.example.com/auth', headers: [] }, response: { status: 503, headers: [{ name: 'cf-mitigated', value: 'challenge' }] }, time: 5 };
+  assert.equal(classifyRequest(challenged, 'demo.example.com').severity, 'warning');
+  assert.equal(classifyRequest({ request: { url: 'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/x' }, response: { status: 0 }, _failed: true }, 'demo.example.com'), null);
+  assert.equal(classifyRequest({ request: { url: 'https://demo.example.com/auth' }, response: { status: 503, headers: [{ name: 'cf-speculation-refused', value: 'prefetch refused: not eligible' }] } }, 'demo.example.com'), null);
+  assert.equal(classifyRequest({ request: { url: 'blob:https://demo.example.com/1234' }, response: { status: 0 }, _failed: true }, 'demo.example.com'), null);
+  // a real 503 from the app still blocks
+  assert.equal(classifyRequest({ request: { url: 'https://demo.example.com/api' }, response: { status: 503, headers: [{ name: 'server', value: 'cloudflare' }] } }, 'demo.example.com').kind, 'http_5xx');
+});
+
 test('routeOf keeps the greppable part of a URL', () => {
   assert.equal(routeOf('http://x/api/notes/42'), '/api/notes');
   assert.equal(routeOf('http://x/api/v1/users/01M81V2EG0623DQRHQE21PDZQ2/setting'), '/api/v1/users');

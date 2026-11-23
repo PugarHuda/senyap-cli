@@ -5,7 +5,15 @@
 import { openContainer } from '@testmuai/evidence-cli';
 import { parse as parseYaml } from 'yaml';
 
-const NOISE = [/\/favicon\.ico(\?|$)/i];
+// Cloudflare's bot challenge is the CDN talking, not the app (wild run: demo.usememos.com
+// answered 503 with cf-mitigated: challenge and the Turnstile widget logged errors).
+const CHALLENGE = /^https:\/\/challenges\.cloudflare\.com\/|\/cdn-cgi\/challenge-platform\/|^blob:https:\/\/challenges\.cloudflare\.com\//i;
+// blob: URLs are in-memory objects the page made itself, not network calls.
+const NOISE = [/\/favicon\.ico(\?|$)/i, CHALLENGE, /^blob:/i];
+const isChallenge = (entry) => (entry.response?.headers ?? []).some((h) => /^cf-mitigated$/i.test(h.name) && /challenge/i.test(h.value));
+// A speculative prefetch the CDN refused (same wild run: GET /auth 503 with
+// cf-speculation-refused) is the browser guessing ahead; the real navigation answered 200.
+const isRefusedPrefetch = (entry) => (entry.response?.headers ?? []).some((h) => /^cf-speculation-refused$/i.test(h.name));
 const LOCAL_HOST = /^(localhost|127\.\d+\.\d+\.\d+|0\.0\.0\.0|\[?::1\]?)$/i;
 const PRE_PROD = /(^|[.-])(staging|stage|dev|test|sandbox|preview|qa|uat)([.-]|$)/i;
 /** Which environment a host belongs to: local, preprod or prod. */
@@ -15,7 +23,8 @@ export const SLOW_MS = 3000; // ponytail: same default as `kane-cli explore --sl
 /** Classify one HAR entry; returns a finding or null. */
 export function classifyRequest(entry, surfaceHost, loadStep = null) {
   const url = entry.request?.url ?? '';
-  if (NOISE.some((re) => re.test(url))) return null;
+  if (NOISE.some((re) => re.test(url)) || isRefusedPrefetch(entry)) return null;
+  if (isChallenge(entry)) return { kind: 'bot_challenge', severity: 'warning', step: entry._step ?? null, method: entry.request?.method, url, status: entry.response?.status, detail: 'Cloudflare bot challenge (cf-mitigated: challenge): the CDN blocked the browser, the app never answered' };
   const status = entry.response?.status ?? 0;
   const body = entry.request?.postData?.text;
   const base = { step: entry._step ?? null, method: entry.request?.method, url, status, ms: Math.round(entry.time ?? 0), ...(body ? { requestBody: redact(body).slice(0, 300) } : {}) };
@@ -96,6 +105,7 @@ const ECHO = /^Failed to load resource: (the server responded with a status of \
  */
 export function classifyConsole(line, loadStep = null) {
   if (line.marker || !line.level) return null;
+  if (CHALLENGE.test(String(line.url ?? ''))) return null;
   if (line.level !== 'error' && !line.is_exception) return null;
   const text = String(line.text ?? '');
   if (!line.is_exception && ECHO.test(text)) return null;
