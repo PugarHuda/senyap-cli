@@ -123,6 +123,8 @@ test('protect denies edits to the checks and lets app edits through', () => {
   assert.equal(run({ tool_name: 'Bash', tool_input: { command: 'npx senyap approve' } }), 'deny');
   assert.equal(run({ tool_name: 'Bash', tool_input: { command: 'echo {} > senyap.config.json' } }), 'deny');
   assert.equal(run({ tool_name: 'Bash', tool_input: { command: 'rm ~/.senyap/state/abc.json' } }), 'deny');
+  assert.equal(run({ tool_name: 'Edit', tool_input: { file_path: 'C:\\app\\.claude\\settings.json' } }), 'deny');
+  assert.equal(run({ tool_name: 'Bash', tool_input: { command: 'echo {} > .codex/hooks.json' } }), 'deny');
   assert.equal(run({ tool_name: 'Edit', tool_input: { file_path: '/app/src/notes.js' } }), 'allow');
   assert.equal(run({ tool_name: 'Bash', tool_input: { command: 'npm test' } }), 'allow');
 });

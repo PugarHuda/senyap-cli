@@ -153,8 +153,10 @@ export async function approve({ cwd = process.cwd(), tty = process.stdin.isTTY }
 // ponytail: protect() stops the obvious moves (Edit/Write on the checks, `senyap approve`,
 // writing the state dir); a determined agent with a shell can still get around it. The
 // guarded hash at stop time is what actually catches a changed config.
-const GUARDED_PATH = /(^|[\\/])(senyap\.config\.json|senyap-tests[\\/]|\.senyap[\\/]state)/;
-const GUARDED_CMD = /senyap(\.js)?["']?\s+approve|>\s*["']?senyap\.config\.json|\.senyap[\\/]state|senyap-tests[\\/]\S*\s*$|(rm|mv|cp|sed -i|tee)\b[^|;&]*senyap(\.config\.json|-tests)/;
+// The hook files count too: removing the Stop hook would switch the gate off.
+const HOOK_FILES = String.raw`\.claude[\\/]settings(\.local)?\.json|\.codex[\\/]hooks\.json|\.cursor[\\/]hooks\.json`;
+const GUARDED_PATH = new RegExp(String.raw`(^|[\\/])(senyap\.config\.json|senyap-tests[\\/]|\.senyap[\\/]state|${HOOK_FILES})`);
+const GUARDED_CMD = new RegExp(String.raw`senyap(\.js)?["']?\s+approve|>\s*["']?senyap\.config\.json|\.senyap[\\/]state|senyap-tests[\\/]\S*\s*$|(rm|mv|cp|sed -i|tee)\b[^|;&]*senyap(\.config\.json|-tests)|${HOOK_FILES}`);
 
 /** Claude Code PreToolUse hook: deny edits to the checks. */
 export function protect({ payload = readStdin(), out = (s) => process.stdout.write(s) } = {}) {
