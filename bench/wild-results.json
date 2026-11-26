@@ -1,0 +1,379 @@
+{
+  "linkding": {
+    "url": "https://demo.linkding.link",
+    "flow": "Log in with the demo credentials shown on the login page (if there is no login, skip this), add a bookmark for https://example.org with the title \"QB wild\" and the tag qbwild, save it, and check it is in the bookmark list",
+    "at": "2026-11-23T15:57:12.390Z",
+    "status": "clean",
+    "credits": 65.47968749999998,
+    "kane": {
+      "status": "passed",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "summary": "You asked to add a bookmark for https://example.org titled \"QB wild\" with the tag \"qbwild\", find it in the bookmark list, and reload the page.\nLogged in using the demo credentials shown on the login page.\nCreated and saved the bookmark, then confirmed it appeared in the list with the requested title, URL, and tag.\nRetrieved the \"QB wild\" bookmark from the list and reloaded the page; it was still present afterward.",
+      "verdict": null,
+      "credits": 65.47968749999998,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84HQPTYZ4945QTC9R14C4NV/dashboard/share/US_OWLGKF64CTXD340JC7SH5J6Z2S9KFHS4JBAD66EBG9BNV5LAQATX8GL585YOYVKR?type=summary&agentView=true&fqdn=summary-page",
+      "exitCode": 0
+    },
+    "findings": [],
+    "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\608659be-11a3-4fda-94dc-d4aa4a4f41e3\\evidence\\f0eb293a-e206-4ca3-a112-efe7898ed5a9.evidence"
+  },
+  "memos": {
+    "url": "https://demo.usememos.com",
+    "flow": "Log in with the demo credentials shown on the login page (if there is no login, skip this), write a memo that says \"QB wild check\" and save it, and check it appears in the memo list",
+    "at": "2026-11-23T16:19:09.541Z",
+    "status": "silent_failure",
+    "credits": 43.3207225,
+    "kane": {
+      "status": "failed",
+      "result_code": 440,
+      "reason_code": "agent_error.child_failed",
+      "summary": "The demo sign-in flow presented a captcha that the browser automation could not complete, so it could not reach the memo-writing steps.\nUse a test account or test environment that exempts approved automation from captcha, then rerun the sign-in and memo persistence flow.",
+      "verdict": {
+        "confirmed": false,
+        "status": "broken",
+        "family": "environment_issue",
+        "category": "bot_detection",
+        "category_proposal": "",
+        "severity": "major",
+        "root_cause": "The demo sign-in flow presented a captcha that the browser automation could not complete, so it could not reach the memo-writing steps.",
+        "agent_fault_assessment": "The agent also made an incorrect early assessment at step 0-2: the screenshot visibly includes a “Sign in to Memos” control, so login was available rather than absent. That mistake delayed the required sign-in path, but the reported terminal blocker was a captcha; there is no evidence that a wrong click or input by the agent caused the captcha to appear.",
+        "bug_title": "Captcha blocked demo sign-in",
+        "signals": [],
+        "confidence": 0.9,
+        "suggestion": "Use a test account or test environment that exempts approved automation from captcha, then rerun the sign-in and memo persistence flow.",
+        "one_liner": "The run could not continue because a captcha blocked access needed to create the memo.",
+        "relevant_steps": [
+          2,
+          3
+        ],
+        "culprit_step": "0-3",
+        "credits_consumed": 2.6043499999999997,
+        "known_bug_id": "",
+        "category_name": "",
+        "mode": "terminal"
+      },
+      "credits": 21.683902500000002,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JB2X78B67V76JX0D46ZXD/dashboard/share/US_UYKK6QXS9NO6Z0VUHH9XYSN5G7CMB6LOHWLP9IUN8CVDL22HZ5R30DO4E5LU4YHZ?type=summary&agentView=true&fqdn=summary-page",
+      "exitCode": 1
+    },
+    "observe": {
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 440,
+        "reason_code": "agent_error.child_failed",
+        "summary": "The demo sign-in flow presented a captcha that the browser automation could not complete, so it could not reach the memo-writing steps.\nUse a test account or test environment that exempts approved automation from captcha, then rerun the sign-in and memo persistence flow.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "environment_issue",
+          "category": "bot_detection",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The demo sign-in flow presented a captcha that the browser automation could not complete, so it could not reach the memo-writing steps.",
+          "agent_fault_assessment": "The agent also made an incorrect early assessment at step 0-2: the screenshot visibly includes a “Sign in to Memos” control, so login was available rather than absent. That mistake delayed the required sign-in path, but the reported terminal blocker was a captcha; there is no evidence that a wrong click or input by the agent caused the captcha to appear.",
+          "bug_title": "Captcha blocked demo sign-in",
+          "signals": [],
+          "confidence": 0.9,
+          "suggestion": "Use a test account or test environment that exempts approved automation from captcha, then rerun the sign-in and memo persistence flow.",
+          "one_liner": "The run could not continue because a captcha blocked access needed to create the memo.",
+          "relevant_steps": [
+            2,
+            3
+          ],
+          "culprit_step": "0-3",
+          "credits_consumed": 2.6043499999999997,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 21.683902500000002,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JB2X78B67V76JX0D46ZXD/dashboard/share/US_UYKK6QXS9NO6Z0VUHH9XYSN5G7CMB6LOHWLP9IUN8CVDL22HZ5R30DO4E5LU4YHZ?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "findings": 58
+    },
+    "confirm": {
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 610,
+        "reason_code": "blocker.captcha",
+        "summary": "The external sign-in service treated the automated browser as suspicious and showed a captcha page that the run could not complete.\nAllow the approved automation environment through the sign-in bot protection, or provide a test-only authenticated session that does not require captcha.\nevidence: http_error_response: Just a moment...",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "environment_issue",
+          "category": "bot_detection",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The external sign-in service treated the automated browser as suspicious and showed a captcha page that the run could not complete.",
+          "agent_fault_assessment": "The agent did not cause the outcome. It correctly found and selected the visible “Sign in to Memos” link after confirming that the explore page had no login form. The sign-in provider then returned a bot-check response before credentials or memo actions could be performed.",
+          "bug_title": "Captcha blocks demo sign-in",
+          "signals": [
+            {
+              "step": "0-4",
+              "kind": "http_error_response",
+              "excerpt": "Just a moment..."
+            }
+          ],
+          "confidence": 0.99,
+          "suggestion": "Allow the approved automation environment through the sign-in bot protection, or provide a test-only authenticated session that does not require captcha.",
+          "one_liner": "The demo sign-in was stopped by a bot-check page, so the memo could not be created or verified.",
+          "relevant_steps": [
+            4
+          ],
+          "culprit_step": "0-4",
+          "credits_consumed": 3.3148999999999997,
+          "known_bug_id": "BUG-35",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 21.63682,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84K51RN4WARFGYDHQW3PJ8F/dashboard/share/US_0DCDYQ58V0E5M0DZ22LE77QB48ZIY85PE4GCWDHBOORZP8Q1B1J81WBJPQY4ECBZ?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "findings": 59
+    },
+    "findings": [
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://accounts.usememos.com/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a5f167d88c8ecdd6",
+        "step": "0-7ded9c65-1",
+        "detail": "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/eswmk/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-7ded9c65-2",
+        "detail": "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/eswmk/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-7ded9c65-2",
+        "detail": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://*.alg13.dnstest.challenges.cloudflare.com https://*.mldsa44.dnstest.challenges.cloudflare.com https://dnstes"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/eswmk/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-7ded9c65-2",
+        "detail": "Fetch API cannot load data:,. Refused to connect because it violates the document's Content Security Policy."
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/eswmk/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-7ded9c65-2",
+        "detail": "%c%d font-size:0;color:transparent nan"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/eswmk/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-7ded9c65-2",
+        "detail": "%c%o font-size:0;color:transparent <unresolved>"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/eswmk/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-7ded9c65-2",
+        "detail": "%c%o font-size:0;color:transparent {}"
+      },
+      {
+        "kind": "auth_probe",
+        "severity": "warning",
+        "method": "POST",
+        "url": "https://demo.usememos.com/memos.api.AuthService/RefreshToken",
+        "status": 401,
+        "step": "0-1",
+        "detail": "{\"code\":\"unauthenticated\",\"message\":\"refresh token not found\"}"
+      },
+      {
+        "kind": "http_5xx",
+        "severity": "blocking",
+        "method": "GET",
+        "url": "https://demo.usememos.com/auth",
+        "status": 503,
+        "step": "0-4",
+        "detail": ""
+      },
+      {
+        "kind": "auth_probe",
+        "severity": "warning",
+        "method": "GET",
+        "url": "https://accounts.usememos.com/sign-in?redirect_url=https%3A%2F%2Fclerk.usememos.com%2Foauth%2Fauthorize%2Fcontinue%3Fclient_id%3DZvnhAj0vOI1i0jBB%26code_challenge%3DrY3TW9wrhDjhmM310I6CjVDAgV4yVv8BxBZsB6Ts6FA%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fdemo.usememos.com%252Fauth%252Fcallback%26response_type%3Dcode%26scope%3Dprofile%2Bemail%26state%3D766bc87081efc54366e143ce4aea39bafaf3c0a9a36b6b1f06d1b59206e776b4",
+        "status": 403,
+        "step": "0-7ded9c65-1",
+        "detail": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
+      },
+      {
+        "kind": "request_failed",
+        "severity": "blocking",
+        "method": "GET",
+        "url": "blob:https://accounts.usememos.com/ef1c15cc-bc67-4120-967b-2595c7fc441a",
+        "status": 0,
+        "step": "0-7ded9c65-1",
+        "detail": "no response"
+      },
+      {
+        "kind": "request_failed",
+        "severity": "blocking",
+        "method": "GET",
+        "url": "blob:https://challenges.cloudflare.com/eafb570c-da05-4f38-bafe-17b1e0f620c1",
+        "status": 0,
+        "step": "0-7ded9c65-2",
+        "detail": "no response"
+      },
+      {
+        "kind": "auth_probe",
+        "severity": "warning",
+        "method": "GET",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a5f167de798f072b/1795449825377/b78ea048958dc49795244eac9cc02fefa9f26f0c455c65742510666a1e503eaf/CpXjEufBPq38NRX0of4c9xwq7CMuO51te8CdVtQrl8hikW_2_kNu9AYi_MrLJGQMa0DRh6mmYCM34joS8OSLCWVq82iIfaXdUs68Oj9XYUt-CaGBx7JBRNQriL1gj_yg6aFzG8vzXCXWLZ76j4QiNiQTyGdxhuKA1ACyLPmZNiJ5J2eF7OdZVh9EwFBqSNXNBDJbTWmdlnYVva1fz5jsX8bzwodrU3ShkxLa4wd1dr_eKeswGrj1XL8YyMzI5-83bX2EEsLrlpK83FJrAXG7E833VrT4Tbyxqji-ic77Zc4F-l_NXZczBRilWPVsLbmC612X8bauLP0Q10SBYx6RX6E1YYbe0jKCmwcTO40Ub8j107z3CcZTtMkBWG321G92IU0SJ_fznUOxiUJV1HNS82sVFCWfpb_Pg9cXoeJUsjub0EUmTAFm_fzBYFwM2f_fucJ8ZeDOqzY0XkYvzmpqZD5utAXzILSn4KlbFGVkTrIRNWoZXXYbDO8tY2DOhylVxRG4CuiZzujXZYpF9nBWJo3zKQ8vQIj-55mudsocgrmiVm4V-ApUceIYEHYrnTBjBuYAsiCrFYq6RmKswAQ8OXz0AFU0jaQaaLpIz85pygIuaIs6M7aU0oY3kXw1TAlRGJ4asufWlOjammokbjTudPsMD_vA-g",
+        "status": 401,
+        "step": "0-7ded9c65-2",
+        "detail": "J"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://accounts.usememos.com/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a5f17d96bf0ed9b5",
+        "step": "0-4",
+        "detail": "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ux55n/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-5",
+        "detail": "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ux55n/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-5",
+        "detail": "%c%d font-size:0;color:transparent nan"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ux55n/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-5",
+        "detail": "%c%o font-size:0;color:transparent <unresolved>"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ux55n/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-5",
+        "detail": "%c%o font-size:0;color:transparent {}"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ux55n/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-5",
+        "detail": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://*.alg13.dnstest.challenges.cloudflare.com https://*.mldsa44.dnstest.challenges.cloudflare.com https://dnstes"
+      },
+      {
+        "kind": "console_error",
+        "severity": "blocking",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ux55n/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "step": "0-5",
+        "detail": "Fetch API cannot load data:,. Refused to connect because it violates the document's Content Security Policy."
+      },
+      {
+        "kind": "auth_probe",
+        "severity": "warning",
+        "method": "GET",
+        "url": "https://accounts.usememos.com/sign-in?redirect_url=https%3A%2F%2Fclerk.usememos.com%2Foauth%2Fauthorize%2Fcontinue%3Fclient_id%3DZvnhAj0vOI1i0jBB%26code_challenge%3DGWRmTYvG6yhvcEhyZ3hI7vGm_FkJiEwJZMx2cbsKtzs%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fdemo.usememos.com%252Fauth%252Fcallback%26response_type%3Dcode%26scope%3Dprofile%2Bemail%26state%3D6279045d5b05fc376f42688c53773be982313d90c38925f0df6763d6e89e6d88",
+        "status": 403,
+        "step": "0-4",
+        "detail": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
+      },
+      {
+        "kind": "request_failed",
+        "severity": "blocking",
+        "method": "GET",
+        "url": "blob:https://accounts.usememos.com/10178c47-f76d-4cc7-8813-68882186c7a9",
+        "status": 0,
+        "step": "0-4",
+        "detail": "no response"
+      },
+      {
+        "kind": "request_failed",
+        "severity": "blocking",
+        "method": "GET",
+        "url": "blob:https://challenges.cloudflare.com/52a4bf54-7194-4719-96b5-8a9527012fd7",
+        "status": 0,
+        "step": "0-5",
+        "detail": "no response"
+      },
+      {
+        "kind": "auth_probe",
+        "severity": "warning",
+        "method": "GET",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a5f17d9c2ac2713e/1795450715882/9eadcac53ace53c11f2ffd40252bb0e6db94d6f7e3df40933738f81a430c48a4/Cq3o3u-9rINzNKh3ehJWkUZk8mdugyPkTAAe1Fn_SzL8DQvzGkp31bpOvTLp7xxyGOpTqQ1-2cJub2tjWByK44IGJNusXfl5Qw6ew6MAaSllbFzTBmUbbgnxTFtAdLyFSTBNOc5YLOP4RlpsLoEsZCiZYPnhSGkMJM6oF-Ja6rayJmXsqdLzop-Ki1etXjU9Lc3_wBVdjrtQtDFcRyHTD8ojbPVadpAsGwOnHVa3Uyy1BrytqmvsJzykDPAf16B71wEbQAzmjmbZpQ86SPgu-Wzi4Mt-cQKm8mTGRgZcHAakUfQ3mdiVHJBXsDtsXu4vY6TNM0d4bKF5R-KHizwnKJyE4Q7dEi116IR8ycGOadcsx53oe7lRd848EPoUczs90-_4JuLLePXZEqG88TlrsAreozFSoIXG9wrXtUWGDcuQ4RbpKYY-4Km5D3eYtdM1ik4zP2ZiMyzc-QnKnuMgGpI7vSQsSwo8xxBG_nouwu2HAyhSnKFPEj-3AT5R5UPFP1_w0pSCxPHdWqd7T9q8BNoTIKx4VRqKeiCqVlh4-Vb-D0UxuaezAsNly2fjmlzipmOBvOuAM3PRshxADO82HgQWSI5Gw0FhlgqE0hbUNnrsF-yBbAjH3RjvX7bOPjirRAWRLstJ9GEcmG3dEOV6etVbZsDLdJfc9xDg",
+        "status": 401,
+        "step": "0-5",
+        "detail": "J"
+      }
+    ],
+    "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\dd710028-ab9a-4ba1-9bb8-626896b45b0d\\evidence\\1ebeb5f9-52ec-4919-9556-10b76b861301.evidence"
+  },
+  "mealie": {
+    "url": "https://demo.mealie.io",
+    "flow": "Log in with the demo credentials shown on the login page (if there is no login, skip this), create a new recipe named \"QB Wild Toast\" by hand, save it, and check the recipe page shows that name",
+    "at": "2026-11-23T16:33:52.309Z",
+    "status": "clean",
+    "credits": 37.785102499999994,
+    "kane": {
+      "status": "passed",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "summary": "The requested recipe was created by hand with the name “QB Wild Toast” and saved.\nA sign-in page was available, so the demo login was used before creating the recipe.\nThe recipe page displayed “QB Wild Toast” after saving.\nThe page was reloaded, and the “QB Wild Toast” recipe remained available.",
+      "verdict": null,
+      "credits": 37.785102499999994,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84KYK76J9EDS3JYA9P194KB/dashboard/share/US_YX71DOSBT0WQQOTN2NBBAFFINCVTE5H1FH5LA3XWEM7HDY14BKGVPSAHB5XU8QF8?type=summary&agentView=true&fqdn=summary-page",
+      "exitCode": 0
+    },
+    "findings": [
+      {
+        "kind": "ambient_console",
+        "severity": "warning",
+        "url": "https://demo.mealie.io/_nuxt/C107NxAw.js",
+        "step": "0-1",
+        "detail": "e.addEventListener is not a function"
+      },
+      {
+        "kind": "ambient_console",
+        "severity": "warning",
+        "url": "https://demo.mealie.io/_nuxt/C107NxAw.js",
+        "step": "0-1",
+        "detail": "e.addEventListener is not a function"
+      },
+      {
+        "kind": "ambient_console",
+        "severity": "warning",
+        "url": "https://demo.mealie.io/_nuxt/C107NxAw.js",
+        "step": "0-1",
+        "detail": "e.addEventListener is not a function"
+      },
+      {
+        "kind": "ambient_console",
+        "severity": "warning",
+        "url": "https://demo.mealie.io/_nuxt/C107NxAw.js",
+        "step": "0-1",
+        "detail": "e.addEventListener is not a function"
+      }
+    ],
+    "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\21cef314-607e-43df-a7ae-68c3e38f2a4a\\evidence\\9800b3d6-a280-4c83-a054-19b42bac737d.evidence"
+  }
+}

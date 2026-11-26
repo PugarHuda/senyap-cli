@@ -7,7 +7,7 @@ import { huntFlow, brief, saveReport, POLICY } from '../src/hunt.js';
 import { readPack } from '../src/pack.js';
 import { producePack } from '../src/producer.js';
 import { verdict } from '../src/kane.js';
-import { loadConfig } from '../src/config.js';
+import { loadConfig, flowsOf } from '../src/config.js';
 import { VERSION } from '../src/version.js';
 
 const HELP = `senyap ${VERSION}: catch the bugs that fail silently (powered by Kane CLI)
@@ -17,6 +17,8 @@ const HELP = `senyap ${VERSION}: catch the bugs that fail silently (powered by K
   senyap guard                                    Agent Stop hook: block "done" until flows are clean
   senyap lock [--flow "<flow>"]                   Save clean flows as regression *_test.md files
   senyap init [--agent claude|codex|cursor|all]   Write senyap.config.json and install the agent hook
+  senyap approve                                  (human) promote the agent's proposed flows, re-pin the checks
+  senyap protect                                  Claude Code PreToolUse hook: the agent can't edit the checks
 
 Flows and URL default to senyap.config.json.
 Exit 0 clean, 1 silent or functional failure, 2 Kane did not run or could not finish verifying.`;
@@ -31,12 +33,12 @@ const commands = {
   async hunt() {
     const cfg = loadConfig();
     const url = values.url ?? cfg.url;
-    const flows = values.flow ?? cfg.flows;
+    const flows = values.flow?.map((flow) => ({ flow })) ?? flowsOf(cfg);
     if (!url || !flows?.length) throw new Error('need --url and at least one --flow (or senyap.config.json)');
     const results = [];
-    for (const flow of flows) {
+    for (const { flow, probe } of flows) {
       log(`▶ ${flow}`);
-      const r = await huntFlow({ url, flow, headless: !values.headed, persistence: !values['no-persistence'] && cfg.persistence !== false });
+      const r = await huntFlow({ url, flow, probe, reset: cfg.reset, headless: !values.headed, persistence: !values['no-persistence'] && cfg.persistence !== false });
       log(`  ${icon(r.status)} ${r.status}  kane=${r.kane.status}/${r.kane.result_code}  findings=${r.findings.length}  ${r.kane.test_url ?? ''}`);
       results.push(r);
     }
@@ -63,6 +65,8 @@ const commands = {
   },
   async guard() { return (await import('../src/guard.js')).guard({ agent: values.agent }); },
   async lock() { return (await import('../src/lock.js')).lockCommand(values); },
+  async approve() { return (await import('../src/guard.js')).approve(); },
+  async protect() { return (await import('../src/guard.js')).protect(); },
   async init() { return (await import('../src/init.js')).init(values); },
 };
 

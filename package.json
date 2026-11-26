@@ -1,6 +1,6 @@
 {
   "name": "senyap",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Catch the bugs that fail silently: Kane CLI hunts hidden 5xx, console errors and false greens, then makes your coding agent fix and prove them.",
   "scripts": {
     "test": "node --test test/*.test.js"

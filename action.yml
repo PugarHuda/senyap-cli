@@ -26,6 +26,10 @@ inputs:
   kane-folder-id:
     description: Test Manager folder id
     required: false
+  comment:
+    description: "On pull requests, post (and keep updating) one comment with Senyap's brief and Kane's run links. Needs permissions pull-requests: write."
+    required: false
+    default: 'true'
 outputs:
   report:
     description: Path to .senyap/report.json
@@ -71,3 +75,14 @@ runs:
           while IFS= read -r flow; do [ -n "$flow" ] && args+=(--flow "$flow"); done <<< "$INPUT_FLOWS"
           node "$GITHUB_ACTION_PATH/bin/senyap.js" "${args[@]}"
         fi
+    - name: Senyap receipt on the pull request
+      if: always() && github.event_name == 'pull_request' && inputs.comment == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PR: ${{ github.event.pull_request.number }}
+        OUTCOME: ${{ steps.senyap.outcome }}
+      run: |
+        [ -f .senyap/BRIEF.md ] || exit 0
+        { echo "### Senyap: $([ "$OUTCOME" = success ] && echo 'clean underneath the screen ✔' || echo 'silent failures found ✖')"; echo; cat .senyap/BRIEF.md; echo; echo "<sub>Kane CLI drove the flows; Senyap judged its evidence packs. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID</sub>"; } > .senyap/comment.md
+        gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file .senyap/comment.md --edit-last --create-if-none || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file .senyap/comment.md || echo "::warning::Senyap could not comment on the PR (needs pull-requests: write)"

@@ -195,6 +195,17 @@ footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .9rem; border-t
     </section>
 
     <section>
+      <h2>Your agent can't talk its way past it</h2>
+      <p class="sub">A blocked agent will sometimes fix the check instead of the app. Senyap closes the easy routes.</p>
+      <ol class="loop">
+        <li><div><strong>The checks are pinned</strong><code>senyap.config.json</code> and <code>senyap-tests/</code> are pinned to what a human approved. Change them and the stop is blocked before any run: "the checks were changed; put them back".</div></li>
+        <li><div><strong>The agent can only add checks</strong>Extra flows go to <code>.senyap/proposed-flows.json</code>. Kane runs them on the next stop, stricter and never looser, and a human promotes them with <code>senyap approve</code>.</div></li>
+        <li><div><strong>The memory isn't in the repo</strong>Attempt counts and the last clean tree live in <code>~/.senyap/state</code>. Delete them and Senyap fails closed until a human approves again.</div></li>
+        <li><div><strong>Bugs with no trace get a probe</strong>When the API answers 200 and stores nothing, a probe reads the app's own data after Kane's run, and a reset puts the app back before every attempt.</div></li>
+      </ol>
+    </section>
+
+    <section>
       <h2>A real Claude Code session, asked to add a note counter</h2>
       <p class="sub">The task had nothing to do with the bugs. Senyap was the Stop hook. Excerpts from the session transcript:</p>
       <div class="transcript">

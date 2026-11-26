@@ -1,0 +1,387 @@
+{
+  "at": "2026-11-23T15:52:27.777Z",
+  "results": [
+    {
+      "flow": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, set Appearance to 'Always dark', then set Default memo visibility to 'Public', reload the page, and check that Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'",
+      "url": "http://localhost:8081",
+      "phase": "observe",
+      "objective": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, set Appearance to 'Always dark', then set Default memo visibility to 'Public', reload the page, and check that Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'. Then reload the page and verify that the result of the flow is still there.",
+      "status": "silent_failure",
+      "kane": {
+        "status": "failed",
+        "result_code": 740,
+        "reason_code": "assertion_error.confirmed_product_bug",
+        "summary": "The application accepted both preference changes during the session, but reloaded Preferences without keeping the selected values.\nInvestigate why saved user preference values are not restored when Preferences loads after a page refresh. Confirm that both appearance and default memo visibility are stored and returned for the signed-in user.\nevidence: objective_contradiction: Checkpoint assertion failed: \"Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'.\"\nevidence: objective_contradiction: click: Clicking Always dark in Appearance dropdown\nevidence: objective_contradiction: click: Selecting Public in default memo visibility dropdown",
+        "verdict": {
+          "confirmed": true,
+          "status": "failed",
+          "family": "application_issue",
+          "category": "functional_defect",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The application accepted both preference changes during the session, but reloaded Preferences without keeping the selected values.",
+          "agent_fault_assessment": "The agent followed the required sequence: it selected Always dark, opened the Default memo visibility control, selected Public, and then reloaded. Both selection actions produced successful setting-update responses, so the failure was not caused by a wrong click, an omitted selection, or an early reload.",
+          "bug_title": "Preferences reset after reload despite successful saves",
+          "signals": [
+            {
+              "step": "0-17",
+              "kind": "objective_contradiction",
+              "excerpt": "Checkpoint assertion failed: \"Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'.\""
+            },
+            {
+              "step": "0-12",
+              "kind": "objective_contradiction",
+              "excerpt": "click: Clicking Always dark in Appearance dropdown"
+            },
+            {
+              "step": "0-16",
+              "kind": "objective_contradiction",
+              "excerpt": "click: Selecting Public in default memo visibility dropdown"
+            }
+          ],
+          "confidence": 0.93,
+          "suggestion": "Investigate why saved user preference values are not restored when Preferences loads after a page refresh. Confirm that both appearance and default memo visibility are stored and returned for the signed-in user.",
+          "one_liner": "The selected appearance and default memo visibility did not remain set after the Preferences page was reloaded.",
+          "relevant_steps": [
+            12,
+            16,
+            17
+          ],
+          "culprit_step": "0-17",
+          "credits_consumed": 4.9009,
+          "known_bug_id": "BUG-25",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 43.20056999999999,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84HHNX9AZS57FKVE4ZD6ZYB/dashboard/share/US_SWCPSTEIWHZFY0VIZ4BLOEB7XIRUF9Y3E6T7C607WXHRQOVYB97X1D767Y5TP1P3?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "probe_failed",
+          "severity": "blocking",
+          "step": null,
+          "url": null,
+          "detail": "`node \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/tools/probes/check.cjs\" probe memos4978 \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/scratch/memos-data-1f1add1a48/memos_prod.db\"` exited 1: [{\"value\":\"{\\\"memoVisibility\\\":\\\"PUBLIC\\\"}\"}]"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\54bc3ee4-cd61-4bbc-9642-1d3615bb40c5\\evidence\\857e3ec7-b919-4d27-97fd-060cd2be1ae5.evidence",
+      "senyapPack": ".senyap\\packs\\857e3ec7-b919-4d27-97fd-060cd2be1ae5-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "857e3ec7-b919-4d27-97fd-060cd2be1ae5-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 11,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-probe-failures"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\memos4978-probe-pre\\.senyap\\packs\\857e3ec7-b919-4d27-97fd-060cd2be1ae5-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T15:43:12.928Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "857e3ec7-b919-4d27-97fd-060cd2be1ae5-senyap",
+                "sha256": "749083b05d0b832a78b8a9176e4dd4291a09538558d5bd116b03984ae575f14a",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 2,
+                "sha256": "13d9adf76b992fdc522f0dc136320692ba410caa1f8679261755a024ef2ad98c",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-probe-failures",
+                  "metric": "metrics.silent.probe_failures",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-insecure-session-cookies",
+                  "metric": "metrics.silent.insecure_cookies",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-probe-failures"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The app does not keep the selected Appearance value after reload, even though it accepts the change during the session.\nInvestigate why the Appearance setting is lost during reload and ensure the saved value is returned and shown when Preferences loads.\nevidence: objective_contradiction: After two attempts and reloads, Appearance resets to Select appearance while Public remains, so the required persisted s",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The app does not keep the selected Appearance value after reload, even though it accepts the change during the session.",
+            "agent_fault_assessment": "The agent followed the requested sequence: it opened Preferences, selected Always dark, selected Public, and the evidence shows successful setting-update requests for both selections. The failure occurred only after reloads, when Appearance reverted while Public remained, so the agent's actions did not cause the outcome.",
+            "bug_title": "Appearance preference resets after reload",
+            "signals": [
+              {
+                "step": "0-13",
+                "kind": "objective_contradiction",
+                "excerpt": "After two attempts and reloads, Appearance resets to Select appearance while Public remains, so the required persisted state is unavailable."
+              }
+            ],
+            "confidence": 0.96,
+            "suggestion": "Investigate why the Appearance setting is lost during reload and ensure the saved value is returned and shown when Preferences loads.",
+            "one_liner": "The Appearance choice was accepted but did not remain set after the page was reloaded.",
+            "relevant_steps": [
+              0,
+              13,
+              15,
+              18,
+              21
+            ],
+            "culprit_step": "0-13",
+            "credits_consumed": 4.673299999999999,
+            "known_bug_id": "BUG-25",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 43.88535000000001,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84H0GK2BMATRSW9C0NB9RFP/dashboard/share/US_WW65B2PCXWIIPQ48MOPBBUO5TEEVTVJXBH626HYB9KQLNYCR3USWCINYNU6RMVHW?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 1
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 740,
+          "reason_code": "assertion_error.confirmed_product_bug",
+          "summary": "The application accepted both preference changes during the session, but reloaded Preferences without keeping the selected values.\nInvestigate why saved user preference values are not restored when Preferences loads after a page refresh. Confirm that both appearance and default memo visibility are stored and returned for the signed-in user.\nevidence: objective_contradiction: Checkpoint assertion failed: \"Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'.\"\nevidence: objective_contradiction: click: Clicking Always dark in Appearance dropdown\nevidence: objective_contradiction: click: Selecting Public in default memo visibility dropdown",
+          "verdict": {
+            "confirmed": true,
+            "status": "failed",
+            "family": "application_issue",
+            "category": "functional_defect",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The application accepted both preference changes during the session, but reloaded Preferences without keeping the selected values.",
+            "agent_fault_assessment": "The agent followed the required sequence: it selected Always dark, opened the Default memo visibility control, selected Public, and then reloaded. Both selection actions produced successful setting-update responses, so the failure was not caused by a wrong click, an omitted selection, or an early reload.",
+            "bug_title": "Preferences reset after reload despite successful saves",
+            "signals": [
+              {
+                "step": "0-17",
+                "kind": "objective_contradiction",
+                "excerpt": "Checkpoint assertion failed: \"Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'.\""
+              },
+              {
+                "step": "0-12",
+                "kind": "objective_contradiction",
+                "excerpt": "click: Clicking Always dark in Appearance dropdown"
+              },
+              {
+                "step": "0-16",
+                "kind": "objective_contradiction",
+                "excerpt": "click: Selecting Public in default memo visibility dropdown"
+              }
+            ],
+            "confidence": 0.93,
+            "suggestion": "Investigate why saved user preference values are not restored when Preferences loads after a page refresh. Confirm that both appearance and default memo visibility are stored and returned for the signed-in user.",
+            "one_liner": "The selected appearance and default memo visibility did not remain set after the Preferences page was reloaded.",
+            "relevant_steps": [
+              12,
+              16,
+              17
+            ],
+            "culprit_step": "0-17",
+            "credits_consumed": 4.9009,
+            "known_bug_id": "BUG-25",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 43.20056999999999,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84HHNX9AZS57FKVE4ZD6ZYB/dashboard/share/US_SWCPSTEIWHZFY0VIZ4BLOEB7XIRUF9Y3E6T7C607WXHRQOVYB97X1D767Y5TP1P3?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 1
+      },
+      "credits": 87.08592
+    }
+  ]
+}

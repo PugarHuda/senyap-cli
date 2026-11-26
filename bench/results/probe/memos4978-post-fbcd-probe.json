@@ -1,0 +1,317 @@
+{
+  "at": "2026-11-23T23:52:48.863Z",
+  "results": [
+    {
+      "flow": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, set Appearance to 'Always dark', then set Default memo visibility to 'Public', reload the page, and check that Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'",
+      "url": "http://localhost:8081",
+      "phase": "observe",
+      "objective": "Sign in with username qb and password QuietBench123!, open Settings, go to Preferences, set Appearance to 'Always dark', then set Default memo visibility to 'Public', reload the page, and check that Preferences still shows Appearance 'Always dark' and Default memo visibility 'Public'. Then reload the page and verify that the result of the flow is still there.",
+      "status": "inconclusive",
+      "kane": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The final check did not read the Appearance and Default memo visibility values. It used unresolved placeholder text, so it reported a failure even though the reload screenshot shows the dark theme and Public visibility.\nFix the assertion to extract the actual text from both preference controls after reload, then rerun the flow. Keep the expected Appearance label aligned with the UI label if 'Always dark' maps to 'Default Dark'.",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "config_issue",
+          "category_proposal": "",
+          "severity": "minor",
+          "root_cause": "The final check did not read the Appearance and Default memo visibility values. It used unresolved placeholder text, so it reported a failure even though the reload screenshot shows the dark theme and Public visibility.",
+          "agent_fault_assessment": "The agent's recorded actions do not explain the failure: it selected Default Dark, received a 200 response when saving the setting, reloaded the Preferences page, and the resulting screenshot visibly shows Default Dark and Public. The failure came from the test's value-capture/assertion configuration, not from an incorrect agent action or proven product behavior.",
+          "bug_title": "Preference assertion records unresolved observed-value placeholders",
+          "signals": [],
+          "confidence": 0.97,
+          "suggestion": "Fix the assertion to extract the actual text from both preference controls after reload, then rerun the flow. Keep the expected Appearance label aligned with the UI label if 'Always dark' maps to 'Default Dark'.",
+          "one_liner": "The settings appear to be selected after reload, but the automated check compared placeholders instead of the displayed values.",
+          "relevant_steps": [
+            12,
+            14,
+            16
+          ],
+          "culprit_step": "step 0-16",
+          "credits_consumed": 4.52045,
+          "known_bug_id": "",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 27.646385000000002,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M85D3NASKJVG5K2BMRV0EPS6/dashboard/share/US_OVDE3XTD9PFFE4IC2VZ7ORZSLCQGGJKBO3ZH3R4SUIDO01ERHBJGJ0SEEJ3R70DI?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      },
+      "falseGreen": false,
+      "findings": [
+        {
+          "kind": "probe_failed",
+          "severity": "blocking",
+          "step": null,
+          "url": null,
+          "detail": "`node \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/tools/probes/check.cjs\" probe memos4978 \"C:/Hackathons/KaneCLI Online Hackathon/quietbench/scratch/memos-data-fbcdf0fba7/memos_prod.db\"` exited 1: [{\"value\":\"{\\\"memoVisibility\\\":\\\"PUBLIC\\\",\\\"theme\\\":\\\"default-dark\\\"}\"}]"
+        }
+      ],
+      "kanePack": "C:\\Users\\pc\\.testmuai\\kaneai\\sessions\\47ff1718-bc14-44c7-b7c5-35c92f513b05\\evidence\\49292cad-0150-4ef1-8e6c-f6695fd591f2.evidence",
+      "senyapPack": ".senyap\\packs\\49292cad-0150-4ef1-8e6c-f6695fd591f2-senyap.evidence",
+      "policyVerdict": {
+        "passed": false,
+        "doc": {
+          "evidence_id": "49292cad-0150-4ef1-8e6c-f6695fd591f2-senyap",
+          "result": "fail",
+          "exit_code": 1,
+          "policies": [
+            {
+              "id": "senyap-silent-failures",
+              "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3",
+              "result": "fail",
+              "exit_code": 1,
+              "counts": {
+                "total": 11,
+                "failed": 1,
+                "warned": 0,
+                "errored": 0
+              },
+              "failed_gate_ids": [
+                "no-probe-failures"
+              ],
+              "errored_gate_ids": [],
+              "file": "C:\\Hackathons\\KaneCLI Online Hackathon\\quietbench\\scratch\\memos4978-probe-fbcd\\.senyap\\packs\\49292cad-0150-4ef1-8e6c-f6695fd591f2-senyap.evidence.verdicts\\senyap-silent-failures.verdict.json"
+            }
+          ],
+          "verdicts": [
+            {
+              "result": "fail",
+              "evaluated_at": "2026-11-23T23:52:48.010Z",
+              "evaluator": "evidence-cli 0.2.0",
+              "pack": {
+                "run_id": "49292cad-0150-4ef1-8e6c-f6695fd591f2-senyap",
+                "sha256": "670759168f674e4efdea2245f8606898c05c2b0f5cab8393fe108f70171e962b",
+                "contract": "0.1"
+              },
+              "policy": {
+                "id": "senyap-silent-failures",
+                "sha256": "f9d66708aa3901f948628eff36f44333524cda2ba9c5c23f1ff96206ea4e8bf3"
+              },
+              "catalog": {
+                "id": "senyap",
+                "version": 2,
+                "sha256": "13d9adf76b992fdc522f0dc136320692ba410caa1f8679261755a024ef2ad98c",
+                "source": "bundled"
+              },
+              "error": null,
+              "gates": [
+                {
+                  "id": "no-false-green",
+                  "metric": "metrics.false_green_tests",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-5xx",
+                  "metric": "metrics.silent.http_5xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-hidden-4xx",
+                  "metric": "metrics.silent.http_4xx",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-dropped-requests",
+                  "metric": "metrics.silent.request_failed",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-console-errors",
+                  "metric": "metrics.silent.console_errors",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-js-exceptions",
+                  "metric": "metrics.silent.js_exceptions",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-env-leaks",
+                  "metric": "metrics.silent.env_leaks",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-probe-failures",
+                  "metric": "metrics.silent.probe_failures",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "blocking",
+                  "message": null,
+                  "actual": 1,
+                  "status": "fail",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-mixed-content",
+                  "metric": "metrics.silent.mixed_content",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-slow-responses",
+                  "metric": "metrics.silent.slow_responses",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                },
+                {
+                  "id": "no-insecure-session-cookies",
+                  "metric": "metrics.silent.insecure_cookies",
+                  "where": null,
+                  "op": "equals",
+                  "expected": 0,
+                  "severity": "warning",
+                  "message": null,
+                  "actual": 0,
+                  "status": "pass",
+                  "trust": "recomputed",
+                  "error": null,
+                  "stored": null
+                }
+              ],
+              "failed_gates": [
+                "no-probe-failures"
+              ],
+              "warnings": [],
+              "errored_gates": [],
+              "exit_code": 1
+            }
+          ]
+        }
+      },
+      "retriedAfter": {
+        "status": "failed",
+        "result_code": 720,
+        "reason_code": "assertion_error.checkpoint_failed",
+        "summary": "The final check used unresolved values, \"{{appearance_always_dark_check}}\" and \"{{default_memo_visibility_public_check}}\", rather than the actual preference labels. The screenshot after reload visibly shows Public, so the assertion result is not a reliable indication that the user setting failed.\nFix the checkpoint to resolve and read the rendered Appearance and Default memo visibility values after reload, then rerun the flow.\nevidence: objective_contradiction: check FAILED: Preferences shows Appearance 'Always dark'. — expected: Always dark | observed: {{appearance_always_dark_c\nevidence: objective_contradiction: check FAILED: Preferences shows Default memo visibility 'Public'. — expected: Public | observed: {{default_memo_visibili",
+        "verdict": {
+          "confirmed": false,
+          "status": "broken",
+          "family": "automation_bug",
+          "category": "config_issue",
+          "category_proposal": "",
+          "severity": "major",
+          "root_cause": "The final check used unresolved values, \"{{appearance_always_dark_check}}\" and \"{{default_memo_visibility_public_check}}\", rather than the actual preference labels. The screenshot after reload visibly shows Public, so the assertion result is not a reliable indication that the user setting failed.",
+          "agent_fault_assessment": "The agent completed the visible selection flow and waited for the reload. Its actions did not cause the terminal failure; the failure was produced by the checkpoint's broken value capture or configuration. The run evidence even shows a successful settings update request after Public was selected.",
+          "bug_title": "Preference checkpoint compares unresolved placeholders",
+          "signals": [
+            {
+              "step": "0-17",
+              "kind": "objective_contradiction",
+              "excerpt": "check FAILED: Preferences shows Appearance 'Always dark'. — expected: Always dark | observed: {{appearance_always_dark_check}}"
+            },
+            {
+              "step": "0-17",
+              "kind": "objective_contradiction",
+              "excerpt": "check FAILED: Preferences shows Default memo visibility 'Public'. — expected: Public | observed: {{default_memo_visibility_public_check}}"
+            }
+          ],
+          "confidence": 0.94,
+          "suggestion": "Fix the checkpoint to resolve and read the rendered Appearance and Default memo visibility values after reload, then rerun the flow.",
+          "one_liner": "The preference checkpoint failed because it recorded placeholder text instead of reading the values displayed on the page.",
+          "relevant_steps": [
+            0,
+            11,
+            14,
+            15,
+            17
+          ],
+          "culprit_step": "0-17",
+          "credits_consumed": 4.83075,
+          "known_bug_id": "BUG-26",
+          "category_name": "",
+          "mode": "terminal"
+        },
+        "credits": 37.3266825,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M85CYFM24N6V77R1GJX6YZJ8/dashboard/share/US_2VTW80TQO3WFQE2EXKLTLJSJNVUL03DP3JCH1DHITVFBL7HUZ1O6HVRUQ0G6UALN?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 1
+      }
+    }
+  ]
+}

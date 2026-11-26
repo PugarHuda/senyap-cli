@@ -4,7 +4,12 @@ on:
   push:
     branches: [main]
     paths: ['src/**', 'bin/**', 'policies/**', 'action.yml', '.github/workflows/demo.yml']
+  pull_request:
+    paths: ['src/**', 'bin/**', 'policies/**', 'action.yml', '.github/workflows/demo.yml']
   workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: write # the Senyap receipt comment
 jobs:
   unit:
     runs-on: ubuntu-latest
@@ -37,6 +42,7 @@ jobs:
           kane-access-key: ${{ secrets.KANE_ACCESS_KEY }}
           kane-project-id: ${{ vars.KANE_PROJECT_ID }}
           kane-folder-id: ${{ vars.KANE_FOLDER_ID }}
+          comment: ${{ matrix.name == 'buggy' }} # one receipt per PR: the run that must fail
       - uses: actions/upload-artifact@v4
         if: always()
         with:

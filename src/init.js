@@ -6,11 +6,14 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { kane } from './kane.js';
 import { VERSION } from './version.js';
+import { DEFAULT_FLOW } from './config.js';
+import { pin } from './guard.js';
 
 const BIN = resolve(fileURLToPath(import.meta.url), '../../bin/senyap.js');
 // Installed from npm -> npx pinned to this exact version (never "whatever is latest" on
 // every stop); run from a checkout -> node <abs path>.
-const guardCmd = (agent) => (BIN.includes('node_modules') ? `npx --yes senyap@${VERSION} guard --agent ${agent}` : `node "${BIN.replace(/\\/g, '/')}" guard --agent ${agent}`);
+const senyapCmd = (args) => (BIN.includes('node_modules') ? `npx --yes senyap@${VERSION} ${args}` : `node "${BIN.replace(/\\/g, '/')}" ${args}`);
+const guardCmd = (agent) => senyapCmd(`guard --agent ${agent}`);
 
 const readJson = (p, fallback) => (existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : fallback);
 function writeJson(p, v) { mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, JSON.stringify(v, null, 2) + '\n'); }
@@ -27,8 +30,19 @@ function addStopHook(file, cmd) {
   writeJson(file, cfg);
 }
 
+/** Claude Code PreToolUse: the agent can't edit senyap.config.json or senyap-tests/. */
+function addProtectHook(file, cmd) {
+  const cfg = readJson(file, {});
+  cfg.hooks ??= {};
+  cfg.hooks.PreToolUse ??= [];
+  if (!cfg.hooks.PreToolUse.flatMap((g) => g.hooks ?? []).some((h) => String(h.command).includes('senyap') && String(h.command).includes('protect'))) {
+    cfg.hooks.PreToolUse.push({ matcher: 'Edit|Write|MultiEdit|NotebookEdit|Bash', hooks: [{ type: 'command', command: cmd, timeout: 30 }] });
+  }
+  writeJson(file, cfg);
+}
+
 export const INSTALLERS = {
-  claude: () => { addStopHook('.claude/settings.json', guardCmd('claude')); return '.claude/settings.json'; },
+  claude: () => { addStopHook('.claude/settings.json', guardCmd('claude')); addProtectHook('.claude/settings.json', senyapCmd('protect')); return '.claude/settings.json (Stop guard + PreToolUse protect)'; },
   codex: () => { addStopHook('.codex/hooks.json', guardCmd('codex')); return '.codex/hooks.json (trust it once with /hooks in Codex)'; },
   cursor: () => {
     const cfg = readJson('.cursor/hooks.json', { version: 1, hooks: {} });
@@ -43,7 +57,7 @@ export async function init({ agent = 'all', url, flow } = {}) {
   if (!existsSync('senyap.config.json')) {
     writeJson('senyap.config.json', {
       url: url ?? 'http://localhost:3000',
-      flows: flow ?? ['Open the home page and use its main feature the way a first-time user would'],
+      flows: flow ?? [DEFAULT_FLOW],
       persistence: true,
       maxAttempts: 3,
     });
@@ -54,6 +68,8 @@ export async function init({ agent = 'all', url, flow } = {}) {
     if (!INSTALLERS[a]) throw new Error(`unknown agent "${a}" (claude, codex, cursor, all)`);
     console.error(`hooked ${a}: ${INSTALLERS[a]()}`);
   }
+  // The human ran init: what the config says now is what the guard holds the agent to.
+  pin();
   const skill = await kane(['install', 'skill'], { timeoutSec: 120 });
   console.error(skill.exitCode === 0 ? 'installed Kane CLI agent skill (kane-cli install skill)' : 'Kane skill not installed; run: npx @testmuai/kane-cli-skill');
   return 0;

@@ -1,0 +1,194 @@
+{
+  "http_5xx": {
+    "A": {
+      "status": "passed",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JDR85D333RDYH6MANXNVG/dashboard/share/US_NSML49DG77TA37A1MG9N3B3GX93UNM88OQ7G3KUS0AC32DW4S9WKLFDQU1O51UU9?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 15.748392500000001,
+      "exitCode": 0
+    },
+    "B": {
+      "status": "silent_failure",
+      "credits": 57.451652499999994,
+      "kane": {
+        "status": "passed",
+        "result_code": 100,
+        "reason_code": "success.complete",
+        "summary": "Added a note with the text “Buy oat milk” and saved it.\nThe requested note was saved successfully.",
+        "verdict": null,
+        "credits": 12.533437499999998,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JFKXBJ6FAQXVFSQWGCR9S/dashboard/share/US_PSXDDG3ROHLMOO8TE59RIV8QQERPRYQECV94HDCGAPNMZCH0S4YCCRDUJFRB3J4N?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 0
+      },
+      "findings": [
+        {
+          "kind": "http_5xx",
+          "severity": "blocking",
+          "method": "POST",
+          "url": "https://senyap-demo.vercel.app/api/zoo?bug=http_5xx",
+          "status": 500,
+          "detail": "{\"error\":\"db down\"}"
+        }
+      ],
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "passed",
+          "result_code": 100,
+          "reason_code": "success.complete",
+          "summary": "Added a note with the text “Buy oat milk” and saved it.\nThe requested note was saved successfully.",
+          "verdict": null,
+          "credits": 12.533437499999998,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JFKXBJ6FAQXVFSQWGCR9S/dashboard/share/US_PSXDDG3ROHLMOO8TE59RIV8QQERPRYQECV94HDCGAPNMZCH0S4YCCRDUJFRB3J4N?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 0
+        },
+        "findings": 1
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "The run opened the bug-zoo URL with `bug=http_5xx`, which deliberately makes the save request return an error. The later assertion correctly could not verify a clean network and console.\nRun the same note-save check without `bug=http_5xx` (for example, the normal or `none` scenario), then capture network and console results once after the save completes.",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "config_issue",
+            "category_proposal": "",
+            "severity": "major",
+            "root_cause": "The run opened the bug-zoo URL with `bug=http_5xx`, which deliberately makes the save request return an error. The later assertion correctly could not verify a clean network and console.",
+            "agent_fault_assessment": "The agent successfully entered and saved the requested note. Its Save click did not create the server error; however, the run navigated to a URL explicitly configured with `bug=http_5xx`. That test configuration made the objective's requirement of no failed or 4xx/5xx request impossible, so this is a test/setup fault rather than a corroborated product defect.",
+            "bug_title": "Run configured to trigger an HTTP 500 scenario",
+            "signals": [],
+            "confidence": 0.98,
+            "suggestion": "Run the same note-save check without `bug=http_5xx` (for example, the normal or `none` scenario), then capture network and console results once after the save completes.",
+            "one_liner": "The note appeared saved, but the run was set to the page's deliberate HTTP 500 scenario, so the clean-network checkpoint could not pass.",
+            "relevant_steps": [
+              1,
+              5,
+              9,
+              10
+            ],
+            "culprit_step": "0-1",
+            "credits_consumed": 4.70285,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 44.918215,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84JTHV5VJ484KA29AXYECT6/dashboard/share/US_9PUQU5CYUANGXJULELNZND4YK4LP0TFKAW2QAXUGUZM77KFZICOD94MPVY67KS2D?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 1
+      }
+    }
+  },
+  "http_4xx": {
+    "A": {
+      "status": "passed",
+      "result_code": 100,
+      "reason_code": "success.complete",
+      "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84K8JW3FW62KF9EJMNEPR97/dashboard/share/US_ZAWKYM97Z1CXSJVTLACIRXY7SFIE4U3DKTALBTI2ITCV3QF7M25BNU3GC14G05GN?type=summary&agentView=true&fqdn=summary-page",
+      "credits": 5.348429999999999,
+      "exitCode": 0
+    },
+    "B": {
+      "status": "silent_failure",
+      "credits": 19.124252499999997,
+      "kane": {
+        "status": "passed",
+        "result_code": 100,
+        "reason_code": "success.complete",
+        "summary": "Added a note with the text “Buy oat milk” and saved it.\nThe note-saving task was completed.",
+        "verdict": null,
+        "credits": 3.72558,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84KABE0VRGTF95YG5M4VPQ0/dashboard/share/US_YXZP96I8RO9OPUE7VRMTX06FS78C5CA7BVS4H3YJ438YHOAYNAX2JFYUOTQ7H4BV?type=summary&agentView=true&fqdn=summary-page",
+        "exitCode": 0
+      },
+      "findings": [
+        {
+          "kind": "http_4xx",
+          "severity": "blocking",
+          "method": "POST",
+          "url": "https://senyap-demo.vercel.app/api/zoo?bug=http_4xx",
+          "status": 422,
+          "detail": "{\"error\":\"text is invalid\"}"
+        },
+        {
+          "kind": "slow_response",
+          "severity": "warning",
+          "method": "GET",
+          "url": "https://senyap-demo.vercel.app/zoo/?bug=http_4xx",
+          "status": 200,
+          "detail": "3678 ms"
+        }
+      ],
+      "observe": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "passed",
+          "result_code": 100,
+          "reason_code": "success.complete",
+          "summary": "Added a note with the text “Buy oat milk” and saved it.\nThe note-saving task was completed.",
+          "verdict": null,
+          "credits": 3.72558,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84KABE0VRGTF95YG5M4VPQ0/dashboard/share/US_YXZP96I8RO9OPUE7VRMTX06FS78C5CA7BVS4H3YJ438YHOAYNAX2JFYUOTQ7H4BV?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 0
+        },
+        "findings": 1
+      },
+      "confirm": {
+        "status": "silent_failure",
+        "kane": {
+          "status": "failed",
+          "result_code": 750,
+          "reason_code": "assertion_error.step_not_achievable",
+          "summary": "The run used a special page address ending in `bug=http_4xx`. That setting intentionally made the save request return an error, which also produced a browser console error.\nRun the same note-save test without the `bug=http_4xx` address setting, then repeat the network and console checks.\nevidence: http_error_response: POST https://senyap-demo.vercel.app/api/zoo?bug=http_4xx -> 422 body: {\"error\":\"text is invalid\"}\nevidence: console_error: Failed to load resource: the server responded with a status of 422 ()",
+          "verdict": {
+            "confirmed": false,
+            "status": "broken",
+            "family": "automation_bug",
+            "category": "config_issue",
+            "category_proposal": "",
+            "severity": "minor",
+            "root_cause": "The run used a special page address ending in `bug=http_4xx`. That setting intentionally made the save request return an error, which also produced a browser console error.",
+            "agent_fault_assessment": "The agent caused the failed checkpoint by navigating to the bug-zoo scenario with `bug=http_4xx`, a configuration that deliberately makes the save call fail. It then correctly typed the requested note and clicked Save; those actions did not cause the 422 response.",
+            "bug_title": "Run configured to trigger HTTP 422 save failure",
+            "signals": [
+              {
+                "excerpt": "POST https://senyap-demo.vercel.app/api/zoo?bug=http_4xx -> 422 body: {\"error\":\"text is invalid\"}",
+                "kind": "http_error_response",
+                "step": "0-5"
+              },
+              {
+                "excerpt": "Failed to load resource: the server responded with a status of 422 ()",
+                "kind": "console_error",
+                "step": "0-5"
+              }
+            ],
+            "confidence": 0.99,
+            "suggestion": "Run the same note-save test without the `bug=http_4xx` address setting, then repeat the network and console checks.",
+            "one_liner": "The test opened a page configured to make saving fail, so the clean network and console check could not pass.",
+            "relevant_steps": [
+              1,
+              5,
+              6
+            ],
+            "culprit_step": "0-1",
+            "credits_consumed": 3.82855,
+            "known_bug_id": "",
+            "category_name": "",
+            "mode": "terminal"
+          },
+          "credits": 15.398672499999996,
+          "test_url": "https://test-manager.lambdatest.com/projects/01M81V2EG0623DQRHQE21PDZQ2/test-cases/01M84KBW3RAXKE175A2V13M5FS/dashboard/share/US_HQEHSTQ1C2AR6D99DNV35EG3CVN0X6MEZ9HBJLL0O53E0CYE73S3WB25SLHKLSL6?type=summary&agentView=true&fqdn=summary-page",
+          "exitCode": 1
+        },
+        "findings": 2
+      }
+    }
+  }
+}
