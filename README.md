@@ -66,7 +66,7 @@ Each bug is a closed GitHub issue with its fix commit, run three ways: plain Kan
 | [tududi #904](https://github.com/chrisvel/tududi/issues/904) title "updated" but not saved | no verdict (750) | **caught** (Kane 740 under the reload check) | clean |
 | [Wallos #459](https://github.com/ellite/Wallos/issues/459) delete in modal does nothing | caught (740) | caught | inconclusive |
 
-Plain Kane caught 5/8; Senyap caught 6/8, including two plain Kane passed. On fixed builds (senyap 0.1.2, live): 4 clean, 3 inconclusive, 1 false alarm. The rule behind that false alarm shipped in 0.1.3; re-judging the same evidence it becomes inconclusive. What Senyap can't see: bugs that leave nothing in the network or console (Uptime Kuma #3713, Memos #4978) are only as good as Kane's own assertion. Its retry also doesn't reset app state between attempts.
+Plain Kane caught 5/8; Senyap caught 6/8, including two plain Kane passed. On fixed builds (senyap 0.1.2, live): 4 clean, 3 inconclusive, 1 false alarm. The rule behind that false alarm shipped in 0.1.3; re-judging the same evidence it becomes inconclusive. What Senyap 0.1.3 can't see: bugs that leave nothing in the network or console (Uptime Kuma #3713, Memos #4978) are only as good as Kane's own assertion, and its retry doesn't reset app state between attempts. 0.1.4 adds a data **probe** and a **reset** per flow for exactly those ([below](#probes-and-resets-bugs-that-leave-no-trace)); live re-runs turned Uptime Kuma #3713 from a miss into a catch (buggy build fails on the heartbeat table, fixed build clean), and every probe run, including one where our own probe spec was wrong, is in [bench/RESULTS.md](bench/RESULTS.md#014-probes-data-checks-for-the-bugs-that-leave-no-trace-live-kane-runs-23-and-26-nov).
 
 ## Install
 
@@ -125,7 +125,7 @@ senyap approve                                  (a human) promote proposed flows
 senyap protect                                  Claude Code PreToolUse hook: the agent can't edit the checks
 ```
 
-The brief the agent gets names each failing call with its method, status, response and request body, the Kane step it happened in, the files that call that route (`git grep`), Kane's run link, and the one command to re-check just that flow. Secrets in request bodies (password, token and key fields, API keys, bearer tokens) are masked first, because the brief can end up in a PR comment.
+The brief the agent gets names each failing call with its method, status, response and request body, the Kane step it happened in, Kane's own diagnosis of each failed step (root cause and suggested fix from the step's `failure.yaml`), the files that call that route (`git grep`), Kane's run link, and the one command to re-check just that flow. Secrets in request bodies (password, token and key fields, API keys, bearer tokens) are masked first, because the brief can end up in a PR comment.
 
 Exit codes: `0` clean, `1` silent failure, `2` Kane did not run.
 
@@ -157,6 +157,7 @@ Senyap drives no browser of its own. Every verdict comes from Kane.
 | `@testmuai/evidence-cli` producer catalog + `finalize` | Senyap's own sealed pack with `metrics.silent.*` and `metrics.false_green_tests` |
 | `kane-cli evidence verdict --policy` | Kane judges Senyap's metrics; `policies/senyap.policy.yaml` |
 | `*_test.md` + `kane-cli testmd run --policy --no-adaptive-heal` | locked regression flows, gated by Kane's own catalog (`steps.failed`, `metrics.tests_without_checks`, `metrics.heal.healed_tests`) |
+| Step triage (`steps/*/failure.yaml`: `triage.rca.root_cause`, `triage.suggested_fix.summary`) | Kane's diagnosis of each failed step goes into the agent's brief next to the HAR evidence |
 | `kane-cli install skill` | the agent gets Kane while it fixes |
 | Test Manager `test_url` | every claim links to a real Kane run |
 
