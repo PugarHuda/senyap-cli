@@ -114,6 +114,18 @@ export function classifyConsole(line, loadStep = null) {
   return { kind: line.is_exception ? 'js_exception' : 'console_error', severity: 'blocking', ...base };
 }
 
+/**
+ * Kane's own diagnosis of a failed step (steps/<n>-<id>/failure.yaml: triage.rca.root_cause,
+ * triage.suggested_fix.summary). Kane already paid credits for it; the agent should read it.
+ */
+export function triageOf(yamlText, step) {
+  let t;
+  try { t = parseYaml(yamlText ?? '')?.triage; } catch { return null; }
+  const rootCause = t?.rca?.root_cause, fix = t?.suggested_fix?.summary;
+  if (!rootCause && !fix) return null;
+  return { step, rootCause: rootCause ? String(rootCause).slice(0, 600) : null, suggestedFix: fix ? String(fix).slice(0, 600) : null };
+}
+
 /** Read every test in a pack and return its Kane status plus the silent findings. */
 export async function readPack(packPath) {
   const pack = await openContainer(packPath);
@@ -136,10 +148,16 @@ export async function readPack(packPath) {
     }
     const kinds = Object.fromEntries((result.steps ?? []).map((st) => [st.id, st.kind]));
     for (const f of findings) if (f.step && kinds[f.step]) f.stepKind = kinds[f.step];
+    const triage = [];
+    for (const s of await pack.listDir(`tests/${id}/steps`).catch(() => [])) {
+      if (!s.isDir) continue;
+      const t = triageOf(await pack.readText(`tests/${id}/steps/${s.name}/failure.yaml`), s.name);
+      if (t) triage.push(t);
+    }
     const blocking = findings.filter((f) => f.severity === 'blocking');
     tests.push({
       id, kaneStatus: result.status, testUrl: result.external_id?.sharable_link ?? null, executionId: result.external_id?.execution_id ?? null,
-      steps: result.steps ?? [], findings, falseGreen: result.status === 'passed' && blocking.length > 0,
+      steps: result.steps ?? [], findings, triage, falseGreen: result.status === 'passed' && blocking.length > 0,
     });
   }
   return { runId: run.run_id, title: run.title, surfaceHost, runKind: run.environment?.run_kind, tests };

@@ -78,3 +78,17 @@ test('reload-cut streams and load-time token refreshes are noise (QuietBench: me
   assert.equal(laterWrite.kind, 'http_4xx', 'a write refused after the flow acts still blocks');
   assert.equal(classifyRequest({ request: { method: 'POST', url: 'http://x.test/a', headers: [] }, response: { status: 0 }, _failed: true, _failure_reason: 'net::ERR_CONNECTION_REFUSED', time: 1 }, 'x.test').kind, 'request_failed');
 });
+
+test("Kane's failure.yaml triage reaches the agent's brief", async () => {
+  const { triageOf } = await import('../src/pack.js');
+  const { brief } = await import('../src/hunt.js');
+  const yaml = 'error: assert failed\ntriage:\n  status: done\n  rca:\n    root_cause: POST /api/notes returns 500 when the text has an apostrophe\n  suggested_fix:\n    summary: Use a parameterised query in server.js save handler\n';
+  const t = triageOf(yaml, '3-ab12');
+  assert.deepEqual(t, { step: '3-ab12', rootCause: 'POST /api/notes returns 500 when the text has an apostrophe', suggestedFix: 'Use a parameterised query in server.js save handler' });
+  assert.equal(triageOf('error: x\n', '1'), null);
+  assert.equal(triageOf(null, '1'), null);
+  assert.equal(triageOf(': : not yaml [', '1'), null);
+  const md = brief([{ flow: 'Add a note', status: 'silent_failure', falseGreen: false, findings: [], triage: [t], kane: { status: 'failed', result_code: 740 } }], { cwd: '.' });
+  assert.match(md, /Kane's diagnosis of step 3-ab12: POST \/api\/notes returns 500/);
+  assert.match(md, /Kane suggests: Use a parameterised query/);
+});

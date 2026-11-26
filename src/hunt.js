@@ -64,6 +64,8 @@ export async function huntFlow(opts) {
     confirm: { status: confirm.status, kane: confirm.kane, findings: confirm.findings.length },
     credits: (observe.kane.credits ?? 0) + (observe.retriedAfter?.credits ?? 0) + (confirm.kane.credits ?? 0),
     findings: dedupe([...observe.findings, ...confirm.findings]),
+    // The confirm run's diagnosis is the sharper one (DevTools analyzers on); fall back to observe's.
+    triage: confirm.triage?.length ? confirm.triage : observe.triage ?? [],
   };
 }
 
@@ -109,7 +111,7 @@ async function huntOnce({ url, flow, probe, reset, phase, workDir = '.senyap', t
       probeOnly: !!probeFail && !findings.some((f) => f.severity === 'blocking' && f.kind !== 'probe_failed') }),
     kane: { status: end.status, result_code: end.result_code, reason_code: end.reason_code, summary: end.summary, verdict: end.verdict ?? null, credits: end.credits_consumed, test_url: end.test_url, exitCode: run.exitCode },
     falseGreen: pack?.tests.some((t) => t.falseGreen) ?? false,
-    findings, kanePack, senyapPack, policyVerdict: judged && { passed: judged.passed, doc: judged.doc },
+    findings, triage: pack?.tests.flatMap((t) => t.triage ?? []) ?? [], kanePack, senyapPack, policyVerdict: judged && { passed: judged.passed, doc: judged.doc },
   };
 }
 
@@ -157,6 +159,10 @@ export function brief(results, { cwd } = {}) {
     for (const f of blocking) {
       out.push(`- \`${f.kind}\` ${f.method ?? ''} ${f.url ?? ''} ${f.status ? `→ ${f.status}` : ''} ${f.detail ? `: ${f.detail}` : ''}${f.step ? ` (Kane step ${f.step}${f.stepKind ? `, ${f.stepKind}` : ''})` : ''}`.replace(/\s+/g, ' '));
       if (f.requestBody) out.push(`  - request body: \`${f.requestBody.replace(/\s+/g, ' ')}\``);
+    }
+    for (const t of (r.triage ?? []).slice(0, 3)) {
+      out.push(`- Kane's diagnosis of step ${t.step}:${t.rootCause ? ` ${t.rootCause.replace(/\s+/g, ' ')}` : ''}`);
+      if (t.suggestedFix) out.push(`  - Kane suggests: ${t.suggestedFix.replace(/\s+/g, ' ')}`);
     }
     const sus = suspects(blocking, cwd);
     if (sus.length) out.push('- Code that calls these routes:', ...sus.map(([route, hits]) => `  - \`${route}\`: ${hits.join(', ')}`));
